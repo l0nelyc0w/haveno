@@ -18,7 +18,6 @@
 package bisq.core.trade.protocol.tasks.seller;
 
 import bisq.core.btc.wallet.TradeWalletService;
-import bisq.core.dao.governance.param.Param;
 import bisq.core.trade.Trade;
 import bisq.core.trade.TradeDataValidation;
 import bisq.core.trade.protocol.tasks.TradeTask;
@@ -44,7 +43,7 @@ public class SellerCreatesDelayedPayoutTx extends TradeTask {
         try {
             runInterceptHook();
             if (true) throw new RuntimeException("SellerCreatesDelayedPayoutTx not implemented for xmr");
-
+            /*
             String donationAddressString = processModel.getDaoFacade().getParamValue(Param.RECIPIENT_BTC_ADDRESS);
             Coin minerFee = trade.getTxFee();
             TradeWalletService tradeWalletService = processModel.getTradeWalletService();
@@ -52,12 +51,10 @@ public class SellerCreatesDelayedPayoutTx extends TradeTask {
 
             long lockTime = trade.getLockTime();
             Transaction preparedDelayedPayoutTx = tradeWalletService.createDelayedUnsignedPayoutTx(depositTx,
-                    donationAddressString,
                     minerFee,
                     lockTime);
             TradeDataValidation.validateDelayedPayoutTx(trade,
                     preparedDelayedPayoutTx,
-                    processModel.getDaoFacade(),
                     processModel.getBtcWalletService());
 
             processModel.setPreparedDelayedPayoutTx(preparedDelayedPayoutTx);
@@ -65,6 +62,7 @@ public class SellerCreatesDelayedPayoutTx extends TradeTask {
             processModel.getTradeManager().requestPersistence();
 
             complete();
+	    */
         } catch (Throwable t) {
             failed(t);
         }

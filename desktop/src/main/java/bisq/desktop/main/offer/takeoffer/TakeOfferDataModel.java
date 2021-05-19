@@ -27,7 +27,6 @@ import bisq.core.account.witness.AccountAgeWitnessService;
 import bisq.core.btc.TxFeeEstimationService;
 import bisq.core.btc.listeners.XmrBalanceListener;
 import bisq.core.btc.model.XmrAddressEntry;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.Restrictions;
 import bisq.core.btc.wallet.XmrWalletService;
 import bisq.core.filter.FilterManager;
@@ -88,7 +87,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 class TakeOfferDataModel extends OfferDataModel {
     private final TradeManager tradeManager;
     private final OfferBook offerBook;
-    private final BsqWalletService bsqWalletService;
     private final User user;
     private final FeeService feeService;
     private final MempoolService mempoolService;
@@ -135,7 +133,6 @@ class TakeOfferDataModel extends OfferDataModel {
                        OfferBook offerBook,
                        OfferUtil offerUtil,
                        XmrWalletService xmrWalletService,
-                       BsqWalletService bsqWalletService,
                        User user, FeeService feeService,
                        MempoolService mempoolService,
                        FilterManager filterManager,
@@ -150,7 +147,6 @@ class TakeOfferDataModel extends OfferDataModel {
 
         this.tradeManager = tradeManager;
         this.offerBook = offerBook;
-        this.bsqWalletService = bsqWalletService;
         this.user = user;
         this.feeService = feeService;
         this.mempoolService = mempoolService;
@@ -691,7 +687,7 @@ class TakeOfferDataModel extends OfferDataModel {
     public Coin getSellerSecurityDeposit() {
         return offer.getSellerSecurityDeposit();
     }
-
+    /*
     public Coin getUsableBsqBalance() {
         // we have to keep a minimum amount of BSQ == bitcoin dust limit
         // otherwise there would be dust violations for change UTXOs
@@ -701,6 +697,7 @@ class TakeOfferDataModel extends OfferDataModel {
             usableBsqBalance = Coin.ZERO;
         return usableBsqBalance;
     }
+    */
 
     public boolean isHalCashAccount() {
         return paymentAccount.isHalCashAccount();
@@ -722,15 +719,9 @@ class TakeOfferDataModel extends OfferDataModel {
         return offerUtil.getTakerFee(true, amount.get());
     }
 
-    public Coin getTakerFeeInBsq() {
-        return offerUtil.getTakerFee(false, amount.get());
-    }
+  
 
     boolean isTakerFeeValid() {
-        return preferences.getPayFeeInBtc() || offerUtil.isBsqForTakerFeeAvailable(amount.get());
-    }
-
-    public boolean isBsqForFeeAvailable() {
-        return offerUtil.isBsqForTakerFeeAvailable(amount.get());
+        return preferences.getPayFeeInBtc();
     }
 }

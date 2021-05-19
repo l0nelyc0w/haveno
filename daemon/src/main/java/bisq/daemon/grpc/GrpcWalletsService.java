@@ -142,53 +142,6 @@ class GrpcWalletsService extends WalletsImplBase {
     }
 
     @Override
-    public void getUnusedBsqAddress(GetUnusedBsqAddressRequest req,
-                                    StreamObserver<GetUnusedBsqAddressReply> responseObserver) {
-        try {
-            String address = coreApi.getUnusedBsqAddress();
-            var reply = GetUnusedBsqAddressReply.newBuilder()
-                    .setAddress(address)
-                    .build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
-        } catch (Throwable cause) {
-            exceptionHandler.handleException(log, cause, responseObserver);
-        }
-    }
-
-    @Override
-    public void sendBsq(SendBsqRequest req,
-                        StreamObserver<SendBsqReply> responseObserver) {
-        try {
-            coreApi.sendBsq(req.getAddress(),
-                    req.getAmount(),
-                    req.getTxFeeRate(),
-                    new TxBroadcaster.Callback() {
-                        @Override
-                        public void onSuccess(Transaction tx) {
-                            log.info("Successfully published BSQ tx: id {}, output sum {} sats, fee {} sats, size {} bytes",
-                                    tx.getTxId().toString(),
-                                    tx.getOutputSum(),
-                                    tx.getFee(),
-                                    tx.getMessageSize());
-                            var reply = SendBsqReply.newBuilder()
-                                    .setTxInfo(toTxInfo(tx).toProtoMessage())
-                                    .build();
-                            responseObserver.onNext(reply);
-                            responseObserver.onCompleted();
-                        }
-
-                        @Override
-                        public void onFailure(TxBroadcastException ex) {
-                            throw new IllegalStateException(ex);
-                        }
-                    });
-        } catch (Throwable cause) {
-            exceptionHandler.handleException(log, cause, responseObserver);
-        }
-    }
-
-    @Override
     public void sendBtc(SendBtcRequest req,
                         StreamObserver<SendBtcReply> responseObserver) {
         try {
@@ -221,21 +174,6 @@ class GrpcWalletsService extends WalletsImplBase {
                             throw new IllegalStateException(t);
                         }
                     });
-        } catch (Throwable cause) {
-            exceptionHandler.handleException(log, cause, responseObserver);
-        }
-    }
-
-    @Override
-    public void verifyBsqSentToAddress(VerifyBsqSentToAddressRequest req,
-                                       StreamObserver<VerifyBsqSentToAddressReply> responseObserver) {
-        try {
-            boolean isAmountReceived = coreApi.verifyBsqSentToAddress(req.getAddress(), req.getAmount());
-            var reply = VerifyBsqSentToAddressReply.newBuilder()
-                    .setIsAmountReceived(isAmountReceived)
-                    .build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
         } catch (Throwable cause) {
             exceptionHandler.handleException(log, cause, responseObserver);
         }

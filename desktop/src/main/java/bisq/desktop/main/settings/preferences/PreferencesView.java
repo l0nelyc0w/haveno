@@ -33,8 +33,6 @@ import bisq.desktop.util.Layout;
 import bisq.desktop.util.validation.BtcValidator;
 
 import bisq.core.btc.wallet.Restrictions;
-import bisq.core.dao.DaoFacade;
-import bisq.core.dao.governance.asset.AssetService;
 import bisq.core.filter.Filter;
 import bisq.core.filter.FilterManager;
 import bisq.core.locale.Country;
@@ -127,25 +125,20 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     private InputTextField transactionFeeInputTextField, ignoreTradersListInputTextField, ignoreDustThresholdInputTextField,
             autoConfRequiredConfirmationsTf, autoConfServiceAddressTf, autoConfTradeLimitTf, /*referralIdInputTextField,*/
             rpcUserTextField, blockNotifyPortTextField;
-    private ToggleButton isDaoFullNodeToggleButton;
     private PasswordTextField rpcPwTextField;
-    private TitledGroupBg daoOptionsTitledGroupBg;
 
     private ChangeListener<Boolean> transactionFeeFocusedListener, autoConfServiceAddressFocusOutListener, autoConfRequiredConfirmationsFocusOutListener;
     private final Preferences preferences;
     private final FeeService feeService;
     //private final ReferralIdService referralIdService;
-    private final AssetService assetService;
     private final FilterManager filterManager;
-    private final DaoFacade daoFacade;
     private final File storageDir;
 
     private ListView<FiatCurrency> fiatCurrenciesListView;
     private ComboBox<FiatCurrency> fiatCurrenciesComboBox;
     private ListView<CryptoCurrency> cryptoCurrenciesListView;
     private ComboBox<CryptoCurrency> cryptoCurrenciesComboBox;
-    private Button resetDontShowAgainButton, resyncDaoFromGenesisButton, resyncDaoFromResourcesButton,
-            editCustomBtcExplorer, editCustomBsqExplorer;
+    private Button resetDontShowAgainButton, resyncDaoFromGenesisButton, resyncDaoFromResourcesButton, editCustomBtcExplorer;
     private ObservableList<String> languageCodes;
     private ObservableList<Country> countries;
     private ObservableList<FiatCurrency> fiatCurrencies;
@@ -160,7 +153,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     private ChangeListener<Boolean> deviationFocusedListener, bsqAverageTrimThresholdFocusedListener;
     private ChangeListener<Boolean> useCustomFeeCheckboxListener;
     private ChangeListener<Number> transactionFeeChangeListener;
-    private final boolean daoOptionsSet;
     private final boolean displayStandbyModeFeature;
     private ChangeListener<Filter> filterChangeListener;
 
@@ -173,9 +165,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     public PreferencesView(PreferencesViewModel model,
                            Preferences preferences,
                            FeeService feeService,
-                           AssetService assetService,
                            FilterManager filterManager,
-                           DaoFacade daoFacade,
                            Config config,
                            User user,
                            @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter formatter,
@@ -188,14 +178,8 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         this.formatter = formatter;
         this.preferences = preferences;
         this.feeService = feeService;
-        this.assetService = assetService;
         this.filterManager = filterManager;
-        this.daoFacade = daoFacade;
         this.storageDir = storageDir;
-        daoOptionsSet = config.fullDaoNodeOptionSetExplicitly &&
-                !rpcUser.isEmpty() &&
-                !rpcPassword.isEmpty() &&
-                rpcBlockNotificationPort != Config.UNSPECIFIED_PORT;
         this.displayStandbyModeFeature = Utilities.isLinux() || Utilities.isOSX() || Utilities.isWindows();
     }
 
@@ -212,8 +196,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
 
         initializeGeneralOptions();
         initializeDisplayOptions();
-        if (DevEnv.isDaoActivated())
-            initializeDaoOptions();
         initializeSeparator();
         initializeAutoConfirmOptions();
         initializeDisplayCurrencies();
@@ -223,15 +205,13 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     @Override
     protected void activate() {
         // We want to have it updated in case an asset got removed
-        allCryptoCurrencies = FXCollections.observableArrayList(CurrencyUtil.getActiveSortedCryptoCurrencies(assetService, filterManager));
+        allCryptoCurrencies = FXCollections.observableArrayList(CurrencyUtil.getActiveSortedCryptoCurrencies( filterManager));
         allCryptoCurrencies.removeAll(cryptoCurrencies);
 
         activateGeneralOptions();
         activateDisplayCurrencies();
         activateDisplayPreferences();
         activateAutoConfirmPreferences();
-        if (DevEnv.isDaoActivated())
-            activateDaoPreferences();
     }
 
     @Override
@@ -240,8 +220,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         deactivateDisplayCurrencies();
         deactivateDisplayPreferences();
         deactivateAutoConfirmPreferences();
-        if (DevEnv.isDaoActivated())
-            deactivateDaoPreferences();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -263,10 +241,11 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         Tuple2<TextField, Button> btcExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer"));
         btcExplorerTextField = btcExp.first;
         editCustomBtcExplorer = btcExp.second;
-
+        /*
         Tuple2<TextField, Button> bsqExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer.bsq"));
         bsqExplorerTextField = bsqExp.first;
         editCustomBsqExplorer = bsqExp.second;
+	*/
 
         Tuple3<Label, InputTextField, ToggleButton> tuple = addTopLabelInputTextFieldSlideToggleButton(root, ++gridRow,
                 Res.get("setting.preferences.txFee"), Res.get("setting.preferences.useCustomValue"));
@@ -619,7 +598,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         GridPane.setHgrow(resetDontShowAgainButton, Priority.ALWAYS);
         GridPane.setColumnIndex(resetDontShowAgainButton, 0);
     }
-
+    /*
     private void initializeDaoOptions() {
         daoOptionsTitledGroupBg = addTitledGroupBg(root, ++gridRow, 4, Res.get("setting.preferences.daoOptions"), Layout.GROUP_DISTANCE);
         resyncDaoFromResourcesButton = addButton(root, gridRow, Res.get("setting.preferences.dao.resyncFromResources.label"), Layout.TWICE_FIRST_ROW_AND_GROUP_DISTANCE);
@@ -630,6 +609,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         resyncDaoFromGenesisButton.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(resyncDaoFromGenesisButton, Priority.ALWAYS);
 
+        /*
         bsqAverageTrimThresholdTextField = addInputTextField(root, ++gridRow,
                 Res.get("setting.preferences.bsqAverageTrimThreshold"));
         bsqAverageTrimThresholdTextField.setText(FormattingUtils.formatToPercentWithSymbol(preferences.getBsqAverageTrimThreshold()));
@@ -661,6 +641,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
 
 
         isDaoFullNodeToggleButton = addSlideToggleButton(root, ++gridRow, Res.get("setting.preferences.dao.isDaoFullNode"));
+	
         rpcUserTextField = addInputTextField(root, ++gridRow, Res.get("setting.preferences.dao.rpcUser"));
         rpcUserTextField.setVisible(false);
         rpcUserTextField.setManaged(false);
@@ -687,7 +668,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             }
         };
     }
-
+    */
     private void initializeAutoConfirmOptions() {
         GridPane autoConfirmGridPane = new GridPane();
         GridPane.setHgrow(autoConfirmGridPane, Priority.ALWAYS);
@@ -865,7 +846,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         });
 
         btcExplorerTextField.setText(preferences.getBlockChainExplorer().name);
-        bsqExplorerTextField.setText(preferences.getBsqBlockChainExplorer().name);
 
         deviationInputTextField.setText(FormattingUtils.formatToPercentWithSymbol(preferences.getMaxPriceDistanceInPercent()));
         deviationInputTextField.textProperty().addListener(deviationListener);
@@ -973,6 +953,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
                     .show();
         });
 
+	/*
         editCustomBsqExplorer.setOnAction(e -> {
             EditCustomExplorerWindow urlWindow = new EditCustomExplorerWindow("BSQ",
                     preferences.getBsqBlockChainExplorer(), preferences.getBsqBlockChainExplorers());
@@ -995,8 +976,10 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         } else {
             preferences.setUseStandbyMode(false);
         }
+	*/
     }
-
+    
+    /*
     private void activateDaoPreferences() {
         boolean daoFullNode = preferences.isDaoFullNode();
         isDaoFullNodeToggleButton.setSelected(daoFullNode);
@@ -1064,7 +1047,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         rpcPwTextField.textProperty().addListener(rpcPwListener);
         blockNotifyPortTextField.textProperty().addListener(blockNotifyPortListener);
     }
-
+    */
     private void activateAutoConfirmPreferences() {
         preferences.findAutoConfirmSettings("XMR").ifPresent(autoConfirmSettings -> {
             autoConfirmXmrToggle.setSelected(autoConfirmSettings.isEnabled());
@@ -1081,7 +1064,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             filterManager.filterProperty().addListener(filterChangeListener);
         });
     }
-
+    /*
     private void updateDaoFields() {
         boolean isDaoFullNode = isDaoFullNodeToggleButton.isSelected();
         GridPane.setRowSpan(daoOptionsTitledGroupBg, isDaoFullNode ? 6 : 3);
@@ -1098,11 +1081,11 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             blockNotifyPortTextField.clear();
         }
 
-        isDaoFullNodeToggleButton.setDisable(daoOptionsSet);
         rpcUserTextField.setDisable(daoOptionsSet);
         rpcPwTextField.setDisable(daoOptionsSet);
         blockNotifyPortTextField.setDisable(daoOptionsSet);
     }
+    */
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1114,7 +1097,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         userLanguageComboBox.setOnAction(null);
         userCountryComboBox.setOnAction(null);
         editCustomBtcExplorer.setOnAction(null);
-        editCustomBsqExplorer.setOnAction(null);
         deviationInputTextField.textProperty().removeListener(deviationListener);
         deviationInputTextField.focusedProperty().removeListener(deviationFocusedListener);
         transactionFeeInputTextField.focusedProperty().removeListener(transactionFeeFocusedListener);
@@ -1143,7 +1125,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             avoidStandbyMode.setOnAction(null);
         }
     }
-
+    /*
     private void deactivateDaoPreferences() {
         resyncDaoFromResourcesButton.setOnAction(null);
         resyncDaoFromGenesisButton.setOnAction(null);
@@ -1165,4 +1147,5 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             filterManager.filterProperty().removeListener(filterChangeListener);
         });
     }
+    */
 }

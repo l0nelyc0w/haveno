@@ -17,8 +17,6 @@
 
 package bisq.core.util;
 
-import bisq.core.dao.DaoFacade;
-import bisq.core.dao.governance.param.Param;
 import bisq.core.filter.FilterManager;
 
 import org.bitcoinj.core.Coin;
@@ -34,12 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FeeReceiverSelector {
-    public static String getAddress(DaoFacade daoFacade, FilterManager filterManager) {
-        return getAddress(daoFacade, filterManager, new Random());
+    public static String getAddress(FilterManager filterManager) {
+        return getAddress(filterManager, new Random());
     }
 
     @VisibleForTesting
-    static String getAddress(DaoFacade daoFacade, FilterManager filterManager, Random rnd) {
+    static String getAddress(FilterManager filterManager, Random rnd) {
         List<String> feeReceivers = Optional.ofNullable(filterManager.getFilter())
                 .flatMap(f -> Optional.ofNullable(f.getBtcFeeReceiverAddresses()))
                 .orElse(List.of());
@@ -57,12 +55,12 @@ public class FeeReceiverSelector {
             }
         });
 
-        if (!amountList.isEmpty()) {
+	//if (!amountList.isEmpty()) {
             return receiverAddressList.get(weightedSelection(amountList, rnd));
-        }
+        //}
 
         // We keep default value as fallback in case no filter value is available or user has old version.
-        return daoFacade.getParamValue(Param.RECIPIENT_BTC_ADDRESS);
+        //return daoFacade.getParamValue(Param.RECIPIENT_BTC_ADDRESS);
     }
 
     @VisibleForTesting

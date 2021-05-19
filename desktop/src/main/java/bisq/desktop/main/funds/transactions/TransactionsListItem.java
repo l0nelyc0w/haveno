@@ -20,9 +20,7 @@ package bisq.desktop.main.funds.transactions;
 import bisq.desktop.components.indicator.TxConfidenceIndicator;
 
 import bisq.core.btc.listeners.TxConfidenceListener;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.XmrWalletService;
-import bisq.core.dao.DaoFacade;
 import bisq.core.trade.Tradable;
 import bisq.core.util.coin.CoinFormatter;
 
@@ -88,9 +86,7 @@ class TransactionsListItem {
 
     TransactionsListItem(MoneroTxWallet transaction,
                          XmrWalletService xmrWalletService,
-                         BsqWalletService bsqWalletService,
                          TransactionAwareTradable transactionAwareTradable,
-                         DaoFacade daoFacade,
                          CoinFormatter formatter,
                          long ignoreDustThreshold) {
         throw new RuntimeException("TransactionsListItem needs updated to use XMR wallet");

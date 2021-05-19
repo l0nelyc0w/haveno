@@ -29,7 +29,6 @@ import bisq.desktop.main.settings.preferences.PreferencesView;
 import bisq.desktop.util.DisplayUtils;
 import bisq.desktop.util.GUIUtil;
 import bisq.desktop.util.validation.AltcoinValidator;
-import bisq.desktop.util.validation.BsqValidator;
 import bisq.desktop.util.validation.BtcValidator;
 import bisq.desktop.util.validation.FiatPriceValidator;
 import bisq.desktop.util.validation.FiatVolumeValidator;
@@ -57,7 +56,6 @@ import bisq.core.user.Preferences;
 import bisq.core.util.FormattingUtils;
 import bisq.core.util.ParsingUtils;
 import bisq.core.util.VolumeUtil;
-import bisq.core.util.coin.BsqFormatter;
 import bisq.core.util.coin.CoinFormatter;
 import bisq.core.util.coin.CoinUtil;
 import bisq.core.util.validation.InputValidator;
@@ -98,14 +96,12 @@ import static javafx.beans.binding.Bindings.createStringBinding;
 @Slf4j
 public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> extends ActivatableWithDataModel<M> {
     private final BtcValidator btcValidator;
-    private final BsqValidator bsqValidator;
     protected final SecurityDepositValidator securityDepositValidator;
     protected final PriceFeedService priceFeedService;
     private final AccountAgeWitnessService accountAgeWitnessService;
     private final Navigation navigation;
     private final Preferences preferences;
     protected final CoinFormatter btcFormatter;
-    private final BsqFormatter bsqFormatter;
     private final FiatVolumeValidator fiatVolumeValidator;
     private final FiatPriceValidator fiatPriceValidator;
     private final AltcoinValidator altcoinValidator;
@@ -129,7 +125,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     public final StringProperty triggerPrice = new SimpleStringProperty("");
     final StringProperty tradeFee = new SimpleStringProperty();
     final StringProperty tradeFeeInBtcWithFiat = new SimpleStringProperty();
-    final StringProperty tradeFeeInBsqWithFiat = new SimpleStringProperty();
     final StringProperty tradeFeeCurrencyCode = new SimpleStringProperty();
     final StringProperty tradeFeeDescription = new SimpleStringProperty();
     final BooleanProperty isTradeFeeVisible = new SimpleBooleanProperty(false);
@@ -199,14 +194,12 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                                  FiatPriceValidator fiatPriceValidator,
                                  AltcoinValidator altcoinValidator,
                                  BtcValidator btcValidator,
-                                 BsqValidator bsqValidator,
                                  SecurityDepositValidator securityDepositValidator,
                                  PriceFeedService priceFeedService,
                                  AccountAgeWitnessService accountAgeWitnessService,
                                  Navigation navigation,
                                  Preferences preferences,
                                  @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter,
-                                 BsqFormatter bsqFormatter,
                                  OfferUtil offerUtil) {
         super(dataModel);
 
@@ -214,14 +207,12 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         this.fiatPriceValidator = fiatPriceValidator;
         this.altcoinValidator = altcoinValidator;
         this.btcValidator = btcValidator;
-        this.bsqValidator = bsqValidator;
         this.securityDepositValidator = securityDepositValidator;
         this.priceFeedService = priceFeedService;
         this.accountAgeWitnessService = accountAgeWitnessService;
         this.navigation = navigation;
         this.preferences = preferences;
         this.btcFormatter = btcFormatter;
-        this.bsqFormatter = bsqFormatter;
         this.offerUtil = offerUtil;
 
         paymentLabel = Res.get("createOffer.fundsBox.paymentLabel", dataModel.shortOfferId);
@@ -517,10 +508,12 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 dataModel.getMakerFeeInBtc(),
                 true,
                 btcFormatter));
+	/* l0nelyc0w
         tradeFeeInBsqWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
                 dataModel.getMakerFeeInBsq(),
                 false,
                 bsqFormatter));
+	*/
     }
 
 
@@ -1025,7 +1018,9 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                     true,
                     btcFormatter,
                     FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
-        } else {
+        }
+        /* l0nelyc0w
+	else {
             // For BSQ we use the fiat equivalent only. Calculating the % value would require to
             // calculate the BTC value of the BSQ fee and use that...
             return FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
@@ -1033,33 +1028,23 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                     false,
                     bsqFormatter);
         }
+	*/
     }
 
     public String getMakerFeePercentage() {
         final Coin makerFeeAsCoin = dataModel.getMakerFee();
-        if (dataModel.isCurrencyForMakerFeeBtc())
-            return GUIUtil.getPercentage(makerFeeAsCoin, dataModel.getAmount().get());
-        else
-            return Res.get("dao.paidWithBsq");
+        return GUIUtil.getPercentage(makerFeeAsCoin, dataModel.getAmount().get());
     }
 
     public String getTotalToPayInfo() {
         final String totalToPay = this.totalToPay.get();
-        if (dataModel.isCurrencyForMakerFeeBtc())
             return totalToPay;
-        else
-            return totalToPay + " + " + bsqFormatter.formatCoinWithCode(dataModel.getMakerFee());
     }
 
     public String getFundsStructure() {
         String fundsStructure;
-        if (dataModel.isCurrencyForMakerFeeBtc()) {
             fundsStructure = Res.get("createOffer.fundsBox.fundsStructure",
                     getSecurityDepositWithCode(), getMakerFeePercentage(), getTxFeePercentage());
-        } else {
-            fundsStructure = Res.get("createOffer.fundsBox.fundsStructure.BSQ",
-                    getSecurityDepositWithCode(), getTxFeePercentage(), bsqFormatter.formatCoinWithCode(dataModel.getMakerFee()));
-        }
         return fundsStructure;
     }
 
@@ -1250,11 +1235,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
     private MonetaryValidator getVolumeValidator() {
         final String code = getTradeCurrency().getCode();
-        if (CurrencyUtil.isCryptoCurrency(code)) {
-            return code.equals("BSQ") ? bsqValidator : altcoinValidator;
-        } else {
             return fiatVolumeValidator;
-        }
     }
 
     private void updateSpinnerInfo() {
@@ -1321,7 +1302,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     }
 
     private CoinFormatter getFormatterForMakerFee() {
-        return dataModel.isCurrencyForMakerFeeBtc() ? btcFormatter : bsqFormatter;
+        return btcFormatter;
     }
 
     private void updateMarketPriceToManual() {

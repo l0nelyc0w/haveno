@@ -36,7 +36,6 @@ import bisq.core.trade.TradeUtil;
 import bisq.core.trade.closed.ClosedTradableManager;
 import bisq.core.user.User;
 import bisq.core.util.FormattingUtils;
-import bisq.core.util.coin.BsqFormatter;
 import bisq.core.util.coin.CoinFormatter;
 import bisq.core.util.validation.BtcAddressValidator;
 
@@ -96,7 +95,6 @@ public class PendingTradesViewModel extends ActivatableWithDataModel<PendingTrad
     }
 
     public final CoinFormatter btcFormatter;
-    private final BsqFormatter bsqFormatter;
     public final BtcAddressValidator btcAddressValidator;
     final AccountAgeWitnessService accountAgeWitnessService;
     public final P2PService p2PService;
@@ -127,7 +125,6 @@ public class PendingTradesViewModel extends ActivatableWithDataModel<PendingTrad
     @Inject
     public PendingTradesViewModel(PendingTradesDataModel dataModel,
                                   @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter,
-                                  BsqFormatter bsqFormatter,
                                   BtcAddressValidator btcAddressValidator,
                                   P2PService p2PService,
                                   MempoolService mempoolService,
@@ -141,7 +138,6 @@ public class PendingTradesViewModel extends ActivatableWithDataModel<PendingTrad
         super(dataModel);
 
         this.btcFormatter = btcFormatter;
-        this.bsqFormatter = bsqFormatter;
         this.btcAddressValidator = btcAddressValidator;
         this.p2PService = p2PService;
         this.mempoolService = mempoolService;
@@ -326,8 +322,9 @@ public class PendingTradesViewModel extends ActivatableWithDataModel<PendingTrad
     public String getTradeFee() {
         if (trade != null && dataModel.getOffer() != null && trade.getTradeAmount() != null) {
             checkNotNull(dataModel.getTrade());
-            if (dataModel.isMaker() && dataModel.getOffer().isCurrencyForMakerFeeBtc() ||
-                    !dataModel.isMaker()) {
+
+            //if (dataModel.isMaker() el.getOffer().isCurrencyForMakerFeeBtc() ||
+            //        !dataModel.isMaker()) {
                 Coin tradeFeeInBTC = dataModel.getTradeFeeInBTC();
 
                 Coin minTradeFee = dataModel.isMaker() ?
@@ -337,9 +334,9 @@ public class PendingTradesViewModel extends ActivatableWithDataModel<PendingTrad
                 String percentage = GUIUtil.getPercentageOfTradeAmount(tradeFeeInBTC, trade.getTradeAmount(),
                         minTradeFee);
                 return btcFormatter.formatCoinWithCode(tradeFeeInBTC) + percentage;
-            } else {
-                return bsqFormatter.formatCoinWithCode(dataModel.getTradeFeeAsBsq());
-            }
+            //} else {
+            //    return bsqFormatter.formatCoinWithCode(dataModel.getTradeFeeAsBsq());
+            
         } else {
             return "";
         }

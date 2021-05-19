@@ -293,17 +293,6 @@ public class CoreApi {
         return walletsService.getFundingAddresses();
     }
 
-    public String getUnusedBsqAddress() {
-        return walletsService.getUnusedBsqAddress();
-    }
-
-    public void sendBsq(String address,
-                        String amount,
-                        String txFeeRate,
-                        TxBroadcaster.Callback callback) {
-        walletsService.sendBsq(address, amount, txFeeRate, callback);
-    }
-
     public void sendBtc(String address,
                         String amount,
                         String txFeeRate,
@@ -312,9 +301,6 @@ public class CoreApi {
         walletsService.sendBtc(address, amount, txFeeRate, memo, callback);
     }
 
-    public boolean verifyBsqSentToAddress(String address, String amount) {
-        return walletsService.verifyBsqSentToAddress(address, amount);
-    }
 
     public void getTxFeeRate(ResultHandler resultHandler) {
         walletsService.getTxFeeRate(resultHandler);

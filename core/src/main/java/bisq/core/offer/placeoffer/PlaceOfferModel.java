@@ -17,11 +17,9 @@
 
 package bisq.core.offer.placeoffer;
 
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.BtcWalletService;
 import bisq.core.btc.wallet.TradeWalletService;
 import bisq.core.btc.wallet.XmrWalletService;
-import bisq.core.dao.DaoFacade;
 import bisq.core.filter.FilterManager;
 import bisq.core.offer.Offer;
 import bisq.core.offer.OfferBookService;
@@ -52,11 +50,9 @@ public class PlaceOfferModel implements Model {
     private final BtcWalletService walletService;
     private final XmrWalletService xmrWalletService;
     private final TradeWalletService tradeWalletService;
-    private final BsqWalletService bsqWalletService;
     private final OfferBookService offerBookService;
     private final ArbitratorManager arbitratorManager;
     private final TradeStatisticsManager tradeStatisticsManager;
-    private final DaoFacade daoFacade;
     private final User user;
     @Getter
     private final FilterManager filterManager;
@@ -75,11 +71,9 @@ public class PlaceOfferModel implements Model {
                            BtcWalletService walletService,
                            XmrWalletService xmrWalletService,
                            TradeWalletService tradeWalletService,
-                           BsqWalletService bsqWalletService,
                            OfferBookService offerBookService,
                            ArbitratorManager arbitratorManager,
                            TradeStatisticsManager tradeStatisticsManager,
-                           DaoFacade daoFacade,
                            User user,
                            FilterManager filterManager) {
         this.offer = offer;
@@ -88,11 +82,9 @@ public class PlaceOfferModel implements Model {
         this.walletService = walletService;
         this.xmrWalletService = xmrWalletService;
         this.tradeWalletService = tradeWalletService;
-        this.bsqWalletService = bsqWalletService;
         this.offerBookService = offerBookService;
         this.arbitratorManager = arbitratorManager;
         this.tradeStatisticsManager = tradeStatisticsManager;
-        this.daoFacade = daoFacade;
         this.user = user;
         this.filterManager = filterManager;
     }

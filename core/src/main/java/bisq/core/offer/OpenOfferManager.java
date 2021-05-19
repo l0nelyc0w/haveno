@@ -18,11 +18,9 @@
 package bisq.core.offer;
 
 import bisq.core.api.CoreContext;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.BtcWalletService;
 import bisq.core.btc.wallet.TradeWalletService;
 import bisq.core.btc.wallet.XmrWalletService;
-import bisq.core.dao.DaoFacade;
 import bisq.core.exceptions.TradePriceOutOfToleranceException;
 import bisq.core.filter.FilterManager;
 import bisq.core.locale.Res;
@@ -111,7 +109,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
     private final BtcWalletService btcWalletService;
     private final XmrWalletService xmrWalletService;
     private final TradeWalletService tradeWalletService;
-    private final BsqWalletService bsqWalletService;
     private final OfferBookService offerBookService;
     private final ClosedTradableManager closedTradableManager;
     private final PriceFeedService priceFeedService;
@@ -120,7 +117,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
     private final ArbitratorManager arbitratorManager;
     private final MediatorManager mediatorManager;
     private final RefundAgentManager refundAgentManager;
-    private final DaoFacade daoFacade;
     private final FilterManager filterManager;
     private final Broadcaster broadcaster;
     private final PersistenceManager<TradableList<OpenOffer>> persistenceManager;
@@ -145,7 +141,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                             BtcWalletService btcWalletService,
                             XmrWalletService xmrWalletService,
                             TradeWalletService tradeWalletService,
-                            BsqWalletService bsqWalletService,
                             OfferBookService offerBookService,
                             ClosedTradableManager closedTradableManager,
                             PriceFeedService priceFeedService,
@@ -154,7 +149,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                             ArbitratorManager arbitratorManager,
                             MediatorManager mediatorManager,
                             RefundAgentManager refundAgentManager,
-                            DaoFacade daoFacade,
                             FilterManager filterManager,
                             Broadcaster broadcaster,
                             PersistenceManager<TradableList<OpenOffer>> persistenceManager) {
@@ -166,7 +160,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
         this.btcWalletService = btcWalletService;
         this.xmrWalletService = xmrWalletService;
         this.tradeWalletService = tradeWalletService;
-        this.bsqWalletService = bsqWalletService;
         this.offerBookService = offerBookService;
         this.closedTradableManager = closedTradableManager;
         this.priceFeedService = priceFeedService;
@@ -175,7 +168,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
         this.arbitratorManager = arbitratorManager;
         this.mediatorManager = mediatorManager;
         this.refundAgentManager = refundAgentManager;
-        this.daoFacade = daoFacade;
         this.filterManager = filterManager;
         this.broadcaster = broadcaster;
         this.persistenceManager = persistenceManager;
@@ -387,11 +379,9 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                 btcWalletService,
                 xmrWalletService,
                 tradeWalletService,
-                bsqWalletService,
                 offerBookService,
                 arbitratorManager,
                 tradeStatisticsManager,
-                daoFacade,
                 user,
                 filterManager);
         PlaceOfferProtocol placeOfferProtocol = new PlaceOfferProtocol(
@@ -684,7 +674,7 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                 availabilityResult = AvailabilityResult.OFFER_TAKEN;
             }
 
-            if (btcWalletService.isUnconfirmedTransactionsLimitHit() || bsqWalletService.isUnconfirmedTransactionsLimitHit()) {
+            if (btcWalletService.isUnconfirmedTransactionsLimitHit())  {
                 errorMessage = Res.get("shared.unconfirmedTransactionsLimitReached");
                 log.warn(errorMessage);
                 availabilityResult = AvailabilityResult.UNCONF_TX_LIMIT_HIT;
