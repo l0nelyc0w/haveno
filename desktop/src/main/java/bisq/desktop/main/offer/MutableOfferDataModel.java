@@ -23,10 +23,8 @@ import bisq.desktop.util.GUIUtil;
 
 import bisq.core.account.witness.AccountAgeWitnessService;
 import bisq.core.btc.TxFeeEstimationService;
-import bisq.core.btc.listeners.BsqBalanceListener;
 import bisq.core.btc.listeners.XmrBalanceListener;
 import bisq.core.btc.model.XmrAddressEntry;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.Restrictions;
 import bisq.core.btc.wallet.XmrWalletService;
 import bisq.core.locale.CurrencyUtil;
@@ -96,12 +94,10 @@ import javax.annotation.Nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Comparator.comparing;
 
-public abstract class MutableOfferDataModel extends OfferDataModel implements BsqBalanceListener {
+public abstract class MutableOfferDataModel extends OfferDataModel {
     private final CreateOfferService createOfferService;
     protected final OpenOfferManager openOfferManager;
     private final XmrWalletService xmrWalletService;
-    private final BsqWalletService bsqWalletService;
-    private final Preferences preferences;
     protected final User user;
     private final P2PService p2PService;
     protected final PriceFeedService priceFeedService;
@@ -155,7 +151,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
                                  OpenOfferManager openOfferManager,
                                  OfferUtil offerUtil,
                                  XmrWalletService xmrWalletService,
-                                 BsqWalletService bsqWalletService,
                                  Preferences preferences,
                                  User user,
                                  P2PService p2PService,
@@ -170,7 +165,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
         this.xmrWalletService = xmrWalletService;
         this.createOfferService = createOfferService;
         this.openOfferManager = openOfferManager;
-        this.bsqWalletService = bsqWalletService;
         this.preferences = preferences;
         this.user = user;
         this.p2PService = p2PService;
@@ -215,13 +209,11 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
 
     private void addListeners() {
         xmrWalletService.addBalanceListener(xmrBalanceListener);
-        bsqWalletService.addBsqBalanceListener(this);
         user.getPaymentAccountsAsObservable().addListener(paymentAccountsChangeListener);
     }
 
     private void removeListeners() {
         xmrWalletService.removeBalanceListener(xmrBalanceListener);
-        bsqWalletService.removeBsqBalanceListener(this);
         user.getPaymentAccountsAsObservable().removeListener(paymentAccountsChangeListener);
     }
 
@@ -511,7 +503,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
     }
 
     boolean isMakerFeeValid() {
-        return preferences.getPayFeeInBtc() || isBsqForFeeAvailable();
+        return preferences.getPayFeeInBtc();
     }
 
     long getMaxTradeLimit() {
@@ -733,9 +725,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
         return totalToPayAsCoin;
     }
 
-    Coin getUsableBsqBalance() {
-        return offerUtil.getUsableBsqBalance();
-    }
 
     public void setMarketPriceAvailable(boolean marketPriceAvailable) {
         this.marketPriceAvailable = marketPriceAvailable;
@@ -753,10 +742,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
         return CoinUtil.getMakerFee(true, amount.get());
     }
 
-    public Coin getMakerFeeInBsq() {
-        return CoinUtil.getMakerFee(false, amount.get());
-    }
-
     public boolean isCurrencyForMakerFeeBtc() {
         return offerUtil.isCurrencyForMakerFeeBtc(amount.get());
     }
@@ -765,9 +750,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel implements Bs
         return preferences.isPayFeeInBtc();
     }
 
-    boolean isBsqForFeeAvailable() {
-        return offerUtil.isBsqForMakerFeeAvailable(amount.get());
-    }
 
     boolean canPlaceOffer() {
         return GUIUtil.isBootstrappedOrShowPopup(p2PService) &&

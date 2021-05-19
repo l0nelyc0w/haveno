@@ -19,9 +19,6 @@ package bisq.desktop.main.overlays.windows;
 
 import bisq.desktop.Navigation;
 import bisq.desktop.main.MainView;
-import bisq.desktop.main.dao.DaoView;
-import bisq.desktop.main.dao.wallet.BsqWalletView;
-import bisq.desktop.main.dao.wallet.receive.BsqReceiveView;
 import bisq.desktop.main.overlays.Overlay;
 import bisq.desktop.main.overlays.popups.Popup;
 import bisq.desktop.util.FormBuilder;
@@ -62,9 +59,7 @@ public class FeeOptionWindow extends Overlay<FeeOptionWindow> {
     private Consumer<Boolean> selectionChangedHandler;
     private final StringProperty makerFeeWithCodeProperty;
     private final boolean isCurrencyForMakerFeeBtc;
-    private final boolean isBsqForFeeAvailable;
     @Nullable
-    private final String missingBsq;
     private final Navigation navigation;
     private final Runnable closeHandler;
     private ToggleGroup toggleGroup;
@@ -75,12 +70,10 @@ public class FeeOptionWindow extends Overlay<FeeOptionWindow> {
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public FeeOptionWindow(StringProperty makerFeeWithCodeProperty, boolean isCurrencyForMakerFeeBtc,
-                           boolean isBsqForFeeAvailable, @Nullable String missingBsq, Navigation navigation,
+                           Navigation navigation,
                            Runnable closeHandler) {
         this.makerFeeWithCodeProperty = makerFeeWithCodeProperty;
-        this.isCurrencyForMakerFeeBtc = isCurrencyForMakerFeeBtc;
-        this.isBsqForFeeAvailable = isBsqForFeeAvailable;
-        this.missingBsq = missingBsq;
+        this.isCurrencyForMakerFeeBtc = true;
         this.navigation = navigation;
         this.closeHandler = closeHandler;
         type = Type.Attention;
@@ -143,9 +136,8 @@ public class FeeOptionWindow extends Overlay<FeeOptionWindow> {
                 toggleGroup,
                 Res.get("feeOptionWindow.optionsLabel"),
                 "BTC",
-                "BSQ", 0);
+                 0);
         RadioButton radioButtonBTC = tuple.second;
-        RadioButton radioButtonBSQ = tuple.third;
 
         makerFeeTextField = FormBuilder.addTopLabelTextField(gridPane, ++rowIndex,
                 Res.get("createOffer.currencyForFee"), makerFeeWithCodeProperty.get()).second;
@@ -154,41 +146,10 @@ public class FeeOptionWindow extends Overlay<FeeOptionWindow> {
             final boolean isBtc = newValue == radioButtonBTC;
             selectionChangedHandler.accept(isBtc);
 
-            if (!isBsqForFeeAvailable && !isBtc) {
-                if (missingBsq != null) {
-                    // We don't call hide() because we want to keep the blurred bg
-                    if (stage != null)
-                        stage.hide();
-                    else
-                        log.warn("Stage is null");
-
-                    cleanup();
-                    onHidden();
-
-                    new Popup().warning(missingBsq)
-                            .actionButtonTextWithGoTo("navigation.dao.wallet.receive")
-                            .onAction(() -> {
-                                UserThread.runAfter(() -> {
-                                    hide();
-                                    navigation.navigateTo(MainView.class, DaoView.class, BsqWalletView.class, BsqReceiveView.class);
-                                }, 100, TimeUnit.MILLISECONDS);
-                            })
-                            .closeButtonText(Res.get("feeOptionWindow.useBTC"))
-                            .onClose(() -> {
-                                selectionChangedHandler.accept(true);
-                                closeHandler.run();
-                            })
-                            .show();
-                }
-
-                UserThread.execute(() -> {
-                    toggleGroup.selectToggle(radioButtonBTC);
-                    radioButtonBSQ.setDisable(true);
-                });
-            }
+         
         };
         toggleGroup.selectedToggleProperty().addListener(toggleChangeListener);
-        toggleGroup.selectToggle(!isBsqForFeeAvailable || isCurrencyForMakerFeeBtc ? radioButtonBTC : radioButtonBSQ);
+        toggleGroup.selectToggle( radioButtonBTC );
 
         makerFeeTextField.textProperty().bind(makerFeeWithCodeProperty);
     }

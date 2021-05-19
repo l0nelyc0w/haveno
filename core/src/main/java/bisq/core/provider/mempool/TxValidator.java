@@ -17,10 +17,10 @@
 
 package bisq.core.provider.mempool;
 
-import bisq.core.dao.governance.param.Param;
-import bisq.core.dao.state.DaoStateService;
-
 import bisq.common.util.Tuple2;
+import bisq.core.util.param.Param;
+
+
 
 import org.bitcoinj.core.Coin;
 
@@ -48,7 +48,6 @@ public class TxValidator {
     private final static double FEE_TOLERANCE = 0.95;     // we expect fees to be at least 95% of target
     private final static long BLOCK_TOLERANCE = 599999L;  // allow really old offers with weird fee addresses
 
-    private final DaoStateService daoStateService;
     private final List<String> errorList;
     private final String txId;
     private Coin amount;
@@ -60,8 +59,7 @@ public class TxValidator {
     private String jsonTxt;
 
 
-    public TxValidator(DaoStateService daoStateService, String txId, Coin amount, @Nullable Boolean isFeeCurrencyBtc) {
-        this.daoStateService = daoStateService;
+    public TxValidator(String txId, Coin amount, @Nullable Boolean isFeeCurrencyBtc) {
         this.txId = txId;
         this.amount = amount;
         this.isFeeCurrencyBtc = isFeeCurrencyBtc;
@@ -69,10 +67,9 @@ public class TxValidator {
         this.jsonTxt = "";
     }
 
-    public TxValidator(DaoStateService daoStateService, String txId) {
-        this.daoStateService = daoStateService;
+    public TxValidator(String txId) {
         this.txId = txId;
-        this.chainHeight = (long) daoStateService.getChainHeight();
+        //this.chainHeight = (long) daoStateService.getChainHeight();
         this.errorList = new ArrayList<>();
         this.jsonTxt = "";
     }
@@ -88,10 +85,9 @@ public class TxValidator {
         try {
             if (status) {
                 if (checkNotNull(isFeeCurrencyBtc)) {
+
                     status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
                             && checkFeeAmountBTC(jsonTxt, amount, true, getBlockHeightForFeeCalculation(jsonTxt));
-                } else {
-                    status = checkFeeAmountBSQ(jsonTxt, amount, true, getBlockHeightForFeeCalculation(jsonTxt));
                 }
             }
         } catch (JsonSyntaxException e) {
@@ -114,9 +110,7 @@ public class TxValidator {
                 if (isFeeCurrencyBtc) {
                     status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
                             && checkFeeAmountBTC(jsonTxt, amount, false, getBlockHeightForFeeCalculation(jsonTxt));
-                } else {
-                    status = checkFeeAmountBSQ(jsonTxt, amount, false, getBlockHeightForFeeCalculation(jsonTxt));
-                }
+                } 
             }
         } catch (JsonSyntaxException e) {
             String s = "The taker fee tx JSON validation failed with reason: " + e.toString();
@@ -159,6 +153,7 @@ public class TxValidator {
         return false;
     }
 
+
     private boolean checkFeeAmountBTC(String jsonTxt, Coin tradeAmount, boolean isMaker, long blockHeight) {
         JsonArray jsonVin = getVinAndVout(jsonTxt).first;
         JsonArray jsonVout = getVinAndVout(jsonTxt).second;
@@ -171,10 +166,14 @@ public class TxValidator {
         }
         long feeValue = jsonFeeValue.getAsLong();
         log.debug("BTC fee: {}", feeValue);
+	return true;
+        /* l0nelyc0w
         Coin expectedFee = getFeeHistorical(tradeAmount,
                 isMaker ? getMakerFeeRateBtc(blockHeight) : getTakerFeeRateBtc(blockHeight),
                 isMaker ? Param.MIN_MAKER_FEE_BTC : Param.MIN_TAKER_FEE_BTC);
+
         double leniencyCalc = feeValue / (double) expectedFee.getValue();
+
         String description = "Expected BTC fee: " + expectedFee.toString() + " sats , actual fee paid: " + Coin.valueOf(feeValue).toString() + " sats";
         if (expectedFee.getValue() == feeValue) {
             log.debug("The fee matched what we expected");
@@ -184,69 +183,14 @@ public class TxValidator {
             return true;
         } else if (leniencyCalc > FEE_TOLERANCE) {
             log.info("Leniency rule: the fee was low, but above {} of what was expected {} {}", FEE_TOLERANCE, leniencyCalc, description);
-            return true;
-        } else if (feeExistsUsingDifferentDaoParam(tradeAmount, Coin.valueOf(feeValue),
-                isMaker ? Param.DEFAULT_MAKER_FEE_BTC : Param.DEFAULT_TAKER_FEE_BTC,
-                isMaker ? Param.MIN_MAKER_FEE_BTC : Param.MIN_TAKER_FEE_BTC)) {
-            log.info("Leniency rule: the fee matches a different DAO parameter {}", description);
-            return true;
+            return true; 
         } else {
             String feeUnderpaidMessage = "UNDERPAID. " + description;
             errorList.add(feeUnderpaidMessage);
             log.info(feeUnderpaidMessage);
         }
         return false;
-    }
-
-    // I think its better to postpone BSQ fee check once the BSQ trade fee tx is confirmed and then use the BSQ explorer to request the
-    // BSQ fee to check if it is correct.
-    // Otherwise the requirements here become very complicated and potentially impossible to verify as we don't know
-    // if inputs and outputs are valid BSQ without the BSQ parser and confirmed transactions.
-    private boolean checkFeeAmountBSQ(String jsonTxt, Coin tradeAmount, boolean isMaker, long blockHeight) {
-        JsonArray jsonVin = getVinAndVout(jsonTxt).first;
-        JsonArray jsonVout = getVinAndVout(jsonTxt).second;
-        JsonObject jsonVin0 = jsonVin.get(0).getAsJsonObject();
-        JsonObject jsonVout0 = jsonVout.get(0).getAsJsonObject();
-        JsonElement jsonVIn0Value = jsonVin0.getAsJsonObject("prevout").get("value");
-        JsonElement jsonFeeValue = jsonVout0.get("value");
-        if (jsonVIn0Value == null || jsonFeeValue == null) {
-            throw new JsonSyntaxException("vin/vout missing data");
-        }
-        Coin expectedFee = getFeeHistorical(tradeAmount,
-                isMaker ? getMakerFeeRateBsq(blockHeight) : getTakerFeeRateBsq(blockHeight),
-                isMaker ? Param.MIN_MAKER_FEE_BSQ : Param.MIN_TAKER_FEE_BSQ);
-        long feeValue = jsonVIn0Value.getAsLong() - jsonFeeValue.getAsLong();
-        // if the first output (BSQ) is greater than the first input (BSQ) include the second input (presumably BSQ)
-        if (jsonFeeValue.getAsLong() > jsonVIn0Value.getAsLong()) {
-            // in this case 2 or more UTXOs were spent to pay the fee:
-            //TODO missing handling of > 2 BSQ inputs
-            JsonObject jsonVin1 = jsonVin.get(1).getAsJsonObject();
-            JsonElement jsonVIn1Value = jsonVin1.getAsJsonObject("prevout").get("value");
-            feeValue += jsonVIn1Value.getAsLong();
-        }
-        log.debug("BURNT BSQ maker fee: {} BSQ ({} sats)", (double) feeValue / 100.0, feeValue);
-        double leniencyCalc = feeValue / (double) expectedFee.getValue();
-        String description = String.format("Expected fee: %.2f BSQ, actual fee paid: %.2f BSQ",
-                (double) expectedFee.getValue() / 100.0, (double) feeValue / 100.0);
-        if (expectedFee.getValue() == feeValue) {
-            log.debug("The fee matched what we expected");
-            return true;
-        } else if (expectedFee.getValue() < feeValue) {
-            log.info("The fee was more than what we expected. " + description);
-            return true;
-        } else if (leniencyCalc > FEE_TOLERANCE) {
-            log.info("Leniency rule: the fee was low, but above {} of what was expected {} {}", FEE_TOLERANCE, leniencyCalc, description);
-            return true;
-        } else if (feeExistsUsingDifferentDaoParam(tradeAmount, Coin.valueOf(feeValue),
-                isMaker ? Param.DEFAULT_MAKER_FEE_BSQ : Param.DEFAULT_TAKER_FEE_BSQ,
-                isMaker ? Param.MIN_MAKER_FEE_BSQ : Param.MIN_TAKER_FEE_BSQ)) {
-            log.info("Leniency rule: the fee matches a different DAO parameter {}", description);
-            return true;
-        } else {
-            errorList.add(description);
-            log.info(description);
-        }
-        return false;
+	*/
     }
 
     private static Tuple2<JsonArray, JsonArray> getVinAndVout(String jsonTxt) throws JsonSyntaxException {
@@ -300,10 +244,11 @@ public class TxValidator {
     // if the tx is not yet confirmed, use current block tip, if tx is confirmed use the block it was confirmed at.
     private long getBlockHeightForFeeCalculation(String jsonTxt) {
         long txBlockHeight = getTxBlockHeight(jsonTxt);
-        if (txBlockHeight > 0) {
+        //if (txBlockHeight > 0) {
             return txBlockHeight;
-        }
-        return daoStateService.getChainHeight();
+        //}
+	// l0nelyc0w
+        // return daoStateService.getChainHeight();
     }
 
     // this would be useful for the arbitrator verifying that the delayed payout tx is confirmed
@@ -328,45 +273,23 @@ public class TxValidator {
         }
         return 0L;  // in mempool, not confirmed yet
     }
-
-    private Coin getFeeHistorical(Coin amount, Coin feeRatePerBtc, Param minFeeParam) {
+    /* l0nelyc0w
+    private Coin getFeeHistorical(Coin amount, Coin feeRatePerBtc) {
         double feePerBtcAsDouble = (double) feeRatePerBtc.value;
         double amountAsDouble = amount != null ? (double) amount.value : 0;
         double btcAsDouble = (double) Coin.COIN.value;
         double fact = amountAsDouble / btcAsDouble;
         Coin feePerBtc = Coin.valueOf(Math.round(feePerBtcAsDouble * fact));
-        Coin minFee = daoStateService.getParamValueAsCoin(minFeeParam, minFeeParam.getDefaultValue());
         return maxCoin(feePerBtc, minFee);
     }
-
-    private Coin getMakerFeeRateBsq(long blockHeight) {
-        return daoStateService.getParamValueAsCoin(Param.DEFAULT_MAKER_FEE_BSQ, (int) blockHeight);
-    }
-
-    private Coin getTakerFeeRateBsq(long blockHeight) {
-        return daoStateService.getParamValueAsCoin(Param.DEFAULT_TAKER_FEE_BSQ, (int) blockHeight);
-    }
-
+    
     private Coin getMakerFeeRateBtc(long blockHeight) {
-        return daoStateService.getParamValueAsCoin(Param.DEFAULT_MAKER_FEE_BTC, (int) blockHeight);
+        return daoStateService.getParamValueAsCoin(Param.UNDEFINED, (int) blockHeight);
     }
 
     private Coin getTakerFeeRateBtc(long blockHeight) {
-        return daoStateService.getParamValueAsCoin(Param.DEFAULT_TAKER_FEE_BTC, (int) blockHeight);
-    }
-
-    // implements leniency rule of accepting old DAO rate parameters: https://github.com/bisq-network/bisq/issues/5329#issuecomment-803223859
-    // We iterate over all past dao param values and if one of those matches we consider it valid. That covers the non-in-sync cases.
-    private boolean feeExistsUsingDifferentDaoParam(Coin tradeAmount, Coin actualFeeValue, Param defaultFeeParam, Param minFeeParam) {
-        for (Coin daoHistoricalRate : daoStateService.getParamChangeList(defaultFeeParam)) {
-            if (actualFeeValue.equals(getFeeHistorical(tradeAmount, daoHistoricalRate, minFeeParam))) {
-                return true;
-            }
-        }
-        // finally check the default rate used when we ask for the fee rate at block height 0 (it is hard coded in the Param enum)
-        Coin defaultRate = daoStateService.getParamValueAsCoin(defaultFeeParam, 0);
-        return actualFeeValue.equals(getFeeHistorical(tradeAmount, defaultRate, minFeeParam));
-    }
+        return daoStateService.getParamValueAsCoin(Param.U, (int) blockHeight);
+    }*/
 
     public TxValidator endResult(String title, boolean status) {
         log.info("{} : {}", title, status ? "SUCCESS" : "FAIL");

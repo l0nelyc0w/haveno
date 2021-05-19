@@ -18,11 +18,11 @@
 package bisq.core.trade;
 
 import bisq.core.btc.wallet.BtcWalletService;
-import bisq.core.dao.DaoFacade;
 import bisq.core.offer.Offer;
 import bisq.core.support.SupportType;
 import bisq.core.support.dispute.Dispute;
 import bisq.core.util.validation.RegexValidatorFactory;
+import bisq.core.util.param.Param;
 
 import bisq.network.p2p.NodeAddress;
 
@@ -60,9 +60,9 @@ public class TradeDataValidation {
         if (!Arrays.equals(dispute.getTakerPaymentAccountPayload().getHash(), dispute.getContract().getTakerPaymentAccountPayloadHash())) throw new InvalidPaymentAccountPayloadException(dispute, "Hash of taker's payment account payload does not match contract");
     }
 
-    public static void validateDonationAddress(String addressAsString, DaoFacade daoFacade)
+    public static void validateDonationAddress(String addressAsString)
             throws AddressException {
-        validateDonationAddress(null, addressAsString, daoFacade);
+        validateDonationAddress(null, addressAsString);
     }
 
     public static void validateNodeAddress(Dispute dispute, NodeAddress nodeAddress, Config config)
@@ -75,7 +75,8 @@ public class TradeDataValidation {
         }
     }
 
-    public static void validateDonationAddress(@Nullable Dispute dispute, String addressAsString, DaoFacade daoFacade)
+
+    public static void validateDonationAddress(@Nullable Dispute dispute, String addressAsString)
             throws AddressException {
 
         if (addressAsString == null) {
@@ -83,14 +84,6 @@ public class TradeDataValidation {
             return;
         }
 
-        Set<String> allPastParamValues = daoFacade.getAllDonationAddresses();
-        if (!allPastParamValues.contains(addressAsString)) {
-            String errorMsg = "Donation address is not a valid DAO donation address." +
-                    "\nAddress used in the dispute: " + addressAsString +
-                    "\nAll DAO param donation addresses:" + allPastParamValues;
-            log.error(errorMsg);
-            throw new AddressException(dispute, errorMsg);
-        }
     }
 
     public static void testIfAnyDisputeTriedReplay(List<Dispute> disputeList,
@@ -213,14 +206,12 @@ public class TradeDataValidation {
 
     public static void validateDelayedPayoutTx(Trade trade,
                                                Transaction delayedPayoutTx,
-                                               DaoFacade daoFacade,
                                                BtcWalletService btcWalletService)
             throws AddressException, MissingTxException,
             InvalidTxException, InvalidLockTimeException, InvalidAmountException {
         validateDelayedPayoutTx(trade,
                 delayedPayoutTx,
                 null,
-                daoFacade,
                 btcWalletService,
                 null);
     }
@@ -228,21 +219,18 @@ public class TradeDataValidation {
     public static void validateDelayedPayoutTx(Trade trade,
                                                Transaction delayedPayoutTx,
                                                @Nullable Dispute dispute,
-                                               DaoFacade daoFacade,
                                                BtcWalletService btcWalletService)
             throws AddressException, MissingTxException,
             InvalidTxException, InvalidLockTimeException, InvalidAmountException {
         validateDelayedPayoutTx(trade,
                 delayedPayoutTx,
                 dispute,
-                daoFacade,
                 btcWalletService,
                 null);
     }
 
     public static void validateDelayedPayoutTx(Trade trade,
                                                Transaction delayedPayoutTx,
-                                               DaoFacade daoFacade,
                                                BtcWalletService btcWalletService,
                                                @Nullable Consumer<String> addressConsumer)
             throws AddressException, MissingTxException,
@@ -250,7 +238,6 @@ public class TradeDataValidation {
         validateDelayedPayoutTx(trade,
                 delayedPayoutTx,
                 null,
-                daoFacade,
                 btcWalletService,
                 addressConsumer);
     }
@@ -258,7 +245,6 @@ public class TradeDataValidation {
     public static void validateDelayedPayoutTx(Trade trade,
                                                Transaction delayedPayoutTx,
                                                @Nullable Dispute dispute,
-                                               DaoFacade daoFacade,
                                                BtcWalletService btcWalletService,
                                                @Nullable Consumer<String> addressConsumer)
             throws AddressException, MissingTxException,
@@ -332,7 +318,7 @@ public class TradeDataValidation {
             addressConsumer.accept(addressAsString);
         }
 
-        validateDonationAddress(addressAsString, daoFacade);
+        validateDonationAddress(addressAsString);
 
         if (dispute != null) {
             // Verify that address in the dispute matches the one in the trade.

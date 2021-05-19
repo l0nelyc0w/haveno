@@ -24,13 +24,11 @@ import bisq.desktop.main.overlays.windows.ShowWalletDataWindow;
 import bisq.desktop.util.Layout;
 
 import bisq.core.btc.listeners.BalanceListener;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.BtcWalletService;
 import bisq.core.btc.wallet.WalletService;
 import bisq.core.btc.wallet.WalletsManager;
 import bisq.core.locale.Res;
 import bisq.core.util.FormattingUtils;
-import bisq.core.util.coin.BsqFormatter;
 import bisq.core.util.coin.CoinFormatter;
 
 import bisq.common.config.Config;
@@ -58,14 +56,11 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
 
     private final WalletsManager walletsManager;
     private final BtcWalletService btcWalletService;
-    private final BsqWalletService bsqWalletService;
     private final CoinFormatter btcFormatter;
-    private final BsqFormatter bsqFormatter;
     private int gridRow = 0;
     private Button openDetailsButton;
     private TextField btcTextField, bsqTextField;
     private BalanceListener btcWalletBalanceListener;
-    private BalanceListener bsqWalletBalanceListener;
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -75,14 +70,10 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
     @Inject
     private WalletInfoView(WalletsManager walletsManager,
                            BtcWalletService btcWalletService,
-                           BsqWalletService bsqWalletService,
-                           @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter,
-                           BsqFormatter bsqFormatter) {
+                           @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter) {
         this.walletsManager = walletsManager;
         this.btcWalletService = btcWalletService;
-        this.bsqWalletService = bsqWalletService;
         this.btcFormatter = btcFormatter;
-        this.bsqFormatter = bsqFormatter;
     }
 
     @Override
@@ -90,12 +81,10 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
         addTitledGroupBg(root, gridRow, 3, Res.get("account.menu.walletInfo.balance.headLine"));
         addMultilineLabel(root, gridRow, Res.get("account.menu.walletInfo.balance.info"), Layout.FIRST_ROW_DISTANCE, Double.MAX_VALUE);
         btcTextField = addTopLabelTextField(root, ++gridRow, "BTC", -Layout.FLOATING_LABEL_DISTANCE).second;
-        bsqTextField = addTopLabelTextField(root, ++gridRow, "BSQ", -Layout.FLOATING_LABEL_DISTANCE).second;
 
         addTitledGroupBg(root, ++gridRow, 3, Res.get("account.menu.walletInfo.xpub.headLine"), Layout.GROUP_DISTANCE);
         addXpubKeys(btcWalletService, "BTC", gridRow, Layout.FIRST_ROW_AND_GROUP_DISTANCE);
         ++gridRow; // update gridRow
-        addXpubKeys(bsqWalletService, "BSQ", ++gridRow, -Layout.FLOATING_LABEL_DISTANCE);
 
         addTitledGroupBg(root, ++gridRow, 4, Res.get("account.menu.walletInfo.path.headLine"), Layout.GROUP_DISTANCE);
         addMultilineLabel(root, gridRow, Res.get("account.menu.walletInfo.path.info"), Layout.FIRST_ROW_AND_GROUP_DISTANCE, Double.MAX_VALUE);
@@ -111,21 +100,13 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
                 updateBalances(btcWalletService);
             }
         };
-        bsqWalletBalanceListener = new BalanceListener() {
-            @Override
-            public void onBalanceChanged(Coin balanceAsCoin, Transaction tx) {
-                updateBalances(bsqWalletService);
-            }
-        };
     }
 
 
     @Override
     protected void activate() {
         btcWalletService.addBalanceListener(btcWalletBalanceListener);
-        bsqWalletService.addBalanceListener(bsqWalletBalanceListener);
         updateBalances(btcWalletService);
-        updateBalances(bsqWalletService);
 
         openDetailsButton.setOnAction(e -> {
             if (walletsManager.areWalletsAvailable()) {
@@ -139,7 +120,6 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
     @Override
     protected void deactivate() {
         btcWalletService.removeBalanceListener(btcWalletBalanceListener);
-        bsqWalletService.removeBalanceListener(bsqWalletBalanceListener);
         openDetailsButton.setOnAction(null);
     }
 
@@ -161,8 +141,6 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
     private void updateBalances(WalletService walletService) {
         if (walletService instanceof BtcWalletService) {
             btcTextField.setText(btcFormatter.formatCoinWithCode(walletService.getBalance(ESTIMATED_SPENDABLE)));
-        } else {
-            bsqTextField.setText(bsqFormatter.formatCoinWithCode(walletService.getBalance(ESTIMATED_SPENDABLE)));
         }
     }
 

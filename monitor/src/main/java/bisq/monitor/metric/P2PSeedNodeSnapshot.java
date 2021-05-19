@@ -61,7 +61,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * buckets, the Metric reports (for each host) the message types observed and
  * their number.
  *
- * Furthermore, since the DAO is a thing now, the consistency of the DAO state held by each host is assessed and reported.
  *
  * @author Florian Reimair
  *

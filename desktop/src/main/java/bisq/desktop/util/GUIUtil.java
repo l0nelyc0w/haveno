@@ -51,7 +51,6 @@ import bisq.core.user.DontShowAgainLookup;
 import bisq.core.user.Preferences;
 import bisq.core.user.User;
 import bisq.core.util.FormattingUtils;
-import bisq.core.util.coin.BsqFormatter;
 import bisq.core.util.coin.CoinFormatter;
 import bisq.core.util.coin.CoinUtil;
 
@@ -932,72 +931,6 @@ public class GUIUtil {
         }
     }
 
-    public static void showBsqFeeInfoPopup(Coin fee,
-                                           Coin miningFee,
-                                           Coin btcForIssuance,
-                                           int txVsize,
-                                           BsqFormatter bsqFormatter,
-                                           CoinFormatter btcFormatter,
-                                           String type,
-                                           Runnable actionHandler) {
-        String confirmationMessage;
-
-        if (btcForIssuance != null) {
-            confirmationMessage = Res.get("dao.feeTx.issuanceProposal.confirm.details",
-                    StringUtils.capitalize(type),
-                    bsqFormatter.formatCoinWithCode(fee),
-                    bsqFormatter.formatBTCWithCode(btcForIssuance),
-                    100,
-                    btcFormatter.formatCoinWithCode(miningFee),
-                    CoinUtil.getFeePerVbyte(miningFee, txVsize),
-                    txVsize / 1000d,
-                    type);
-        } else {
-            confirmationMessage = Res.get("dao.feeTx.confirm.details",
-                    StringUtils.capitalize(type),
-                    bsqFormatter.formatCoinWithCode(fee),
-                    btcFormatter.formatCoinWithCode(miningFee),
-                    CoinUtil.getFeePerVbyte(miningFee, txVsize),
-                    txVsize / 1000d,
-                    type);
-        }
-        new Popup().headLine(Res.get("dao.feeTx.confirm", type))
-                .confirmation(confirmationMessage)
-                .actionButtonText(Res.get("shared.yes"))
-                .onAction(actionHandler)
-                .closeButtonText(Res.get("shared.cancel"))
-                .show();
-    }
-
-    public static void showBsqFeeInfoPopup(Coin fee, Coin miningFee, int txVsize, BsqFormatter bsqFormatter,
-                                           CoinFormatter btcFormatter, String type,
-                                           Runnable actionHandler) {
-        showBsqFeeInfoPopup(fee, miningFee, null, txVsize, bsqFormatter, btcFormatter, type, actionHandler);
-    }
-
-    public static void setFitToRowsForTableView(TableView<?> tableView,
-                                                int rowHeight,
-                                                int headerHeight,
-                                                int minNumRows,
-                                                int maxNumRows) {
-        int size = tableView.getItems().size();
-        int minHeight = rowHeight * minNumRows + headerHeight;
-        int maxHeight = rowHeight * maxNumRows + headerHeight;
-        checkArgument(maxHeight >= minHeight, "maxHeight cannot be smaller as minHeight");
-        int height = Math.min(maxHeight, Math.max(minHeight, size * rowHeight + headerHeight));
-
-        tableView.setPrefHeight(-1);
-        tableView.setVisible(false);
-        // We need to delay the setter to the next render frame as otherwise views don' get updated in some cases
-        // Not 100% clear what causes that issue, but seems the requestLayout method is not called otherwise.
-        // We still need to set the height immediately, otherwise some views render an incorrect layout.
-        tableView.setPrefHeight(height);
-
-        UserThread.execute(() -> {
-            tableView.setPrefHeight(height);
-            tableView.setVisible(true);
-        });
-    }
 
     public static Tuple2<ComboBox<TradeCurrency>, Integer> addRegionCountryTradeCurrencyComboBoxes(GridPane gridPane,
                                                                                                    int gridRow,
@@ -1106,28 +1039,6 @@ public class GUIUtil {
         };
     }
 
-    public static void openTxInBsqBlockExplorer(String txId, Preferences preferences) {
-        if (txId != null)
-            GUIUtil.openWebPage(preferences.getBsqBlockChainExplorer().txUrl + txId, false);
-    }
-
-    public static String getBsqInUsd(Price bsqPrice,
-                                     Coin bsqAmount,
-                                     PriceFeedService priceFeedService,
-                                     BsqFormatter bsqFormatter) {
-        MarketPrice usdMarketPrice = priceFeedService.getMarketPrice("USD");
-        if (usdMarketPrice == null) {
-            return Res.get("shared.na");
-        }
-        long usdMarketPriceAsLong = MathUtils.roundDoubleToLong(MathUtils.scaleUpByPowerOf10(usdMarketPrice.getPrice(),
-                Fiat.SMALLEST_UNIT_EXPONENT));
-        Price usdPrice = Price.valueOf("USD", usdMarketPriceAsLong);
-        String bsqAmountAsString = bsqFormatter.formatCoin(bsqAmount);
-        Volume bsqAmountAsVolume = Volume.parse(bsqAmountAsString, "BSQ");
-        Coin requiredBtc = bsqPrice.getAmountByVolume(bsqAmountAsVolume);
-        Volume volumeByAmount = usdPrice.getVolumeByAmount(requiredBtc);
-        return DisplayUtils.formatAverageVolumeWithCode(volumeByAmount);
-    }
 
     public static MaterialDesignIcon getIconForSignState(AccountAgeWitnessService.SignState state) {
         if (state.equals(AccountAgeWitnessService.SignState.PEER_INITIAL)) {

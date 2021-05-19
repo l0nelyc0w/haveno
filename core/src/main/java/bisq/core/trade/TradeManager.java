@@ -18,7 +18,6 @@
 package bisq.core.trade;
 
 import bisq.core.btc.model.XmrAddressEntry;
-import bisq.core.btc.wallet.BsqWalletService;
 import bisq.core.btc.wallet.XmrWalletService;
 import bisq.core.locale.Res;
 import bisq.core.offer.Offer;
@@ -128,7 +127,6 @@ public class TradeManager implements PersistedDataHost, DecryptedDirectMessageLi
     @Getter
     private final KeyRing keyRing;
     private final XmrWalletService xmrWalletService;
-    private final BsqWalletService bsqWalletService;
     private final OfferBookService offerBookService;
     private final OpenOfferManager openOfferManager;
     private final ClosedTradableManager closedTradableManager;
@@ -168,7 +166,6 @@ public class TradeManager implements PersistedDataHost, DecryptedDirectMessageLi
     public TradeManager(User user,
                         KeyRing keyRing,
                         XmrWalletService xmrWalletService,
-                        BsqWalletService bsqWalletService,
                         OfferBookService offerBookService,
                         OpenOfferManager openOfferManager,
                         ClosedTradableManager closedTradableManager,
@@ -189,7 +186,6 @@ public class TradeManager implements PersistedDataHost, DecryptedDirectMessageLi
         this.user = user;
         this.keyRing = keyRing;
         this.xmrWalletService = xmrWalletService;
-        this.bsqWalletService = bsqWalletService;
         this.offerBookService = offerBookService;
         this.openOfferManager = openOfferManager;
         this.closedTradableManager = closedTradableManager;

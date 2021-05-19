@@ -17,8 +17,6 @@
 
 package bisq.core.provider.mempool;
 
-import bisq.core.dao.DaoFacade;
-import bisq.core.dao.state.DaoStateService;
 import bisq.core.filter.FilterManager;
 import bisq.core.offer.OfferPayload;
 import bisq.core.trade.Trade;
@@ -57,8 +55,6 @@ public class MempoolService {
     private final Config config;
     private final Preferences preferences;
     private final FilterManager filterManager;
-    private final DaoFacade daoFacade;
-    private final DaoStateService daoStateService;
     private final List<String> btcFeeReceivers = new ArrayList<>();
     @Getter
     private int outstandingRequests = 0;
@@ -67,15 +63,11 @@ public class MempoolService {
     public MempoolService(Socks5ProxyProvider socks5ProxyProvider,
                           Config config,
                           Preferences preferences,
-                          FilterManager filterManager,
-                          DaoFacade daoFacade,
-                          DaoStateService daoStateService) {
+                          FilterManager filterManager) {
         this.socks5ProxyProvider = socks5ProxyProvider;
         this.config = config;
         this.preferences = preferences;
         this.filterManager = filterManager;
-        this.daoFacade = daoFacade;
-        this.daoStateService = daoStateService;
     }
 
     public void onAllServicesInitialized() {
@@ -85,14 +77,16 @@ public class MempoolService {
     public boolean canRequestBeMade() {
         return outstandingRequests < 5; // limit max simultaneous lookups
     }
-
+    
     public boolean canRequestBeMade(OfferPayload offerPayload) {
         // when validating a new offer, wait 1 block for the tx to propagate
-        return offerPayload.getBlockHeightAtOfferCreation() < daoStateService.getChainHeight() && canRequestBeMade();
+	// l0nelyc0w: should compare offerPayload with XMR stagenet height
+        //return offerPayload.getBlockHeightAtOfferCreation() < daoStateService.getChainHeight() && canRequestBeMade();
+        return canRequestBeMade();
     }
 
     public void validateOfferMakerTx(OfferPayload offerPayload, Consumer<TxValidator> resultHandler) {
-        validateOfferMakerTx(new TxValidator(daoStateService, offerPayload.getOfferFeePaymentTxId(), Coin.valueOf(offerPayload.getAmount()),
+        validateOfferMakerTx(new TxValidator( offerPayload.getOfferFeePaymentTxId(), Coin.valueOf(offerPayload.getAmount()),
                 offerPayload.isCurrencyForMakerFeeBtc()), resultHandler);
     }
 
@@ -121,7 +115,7 @@ public class MempoolService {
     }
 
     public void checkTxIsConfirmed(String txId, Consumer<TxValidator> resultHandler) {
-        TxValidator txValidator = new TxValidator(daoStateService, txId);
+        TxValidator txValidator = new TxValidator(txId);
         if (!isServiceSupported()) {
             UserThread.runAfter(() -> resultHandler.accept(txValidator.endResult("mempool request not supported, bypassing", true)), 1);
             return;
@@ -252,7 +246,6 @@ public class MempoolService {
                 // If input format is not as expected we ignore entry
             }
         });
-        btcFeeReceivers.addAll(daoFacade.getAllDonationAddresses());
         log.info("Known BTC fee receivers: {}", btcFeeReceivers.toString());
 
         return btcFeeReceivers;
