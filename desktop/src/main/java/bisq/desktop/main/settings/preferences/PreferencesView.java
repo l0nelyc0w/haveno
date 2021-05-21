@@ -241,7 +241,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         Tuple2<TextField, Button> btcExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer"));
         btcExplorerTextField = btcExp.first;
         editCustomBtcExplorer = btcExp.second;
-        /*
+        /* l0nelyc0w: remove dao
         Tuple2<TextField, Button> bsqExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer.bsq"));
         bsqExplorerTextField = bsqExp.first;
         editCustomBsqExplorer = bsqExp.second;
@@ -1136,7 +1136,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         rpcPwTextField.textProperty().removeListener(rpcPwListener);
         blockNotifyPortTextField.textProperty().removeListener(blockNotifyPortListener);
     }
-
+    */
     private void deactivateAutoConfirmPreferences() {
         preferences.findAutoConfirmSettings("XMR").ifPresent(autoConfirmSettings -> {
             autoConfirmXmrToggle.setOnAction(null);
@@ -1147,5 +1147,5 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             filterManager.filterProperty().removeListener(filterChangeListener);
         });
     }
-    */
+    
 }

@@ -136,6 +136,7 @@ public class FeeOptionWindow extends Overlay<FeeOptionWindow> {
                 toggleGroup,
                 Res.get("feeOptionWindow.optionsLabel"),
                 "BTC",
+		"BSQ",
                  0);
         RadioButton radioButtonBTC = tuple.second;
 

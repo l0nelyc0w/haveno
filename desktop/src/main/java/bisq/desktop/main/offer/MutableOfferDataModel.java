@@ -98,6 +98,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
     private final CreateOfferService createOfferService;
     protected final OpenOfferManager openOfferManager;
     private final XmrWalletService xmrWalletService;
+    private final Preferences preferences;
     protected final User user;
     private final P2PService p2PService;
     protected final PriceFeedService priceFeedService;
@@ -416,7 +417,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
         }
     }
 
-    @Override
+    //@Override
     public void onUpdateBalances(Coin availableConfirmedBalance,
                                  Coin availableNonBsqBalance,
                                  Coin unverifiedBalance,

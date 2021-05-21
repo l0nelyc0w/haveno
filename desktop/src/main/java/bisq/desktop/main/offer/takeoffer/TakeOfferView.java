@@ -417,7 +417,7 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         if (!model.dataModel.isTakerFeeValid()) {
             throw new RuntimeException("showInsufficientBsqFundsForBtcFeePaymentPopup();");
 
-            return;
+            //return;
         }
 
         if (DevEnv.isDevMode()) {
