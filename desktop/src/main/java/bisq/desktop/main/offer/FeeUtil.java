@@ -36,14 +36,15 @@ public class FeeUtil {
                                                        Coin tradeFee,
                                                        boolean isCurrencyForMakerFeeBtc,
                                                        CoinFormatter formatter) {
+	/* l0nelyc0w: remove dao    
         if (!isCurrencyForMakerFeeBtc && !DevEnv.isDaoActivated()) {
             return "";
         }
+	*/
 
         Optional<Volume> optionalBtcFeeInFiat = offerUtil.getFeeInUserFiatCurrency(tradeFee,
                 isCurrencyForMakerFeeBtc,
                 formatter);
-
         return DisplayUtils.getFeeWithFiatAmount(tradeFee, optionalBtcFeeInFiat, formatter);
     }
 
@@ -53,24 +54,29 @@ public class FeeUtil {
                                                                     boolean isCurrencyForMakerFeeBtc,
                                                                     CoinFormatter formatter,
                                                                     Coin minTradeFee) {
-        if (isCurrencyForMakerFeeBtc) {
+        //if (isCurrencyForMakerFeeBtc) {
             String feeAsBtc = formatter.formatCoinWithCode(tradeFee);
             String percentage;
             if (!tradeFee.isGreaterThan(minTradeFee)) {
                 percentage = Res.get("guiUtil.requiredMinimum")
                         .replace("(", "")
                         .replace(")", "");
-            } else {
+            }
+            
+	    else {
                 percentage = GUIUtil.getPercentage(tradeFee, tradeAmount) +
                         " " + Res.get("guiUtil.ofTradeAmount");
             }
+	   
             return offerUtil.getFeeInUserFiatCurrency(tradeFee,
                     isCurrencyForMakerFeeBtc,
                     formatter)
                     .map(DisplayUtils::formatAverageVolumeWithCode)
                     .map(feeInFiat -> Res.get("feeOptionWindow.btcFeeWithFiatAndPercentage", feeAsBtc, feeInFiat, percentage))
                     .orElseGet(() -> Res.get("feeOptionWindow.btcFeeWithPercentage", feeAsBtc, percentage));
-        } else {
+        //} 
+	/* l0nelyc0w: remove dao
+	else {
             // For BSQ we use the fiat equivalent only. Calculating the % value would be more effort.
             // We could calculate the BTC value if the BSQ fee and use that...
             return FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
@@ -78,5 +84,6 @@ public class FeeUtil {
                     false,
                     formatter);
         }
+	*/
     }
 }

@@ -114,9 +114,9 @@ public class OfferUtil {
                 throw new IllegalStateException(format("%s cannot be used to pay trade fees",
                         feeCurrencyCode.toUpperCase()));
 
-            if (feeCurrencyCode.equalsIgnoreCase("BSQ") && preferences.isPayFeeInBtc())
-                preferences.setPayFeeInBtc(false);
-            else if (feeCurrencyCode.equalsIgnoreCase("BTC") && !preferences.isPayFeeInBtc())
+            //if (feeCurrencyCode.equalsIgnoreCase("BSQ") && preferences.isPayFeeInBtc())
+            //    preferences.setPayFeeInBtc(false);
+            //else if (feeCurrencyCode.equalsIgnoreCase("BTC") && !preferences.isPayFeeInBtc())
                 preferences.setPayFeeInBtc(true);
         }
     }
@@ -236,7 +236,8 @@ public class OfferUtil {
     }
 
     public Optional<Volume> getFeeInUserFiatCurrency(Coin makerFee,
-                                                     boolean isCurrencyForMakerFeeBtc) {
+                                                     boolean isCurrencyForMakerFeeBtc,
+						     CoinFormatter bsqFormatter) {
         String userCurrencyCode = preferences.getPreferredTradeCurrency().getCode();
         if (CurrencyUtil.isCryptoCurrency(userCurrencyCode)) {
             // In case the user has selected a altcoin as preferredTradeCurrency
@@ -247,7 +248,8 @@ public class OfferUtil {
 
         return getFeeInUserFiatCurrency(makerFee,
                 isCurrencyForMakerFeeBtc,
-                userCurrencyCode);
+                userCurrencyCode,
+		bsqFormatter);
     }
 
     public Map<String, String> getExtraDataMap(PaymentAccount paymentAccount,
@@ -305,15 +307,17 @@ public class OfferUtil {
 
     private Optional<Volume> getFeeInUserFiatCurrency(Coin makerFee,
                                                       boolean isCurrencyForMakerFeeBtc,
-                                                      String userCurrencyCode) {
+                                                      String userCurrencyCode,
+						      CoinFormatter bsqFormatter) {
         MarketPrice marketPrice = priceFeedService.getMarketPrice(userCurrencyCode);
         if (marketPrice != null && makerFee != null) {
             long marketPriceAsLong = roundDoubleToLong(
                     scaleUpByPowerOf10(marketPrice.getPrice(), Fiat.SMALLEST_UNIT_EXPONENT));
             Price userCurrencyPrice = Price.valueOf(userCurrencyCode, marketPriceAsLong);
 
-            if (isCurrencyForMakerFeeBtc) {
+            //if (isCurrencyForMakerFeeBtc) {
                 return Optional.of(userCurrencyPrice.getVolumeByAmount(makerFee));
+	    /*
             } else {
                 // We use the current market price for the fiat currency and the 30 day average BSQ price
                 Tuple2<Price, Price> tuple = AveragePriceUtil.getAveragePriceTuple(preferences,
@@ -322,6 +326,7 @@ public class OfferUtil {
                 return Optional.empty();
                
             }
+	    */
         } else {
             return Optional.empty();
         }

@@ -1015,7 +1015,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
 
     public String getTradeFee() {
-        if (dataModel.isCurrencyForMakerFeeBtc()) {
+        //if (dataModel.isCurrencyForMakerFeeBtc()) {
             return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                     dataModel.getMakerFeeInBtc(),
                     dataModel.getAmount().get(),
@@ -1023,7 +1023,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                     btcFormatter,
                     FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
         }
-        /* l0nelyc0w
+        /* l0nelyc0w: remove dao
 	else {
             // For BSQ we use the fiat equivalent only. Calculating the % value would require to
             // calculate the BTC value of the BSQ fee and use that...
@@ -1032,8 +1032,9 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                     false,
                     bsqFormatter);
         }
-	*/
+	
     }
+    */
 
     public String getMakerFeePercentage() {
         final Coin makerFeeAsCoin = dataModel.getMakerFee();
