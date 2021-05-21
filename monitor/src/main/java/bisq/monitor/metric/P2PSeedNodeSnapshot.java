@@ -19,13 +19,13 @@ package bisq.monitor.metric;
 
 import bisq.monitor.OnionParser;
 import bisq.monitor.Reporter;
-
+/*
 import bisq.core.dao.monitoring.model.StateHash;
 import bisq.core.dao.monitoring.network.messages.GetBlindVoteStateHashesRequest;
 import bisq.core.dao.monitoring.network.messages.GetDaoStateHashesRequest;
 import bisq.core.dao.monitoring.network.messages.GetProposalStateHashesRequest;
 import bisq.core.dao.monitoring.network.messages.GetStateHashesResponse;
-
+*/
 import bisq.network.p2p.NodeAddress;
 import bisq.network.p2p.network.Connection;
 import bisq.network.p2p.peers.getdata.messages.GetDataResponse;
@@ -66,16 +66,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @Slf4j
+
 public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
 
     final Map<NodeAddress, Statistics<Set<Integer>>> bucketsPerHost = new ConcurrentHashMap<>();
+    /*
     private int daostateheight = 594000;
     private int proposalheight = daostateheight;
     private int blindvoteheight = daostateheight;
+    */
 
-    /**
-     * Use a counter to do statistics.
-     */
     private static class MyStatistics extends Statistics<Set<Integer>> {
 
         @Override
@@ -92,10 +92,10 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
     public P2PSeedNodeSnapshot(Reporter reporter) {
         super(reporter);
     }
-
     protected List<NetworkEnvelope> getRequests() {
         List<NetworkEnvelope> result = new ArrayList<>();
 
+    /* remove dao
         Random random = new Random();
         result.add(new PreliminaryGetDataRequest(random.nextInt(), hashes));
 
@@ -104,13 +104,12 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
         result.add(new GetProposalStateHashesRequest(proposalheight, random.nextInt()));
 
         result.add(new GetBlindVoteStateHashesRequest(blindvoteheight, random.nextInt()));
-
+       */
         return result;
-    }
 
-    /**
-     * Report all the stuff. Uses the configured reporter directly.
-     */
+    }
+    
+
     void report() {
 
         // report
@@ -123,7 +122,6 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
         //   - transfer values
         Map<String, Statistics<Set<Integer>>> messagesPerHost = new HashMap<>();
         bucketsPerHost.forEach((host, value) -> messagesPerHost.put(OnionParser.prettyPrint(host), value));
-
         //   - pick reference seed node and its values
         String referenceHost = "overall_number_of_unique_messages";
         Map<String, Set<Object>> referenceValues = new HashMap<>();
@@ -159,7 +157,7 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
 
         //   - report
         reporter.report(report, getName());
-
+        /*
         // - assemble dao report
         Map<String, String> daoreport = new HashMap<>();
 
@@ -218,6 +216,7 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
 
         //   - report
         reporter.report(daoreport, "DaoStateSnapshot");
+	*/
     }
 
     private static class Tuple {
@@ -230,7 +229,7 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
             this.hash = hash;
         }
     }
-
+    /*
     private class DaoStatistics extends Statistics<Tuple> {
 
         @Override
@@ -244,9 +243,10 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
             buckets.putIfAbsent(className, new Tuple(last.getHeight(), last.getHash()));
         }
     }
-
+    */
+    /*
     private final Map<NodeAddress, Statistics<Tuple>> daoData = new ConcurrentHashMap<>();
-
+    */
     protected boolean treatMessage(NetworkEnvelope networkEnvelope, Connection connection) {
         checkNotNull(connection.getPeersNodeAddressProperty(),
                 "although the property is nullable, we need it to not be null");
@@ -279,13 +279,18 @@ public class P2PSeedNodeSnapshot extends P2PSeedNodeSnapshotBase {
 
             bucketsPerHost.put(connection.getPeersNodeAddressProperty().getValue(), result);
             return true;
-        } else if (networkEnvelope instanceof GetStateHashesResponse) {
+        } 
+	/*
+	else if (networkEnvelope instanceof GetStateHashesResponse) {
             daoData.putIfAbsent(connection.getPeersNodeAddressProperty().getValue(), new DaoStatistics());
 
             daoData.get(connection.getPeersNodeAddressProperty().getValue()).log(networkEnvelope);
 
             return true;
         }
+	*/
         return false;
     }
+
 }
+

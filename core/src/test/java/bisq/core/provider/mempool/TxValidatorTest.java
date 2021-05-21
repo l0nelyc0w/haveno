@@ -17,10 +17,10 @@
 
 package bisq.core.provider.mempool;
 
-import bisq.core.dao.governance.param.Param;
-import bisq.core.dao.state.DaoStateService;
+//import bisq.core.dao.governance.param.Param;
+//import bisq.core.dao.state.DaoStateService;
 import bisq.core.util.ParsingUtils;
-import bisq.core.util.coin.BsqFormatter;
+//import bisq.core.util.coin.BsqFormatter;
 
 import com.google.gson.Gson;
 
@@ -188,8 +188,8 @@ public class TxValidatorTest {
             String txId = y[1];
             long amount = Long.parseLong(y[2]);
             boolean isCurrencyForMakerFeeBtc = Long.parseLong(y[4]) > 0;
-            DaoStateService mockedDaoStateService = mock(DaoStateService.class);
-
+            //DaoStateService mockedDaoStateService = mock(DaoStateService.class);
+            /* 
             Answer<Coin> mockGetFeeRate = invocation -> {
                 return mockedLookupFeeRate(invocation.getArgument(0), invocation.getArgument(1));
             };
@@ -199,19 +199,23 @@ public class TxValidatorTest {
             Answer<List<Coin>> mockGetParamChangeList = invocation -> {
                 return mockedGetParamChangeList(invocation.getArgument(0));
             };
+	    */
+	    /*
             when(mockedDaoStateService.getParamValueAsCoin(Mockito.any(Param.class), Mockito.anyInt())).thenAnswer(mockGetFeeRate);
             when(mockedDaoStateService.getParamValueAsCoin(Mockito.any(Param.class), Mockito.anyString())).thenAnswer(mockGetParamValueAsCoin);
             when(mockedDaoStateService.getParamChangeList(Mockito.any())).thenAnswer(mockGetParamChangeList);
-            TxValidator txValidator = new TxValidator(mockedDaoStateService, txId, Coin.valueOf(amount), isCurrencyForMakerFeeBtc);
+	    */
+	    //TxValidator txValidator = new TxValidator(mockedDaoStateService, txId, Coin.valueOf(amount), isCurrencyForMakerFeeBtc);
+            TxValidator txValidator = new TxValidator(txId, Coin.valueOf(amount), isCurrencyForMakerFeeBtc);
             return txValidator;
         } catch (RuntimeException ignore) {
             // If input format is not as expected we ignore entry
         }
         return null;
     }
-
+    /*
     Coin mockedLookupFeeRate(Param param, int blockHeight) {
-        BsqFormatter bsqFormatter = new BsqFormatter();
+        //BsqFormatter bsqFormatter = new BsqFormatter();
         LinkedHashMap<Long, String> feeMap = mockedGetFeeRateMap(param);
         for (Map.Entry<Long, String> entry : feeMap.entrySet()) {
             if (blockHeight >= entry.getKey()) {
@@ -226,7 +230,8 @@ public class TxValidatorTest {
         else
             return ParsingUtils.parseToCoin(param.getDefaultValue(), bsqFormatter);
     }
-
+    */
+    /*
     private LinkedHashMap<Long, String> mockedGetFeeRateMap(Param param) {
         LinkedHashMap<Long, String> feeMap = new LinkedHashMap<>();
         if (param == Param.DEFAULT_MAKER_FEE_BSQ) {
@@ -262,12 +267,13 @@ public class TxValidatorTest {
         }
         return feeMap;
     }
-
+    */
+    /*
     public Coin mockedGetParamValueAsCoin(Param param, String paramValue) {
         BsqFormatter bsqFormatter = new BsqFormatter();
         return bsqFormatter.parseParamValueToCoin(param, paramValue);
     }
-
+    
     public List<Coin> mockedGetParamChangeList(Param param) {
         BsqFormatter bsqFormatter = new BsqFormatter();
         List<Coin> retVal = new ArrayList<Coin>();
@@ -277,4 +283,5 @@ public class TxValidatorTest {
         }
         return retVal;
     }
+    */
 }
