@@ -65,7 +65,6 @@ public class CreateMakerFeeTx extends Task<PlaceOfferModel> {
 
             String feeReceiver = FeeReceiverSelector.getAddress( model.getFilterManager());
 
-            if (offer.isCurrencyForMakerFeeBtc()) {
                 tradeWalletService.createBtcTradingFeeTx(
                         fundingAddress,
                         reservedForTradeAddress,
@@ -105,7 +104,7 @@ public class CreateMakerFeeTx extends Task<PlaceOfferModel> {
                                 }
                             }
                         });
-            } 
+             
             
         } catch (Throwable t) {
                 offer.setErrorMessage("An error occurred.\n" +

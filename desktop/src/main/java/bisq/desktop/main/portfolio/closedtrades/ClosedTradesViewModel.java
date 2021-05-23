@@ -137,16 +137,6 @@ public class ClosedTradesViewModel extends ActivatableWithDataModel<ClosedTrades
         }
     }
 
-    boolean isCurrencyForTradeFeeBtc(ClosedTradableListItem item) {
-        if (item == null) {
-            return false;
-        }
-
-        Tradable tradable = item.getTradable();
-        Offer offer = tradable.getOffer();
-            // I was maker so we use offer
-            return offer.isCurrencyForMakerFeeBtc();
-    }
 
     String getTradeFee(ClosedTradableListItem item, boolean appendCode) {
         if (item == null) {
@@ -304,19 +294,4 @@ public class ClosedTradesViewModel extends ActivatableWithDataModel<ClosedTrades
                 btcFormatter.formatCoin(totalTradeFee, true),
                 FormattingUtils.formatToPercentWithSymbol(percentage));
     }
-    /*
-    public String getTotalTradeFeeInBsq(Coin totalTradeAmount) {
-        return dataModel.getVolume(totalTradeAmount, "USD")
-                .filter(v -> v.getValue() > 0)
-                .map(tradeAmountVolume -> {
-                    Coin totalTradeFee = dataModel.getTotalTradeFee(false);
-                    Volume bsqVolumeInUsd = dataModel.getBsqVolumeInUsdWithAveragePrice(totalTradeFee); // with 4 decimal
-                    double percentage = ((double) bsqVolumeInUsd.getValue()) / tradeAmountVolume.getValue();
-                    return Res.get("closedTradesSummaryWindow.totalTradeFeeInBsq.value",
-                            bsqFormatter.formatCoin(totalTradeFee, true),
-                            FormattingUtils.formatToPercentWithSymbol(percentage));
-                })
-                .orElse("");
-    }
-    */
 }

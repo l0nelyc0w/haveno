@@ -207,7 +207,6 @@ class EditOfferDataModel extends MutableOfferDataModel {
                 offerPayload.getBlockHeightAtOfferCreation(),
                 offerPayload.getTxFee(),
                 offerPayload.getMakerFee(),
-                offerPayload.isCurrencyForMakerFeeBtc(),
                 offerPayload.getBuyerSecurityDeposit(),
                 offerPayload.getSellerSecurityDeposit(),
                 offerPayload.getMaxTradeLimit(),

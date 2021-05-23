@@ -1011,7 +1011,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                         originalOfferPayload.getBlockHeightAtOfferCreation(),
                         originalOfferPayload.getTxFee(),
                         originalOfferPayload.getMakerFee(),
-                        originalOfferPayload.isCurrencyForMakerFeeBtc(),
                         originalOfferPayload.getBuyerSecurityDeposit(),
                         originalOfferPayload.getSellerSecurityDeposit(),
                         originalOfferPayload.getMaxTradeLimit(),
