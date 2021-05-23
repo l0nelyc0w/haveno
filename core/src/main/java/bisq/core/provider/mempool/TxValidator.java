@@ -52,7 +52,7 @@ public class TxValidator {
     private final String txId;
     private Coin amount;
     @Nullable
-    private Boolean isFeeCurrencyBtc = null;
+    private Boolean isFeeCurrencyBtc = true;
     @Nullable
     private Long chainHeight;
     @Setter
@@ -62,14 +62,13 @@ public class TxValidator {
     public TxValidator(String txId, Coin amount, @Nullable Boolean isFeeCurrencyBtc) {
         this.txId = txId;
         this.amount = amount;
-        this.isFeeCurrencyBtc = isFeeCurrencyBtc;
+        this.isFeeCurrencyBtc = true;
         this.errorList = new ArrayList<>();
         this.jsonTxt = "";
     }
 
     public TxValidator(String txId) {
         this.txId = txId;
-        //this.chainHeight = (long) daoStateService.getChainHeight();
         this.errorList = new ArrayList<>();
         this.jsonTxt = "";
     }
@@ -84,11 +83,8 @@ public class TxValidator {
         boolean status = initialSanityChecks(txId, jsonTxt);
         try {
             if (status) {
-                if (checkNotNull(isFeeCurrencyBtc)) {
-
-                    status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
-                            && checkFeeAmountBTC(jsonTxt, amount, true, getBlockHeightForFeeCalculation(jsonTxt));
-                }
+                status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
+                        && checkFeeAmountBTC(jsonTxt, amount, true, getBlockHeightForFeeCalculation(jsonTxt));
             }
         } catch (JsonSyntaxException e) {
             String s = "The maker fee tx JSON validation failed with reason: " + e.toString();
@@ -104,13 +100,8 @@ public class TxValidator {
         boolean status = initialSanityChecks(txId, jsonTxt);
         try {
             if (status) {
-                if (isFeeCurrencyBtc == null) {
-                    isFeeCurrencyBtc = checkFeeAddressBTC(jsonTxt, btcFeeReceivers);
-                }
-                if (isFeeCurrencyBtc) {
-                    status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
-                            && checkFeeAmountBTC(jsonTxt, amount, false, getBlockHeightForFeeCalculation(jsonTxt));
-                } 
+                status = checkFeeAddressBTC(jsonTxt, btcFeeReceivers)
+                       && checkFeeAmountBTC(jsonTxt, amount, false, getBlockHeightForFeeCalculation(jsonTxt));
             }
         } catch (JsonSyntaxException e) {
             String s = "The taker fee tx JSON validation failed with reason: " + e.toString();

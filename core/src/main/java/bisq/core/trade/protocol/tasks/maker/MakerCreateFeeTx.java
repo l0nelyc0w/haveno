@@ -57,7 +57,6 @@ public class MakerCreateFeeTx extends Task<PlaceOfferModel> {
             TradeWalletService tradeWalletService = model.getTradeWalletService();
             String feeReceiver = "52FnB7ABUrKJzVQRpbMNrqDFWbcKLjFUq8Rgek7jZEuB6WE2ZggXaTf4FK6H8gQymvSrruHHrEuKhMN3qTMiBYzREKsmRKM"; // TODO (woodser): don't hardcode
 
-            if (offer.isCurrencyForMakerFeeBtc()) {
                 try {
                   MoneroTxWallet tx = tradeWalletService.createXmrTradingFeeTx(
                           reservedForTradeAddress,
@@ -132,7 +131,6 @@ public class MakerCreateFeeTx extends Task<PlaceOfferModel> {
 //                                }
 //                            }
 //                        });
-            }
         } catch (Throwable t) {
                 offer.setErrorMessage("An error occurred.\n" +
                         "Error message:\n"

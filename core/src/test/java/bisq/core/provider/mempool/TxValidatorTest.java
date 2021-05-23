@@ -187,7 +187,7 @@ public class TxValidatorTest {
             String[] y = offerData.split(",");
             String txId = y[1];
             long amount = Long.parseLong(y[2]);
-            boolean isCurrencyForMakerFeeBtc = Long.parseLong(y[4]) > 0;
+            //boolean isCurrencyForMakerFeeBtc = Long.parseLong(y[4]) > 0;
             //DaoStateService mockedDaoStateService = mock(DaoStateService.class);
             /* 
             Answer<Coin> mockGetFeeRate = invocation -> {
@@ -206,7 +206,7 @@ public class TxValidatorTest {
             when(mockedDaoStateService.getParamChangeList(Mockito.any())).thenAnswer(mockGetParamChangeList);
 	    */
 	    //TxValidator txValidator = new TxValidator(mockedDaoStateService, txId, Coin.valueOf(amount), isCurrencyForMakerFeeBtc);
-            TxValidator txValidator = new TxValidator(txId, Coin.valueOf(amount), isCurrencyForMakerFeeBtc);
+            TxValidator txValidator = new TxValidator(txId, Coin.valueOf(amount));
             return txValidator;
         } catch (RuntimeException ignore) {
             // If input format is not as expected we ignore entry
