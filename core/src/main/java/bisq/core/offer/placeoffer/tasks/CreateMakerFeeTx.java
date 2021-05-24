@@ -25,7 +25,7 @@ import bisq.core.btc.wallet.TxBroadcaster;
 import bisq.core.btc.wallet.WalletService;
 import bisq.core.offer.Offer;
 import bisq.core.offer.placeoffer.PlaceOfferModel;
-import bisq.core.util.FeeReceiverSelector;
+//import bisq.core.util.FeeReceiverSelector;
 
 import bisq.common.UserThread;
 import bisq.common.taskrunner.Task;
@@ -63,8 +63,7 @@ public class CreateMakerFeeTx extends Task<PlaceOfferModel> {
 
             TradeWalletService tradeWalletService = model.getTradeWalletService();
 
-            String feeReceiver = FeeReceiverSelector.getAddress( model.getFilterManager());
-
+            /*
                 tradeWalletService.createBtcTradingFeeTx(
                         fundingAddress,
                         reservedForTradeAddress,
@@ -73,7 +72,6 @@ public class CreateMakerFeeTx extends Task<PlaceOfferModel> {
                         model.isUseSavingsWallet(),
                         offer.getMakerFee(),
                         offer.getTxFee(),
-                        feeReceiver,
                         true,
                         new TxBroadcaster.Callback() {
                             @Override
@@ -105,7 +103,7 @@ public class CreateMakerFeeTx extends Task<PlaceOfferModel> {
                             }
                         });
              
-            
+        */    
         } catch (Throwable t) {
                 offer.setErrorMessage("An error occurred.\n" +
                         "Error message:\n"

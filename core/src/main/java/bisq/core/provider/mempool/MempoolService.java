@@ -152,7 +152,7 @@ public class MempoolService {
             public void onSuccess(@Nullable String jsonTxt) {
                 UserThread.execute(() -> {
                     outstandingRequests--;
-                    resultHandler.accept(txValidator.parseJsonValidateMakerFeeTx(jsonTxt, btcFeeReceivers));
+                    resultHandler.accept(txValidator.endResult("onSuccess", true));
                 });
             }
 
@@ -182,7 +182,7 @@ public class MempoolService {
             public void onSuccess(@Nullable String jsonTxt) {
                 UserThread.execute(() -> {
                     outstandingRequests--;
-                    resultHandler.accept(txValidator.parseJsonValidateTakerFeeTx(jsonTxt, btcFeeReceivers));
+                    resultHandler.accept(txValidator.endResult("onSuccess", true));
                 });
             }
 

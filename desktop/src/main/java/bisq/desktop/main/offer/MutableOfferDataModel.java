@@ -158,7 +158,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
                                  PriceFeedService priceFeedService,
                                  AccountAgeWitnessService accountAgeWitnessService,
                                  FeeService feeService,
-                                 @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter,
+				 @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter btcFormatter,
                                  TradeStatisticsManager tradeStatisticsManager,
                                  Navigation navigation) {
         super(xmrWalletService, offerUtil);
@@ -172,7 +172,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
         this.priceFeedService = priceFeedService;
         this.accountAgeWitnessService = accountAgeWitnessService;
         this.feeService = feeService;
-        this.btcFormatter = btcFormatter;
+	this.btcFormatter = btcFormatter;
         this.navigation = navigation;
         this.tradeStatisticsManager = tradeStatisticsManager;
 
@@ -594,8 +594,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
         final Coin makerFee = getMakerFee();
         if (direction != null && amount.get() != null && makerFee != null) {
             Coin feeAndSecDeposit = getTxFee().add(getSecurityDeposit());
-            if (isCurrencyForMakerFeeBtc())
-                feeAndSecDeposit = feeAndSecDeposit.add(makerFee);
+            feeAndSecDeposit = feeAndSecDeposit.add(makerFee);
             Coin total = isBuyOffer() ? feeAndSecDeposit : feeAndSecDeposit.add(amount.get());
             totalToPayAsCoin.set(total);
             updateBalance();
@@ -607,10 +606,7 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
     }
 
     public Coin getTxFee() {
-        if (isCurrencyForMakerFeeBtc())
-            return txFeeFromFeeService;
-        else
-            return txFeeFromFeeService.subtract(getMakerFee());
+        return txFeeFromFeeService;
     }
 
     void swapTradeToSavings() {

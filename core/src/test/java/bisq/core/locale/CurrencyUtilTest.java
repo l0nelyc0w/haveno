@@ -67,8 +67,8 @@ public class CurrencyUtilTest {
         // test if code is matching
         boolean daoTradingActivated = false;
         // Test if BSQ on mainnet is failing
-        Assert.assertFalse(CurrencyUtil.findAsset(assetRegistry, "BSQ",
-                BaseCurrencyNetwork.XMR_MAINNET, daoTradingActivated).isPresent());
+        //Assert.assertFalse(CurrencyUtil.findAsset(assetRegistry, "BSQ",
+        //        BaseCurrencyNetwork.XMR_MAINNET, daoTradingActivated).isPresent());
 
         // on testnet/regtest it is allowed
         assertEquals(CurrencyUtil.findAsset(assetRegistry, "BSQ",
