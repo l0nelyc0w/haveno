@@ -40,44 +40,43 @@ public class OfferMaker {
     public static final Property<Offer, String> id = new Property<>();
 
     public static final Instantiator<Offer> Offer = lookup -> new Offer(
-            new OfferPayload(lookup.valueOf(id, "1234"),
-                    0L,
-                    null,
-                    null,
-                    lookup.valueOf(direction, OfferPayload.Direction.BUY),
-                    lookup.valueOf(price, 100000L),
-                    lookup.valueOf(marketPriceMargin, 0.0),
-                    lookup.valueOf(useMarketBasedPrice, false),
-                    lookup.valueOf(amount, 100000L),
-                    lookup.valueOf(minAmount, 100000L),
-                    lookup.valueOf(baseCurrencyCode, "XMR"),
-                    lookup.valueOf(counterCurrencyCode, "USD"),
-                    null,
-                    null,
-                    "SEPA",
-                    "",
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    "",
-                    0L,
-                    0L,
-                    0L,
-                    false,
-                    0L,
-                    0L,
-                    0L,
-                    0L,
-                    false,
-                    false,
-                    0L,
-                    0L,
-                    false,
-                    null,
-                    null,
-                    0));
+            new OfferPayload(lookup.valueOf(id, "1234"),                     //id
+                    0L,                                                      //date
+                    null,                                                    //OwnerNodeAddress
+                    null,                                                    //PubkeyRing
+                    lookup.valueOf(direction, OfferPayload.Direction.BUY),   //Direction
+                    lookup.valueOf(price, 100000L),                          //Price
+                    lookup.valueOf(marketPriceMargin, 0.0),                  //MarketPriceMargin
+                    lookup.valueOf(useMarketBasedPrice, false),              //MarketBasedPrice
+                    lookup.valueOf(amount, 100000L),                         //Amount
+                    lookup.valueOf(minAmount, 100000L),                      //MinAmount
+                    lookup.valueOf(baseCurrencyCode, "XMR"),                 //BaseCurrencyCode
+                    lookup.valueOf(counterCurrencyCode, "USD"),              //CounterCurrencyCode
+                    null,           //ArbitratorNodeAddress
+		    null,           //MediatorNodeAddress
+                    "SEPA",         //PaymentMethodID
+                    "",             //MakerPaymentAccountID
+                    null,           //OfferFeePaymentTxID
+                    null,           //CountryCode
+                    null,          //AcceptedCountryCodes 
+                    null,          //BankID 
+                    null,           //AcceptedBankIds
+                    "",             //VersionNr
+                    0L,             //BlockHeightAtOfferCreation
+                    0L,             //TxFee
+                    0L,             //MakerFee
+                    0L,             //BuyerSecurityDeposit
+                    0L,             //SellerSecurityDeposit
+                    0L,             //MaxTradeLimit
+                    0L,             //MaxTradePeriod
+                    false,          //UseAutoClose
+                    false,          //UseReOpenAfterAutoClose
+                    0L,            //LowerClosePrice 
+                    0L,            //UpperClosePrice 
+                    false, //IsPrivateOffer         
+                    null,//HashOfChallenge
+                    null,//ExtraDataMapMap
+                    0));//ProtocolVersion
 
     public static final Maker<Offer> btcUsdOffer = a(Offer);
     public static final Maker<Offer> btcBCHCOffer = a(Offer).but(with(counterCurrencyCode, "BCHC"));

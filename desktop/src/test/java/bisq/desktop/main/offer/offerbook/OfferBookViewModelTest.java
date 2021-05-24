@@ -44,7 +44,6 @@ import bisq.core.payment.payload.SpecificBanksAccountPayload;
 import bisq.core.provider.price.MarketPrice;
 import bisq.core.provider.price.PriceFeedService;
 import bisq.core.trade.statistics.TradeStatisticsManager;
-import bisq.core.util.coin.BsqFormatter;
 import bisq.core.util.coin.CoinFormatter;
 import bisq.core.util.coin.ImmutableCoinFormatter;
 
@@ -239,7 +238,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, null, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         assertEquals(0, model.maxPlacesForAmount.intValue());
     }
 
@@ -253,7 +252,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(6, model.maxPlacesForAmount.intValue());
@@ -271,7 +270,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(15, model.maxPlacesForAmount.intValue());
@@ -290,7 +289,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, null, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         assertEquals(0, model.maxPlacesForVolume.intValue());
     }
 
@@ -304,7 +303,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(5, model.maxPlacesForVolume.intValue());
@@ -322,7 +321,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(9, model.maxPlacesForVolume.intValue());
@@ -341,7 +340,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, null, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         assertEquals(0, model.maxPlacesForPrice.intValue());
     }
 
@@ -355,7 +354,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(7, model.maxPlacesForPrice.intValue());
@@ -373,7 +372,7 @@ public class OfferBookViewModelTest {
         when(offerBook.getOfferBookListItems()).thenReturn(offerBookListItems);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, null, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         assertEquals(0, model.maxPlacesForMarketPriceMargin.intValue());
     }
 
@@ -401,7 +400,7 @@ public class OfferBookViewModelTest {
         offerBookListItems.addAll(item1, item2);
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, priceFeedService,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
         model.activate();
 
         assertEquals(8, model.maxPlacesForMarketPriceMargin.intValue()); //" (1.97%)"
@@ -422,7 +421,7 @@ public class OfferBookViewModelTest {
         when(priceFeedService.getMarketPrice(anyString())).thenReturn(new MarketPrice("USD", 12684.0450, Instant.now().getEpochSecond(), true));
 
         final OfferBookViewModel model = new OfferBookViewModel(null, openOfferManager, offerBook, empty, null, null, null,
-                null, null, null, getPriceUtil(), null, coinFormatter, new BsqFormatter());
+                null, null, null, getPriceUtil(), null, coinFormatter);
 
         final OfferBookListItem item = make(btcBuyItem.but(
                 with(useMarketBasedPrice, true),
@@ -584,43 +583,42 @@ public class OfferBookViewModelTest {
                            ArrayList<String> acceptedCountryCodes,
                            String bankId,
                            ArrayList<String> acceptedBanks) {
-        return new Offer(new OfferPayload(null,
-                0,
-                null,
-                null,
-                null,
-                0,
-                0,
-                false,
-                0,
-                0,
-                "XMR",
-                tradeCurrencyCode,
-                null,
-                null,
-                paymentMethodId,
-                null,
-                null,
-                countryCode,
-                acceptedCountryCodes,
-                bankId,
-                acceptedBanks,
-                null,
-                0,
-                0,
-                0,
-                false,
-                0,
-                0,
-                0,
-                0,
-                false,
-                false,
-                0,
-                0,
-                false,
-                null,
-                null,
-                1));
+        return new Offer(new OfferPayload(null, //id
+                0,                     //date
+                null,                  //ownerNodeAddress
+                null,                  //pubKeyRing
+                null,                  //direction
+                0,                     //price
+                0,                     //marketPriceMargin
+                false,                 //useMarketBasedPrice
+                0,                     //amount
+                0,                     //minAmount
+                "XMR",                 //baseCurrencyCode
+                tradeCurrencyCode,     //counterCurrencyCode
+                null,                  //arbitratorNodeAddress
+                null,                  //mediatorNodeAddress
+                paymentMethodId,       //paymentMethodId
+                null,                  //makerPaymentAccountId
+                null,                  //offerFeePaymentTxId
+                countryCode,           //countryCode
+                acceptedCountryCodes,  //acceptedCountryCodes
+                bankId,                //bankId
+                acceptedBanks,         //acceptedBanks
+                null,                  //versionNr
+                0,                     //blockHeightAtOfferCreation
+                0,                     //txFee
+                0,                     //makerFee
+                0,                     //buyerSecurityDeposit
+                0,                     //sellerSecurityDeposit                
+                0,                     //maxTradeLimit
+                0,                     //maxTradePeriod
+                false,                 //useAutoClose
+                false,                 //useReOpenAfterAutoClose
+                0,                     //lowerClosePrice
+                0,                     //upperClosePrice
+                false,                 //isPrivateOffer
+                null,                  //hashOfChallenge
+                null,                  //extraDataMap
+                1));                   //protocolVersion
     }
 }

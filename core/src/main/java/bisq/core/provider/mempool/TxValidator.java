@@ -59,10 +59,9 @@ public class TxValidator {
     private String jsonTxt;
 
 
-    public TxValidator(String txId, Coin amount, @Nullable Boolean isFeeCurrencyBtc) {
+    public TxValidator(String txId, Coin amount) {
         this.txId = txId;
         this.amount = amount;
-        this.isFeeCurrencyBtc = true;
         this.errorList = new ArrayList<>();
         this.jsonTxt = "";
     }
@@ -77,7 +76,7 @@ public class TxValidator {
     ///////////////////////////////////////////////////////////////////////////////////////////
     // API
     ///////////////////////////////////////////////////////////////////////////////////////////
-
+    /*
     public TxValidator parseJsonValidateMakerFeeTx(String jsonTxt, List<String> btcFeeReceivers) {
         this.jsonTxt = jsonTxt;
         boolean status = initialSanityChecks(txId, jsonTxt);
@@ -94,7 +93,9 @@ public class TxValidator {
         }
         return endResult("Maker tx validation", status);
     }
+    */
 
+    /*
     public TxValidator parseJsonValidateTakerFeeTx(String jsonTxt, List<String> btcFeeReceivers) {
         this.jsonTxt = jsonTxt;
         boolean status = initialSanityChecks(txId, jsonTxt);
@@ -111,6 +112,7 @@ public class TxValidator {
         }
         return endResult("Taker tx validation", status);
     }
+    */
 
     public long parseJsonValidateTx() {
         if (!initialSanityChecks(txId, jsonTxt)) {
@@ -120,7 +122,7 @@ public class TxValidator {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
-
+    /*
     private boolean checkFeeAddressBTC(String jsonTxt, List<String> btcFeeReceivers) {
         try {
             JsonArray jsonVout = getVinAndVout(jsonTxt).second;
@@ -182,8 +184,8 @@ public class TxValidator {
         }
         return false;
 	*/
-    }
-
+    //}
+    
     private static Tuple2<JsonArray, JsonArray> getVinAndVout(String jsonTxt) throws JsonSyntaxException {
         // there should always be "vout" at the top level
         // check that there are 2 or 3 vout elements: the fee, the reserved for trade, optional change
