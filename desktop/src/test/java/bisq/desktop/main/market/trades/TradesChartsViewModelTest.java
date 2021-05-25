@@ -60,44 +60,44 @@ public class TradesChartsViewModelTest {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private File dir;
-    OfferPayload offer = new OfferPayload(null,
-            0,
-            null,
-            null,
-            null,
-            0,
-            0,
-            false,
-            0,
-            0,
-            "XMR",
-            "EUR",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            0,
-            0,
-            0,
-            false,
-            0,
-            0,
-            0,
-            0,
-            false,
-            false,
-            0,
-            0,
-            false,
-            null,
-            null,
-            1
+    OfferPayload offer = new OfferPayload(null, //id
+            0,           //date
+            null,        //ownerNodeAddress
+            null,        //pubKeyRing
+            null,        //direction
+            0,           //price
+            0,           //marketPriceMargin
+            false,       //userMarketBasedPrice
+            0,           //amount
+            0,           //minAmount
+            "XMR",       //baseCurrencyCode
+            "EUR",       //counterCurrencyCode
+            null,        //arbitratorNodeAddress
+            null,        //mediatorNodeAddress
+            null,        //paymentMethodId
+            null,        //makerPaymentAccountId
+            null,        //offerFeePaymentTxId
+            null,        //countryCode
+            null,        //acceptedCountryCodes
+            null,        //bankId
+            null,        //acceptedBankIds
+            null,        //versionNr
+            0,           //blockHeightAtOfferCreation
+            0,           //txFee
+            0,           //makerFee
+            //false,       //
+            0,           //buyerSecurityDeposit
+            0,           //selletSecurityDeposit
+            0,           //maxTradeLimit
+            0,           //maxTradePeriod
+            false,       //useAutoClose
+            false,       //useReOpenAfterAutoClose
+            0,           //lowerClosePrice
+            0,           //upperClosePrice
+            false,       //isPrivateOffer
+            null,        //hashOfChallenge
+            null,        //extraDataMap
+            1            //protocolVersion
     );
 
     @Before
