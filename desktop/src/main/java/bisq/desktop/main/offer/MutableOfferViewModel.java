@@ -1015,26 +1015,13 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
 
     public String getTradeFee() {
-        //if (dataModel.isCurrencyForMakerFeeBtc()) {
-            return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
-                    dataModel.getMakerFeeInBtc(),
-                    dataModel.getAmount().get(),
-                    true,
-                    btcFormatter,
-                    FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
-        }
-        /* l0nelyc0w: remove dao
-	else {
-            // For BSQ we use the fiat equivalent only. Calculating the % value would require to
-            // calculate the BTC value of the BSQ fee and use that...
-            return FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
-                    dataModel.getMakerFeeInBsq(),
-                    false,
-                    bsqFormatter);
-        }
-	
+        return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
+                dataModel.getMakerFeeInBtc(),
+                dataModel.getAmount().get(),
+                true,
+                btcFormatter,
+                FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
     }
-    */
 
     public String getMakerFeePercentage() {
         final Coin makerFeeAsCoin = dataModel.getMakerFee();
@@ -1048,8 +1035,8 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
     public String getFundsStructure() {
         String fundsStructure;
-            fundsStructure = Res.get("createOffer.fundsBox.fundsStructure",
-                    getSecurityDepositWithCode(), getMakerFeePercentage(), getTxFeePercentage());
+        fundsStructure = Res.get("createOffer.fundsBox.fundsStructure",
+                getSecurityDepositWithCode(), getMakerFeePercentage(), getTxFeePercentage());
         return fundsStructure;
     }
 
