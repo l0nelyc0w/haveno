@@ -508,12 +508,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 dataModel.getMakerFeeInBtc(),
                 true,
                 btcFormatter));
-	/* l0nelyc0w
-        tradeFeeInBsqWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
-                dataModel.getMakerFeeInBsq(),
-                false,
-                bsqFormatter));
-	*/
     }
 
 

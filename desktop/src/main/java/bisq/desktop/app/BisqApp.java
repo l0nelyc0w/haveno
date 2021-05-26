@@ -316,12 +316,6 @@ public class BisqApp extends Application implements UncaughtExceptionHandler {
                 } else if (Utilities.isAltOrCtrlPressed(KeyCode.F, keyEvent)) {
                     injector.getInstance(FilterWindow.class).show();
                 }
-		/* l0nelyc0w: remove dao
-		 else if (Utilities.isAltOrCtrlPressed(KeyCode.H, keyEvent)) {
-                    log.warn("We re-published all proposalPayloads and blindVotePayloads to the P2P network.");
-                    injector.getInstance(MissingDataRequestService.class).reRepublishAllGovernanceData();
-                }
-	        */	
 		else if (Utilities.isAltOrCtrlPressed(KeyCode.T, keyEvent)) {
                     // Toggle between show tor logs and only show warnings. Helpful in case of connection problems
                     String pattern = "org.berndpruenster.netlayer";

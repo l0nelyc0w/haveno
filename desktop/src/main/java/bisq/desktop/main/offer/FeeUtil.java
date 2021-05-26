@@ -36,11 +36,6 @@ public class FeeUtil {
                                                        Coin tradeFee,
                                                        boolean isCurrencyForMakerFeeBtc,
                                                        CoinFormatter formatter) {
-	/* l0nelyc0w: remove dao    
-        if (!isCurrencyForMakerFeeBtc && !DevEnv.isDaoActivated()) {
-            return "";
-        }
-	*/
 
         Optional<Volume> optionalBtcFeeInFiat = offerUtil.getFeeInUserFiatCurrency(tradeFee,
                 isCurrencyForMakerFeeBtc,
@@ -54,7 +49,6 @@ public class FeeUtil {
                                                                     boolean isCurrencyForMakerFeeBtc,
                                                                     CoinFormatter formatter,
                                                                     Coin minTradeFee) {
-        //if (isCurrencyForMakerFeeBtc) {
             String feeAsBtc = formatter.formatCoinWithCode(tradeFee);
             String percentage;
             if (!tradeFee.isGreaterThan(minTradeFee)) {
@@ -74,16 +68,5 @@ public class FeeUtil {
                     .map(DisplayUtils::formatAverageVolumeWithCode)
                     .map(feeInFiat -> Res.get("feeOptionWindow.btcFeeWithFiatAndPercentage", feeAsBtc, feeInFiat, percentage))
                     .orElseGet(() -> Res.get("feeOptionWindow.btcFeeWithPercentage", feeAsBtc, percentage));
-        //} 
-	/* l0nelyc0w: remove dao
-	else {
-            // For BSQ we use the fiat equivalent only. Calculating the % value would be more effort.
-            // We could calculate the BTC value if the BSQ fee and use that...
-            return FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
-                    tradeFee,
-                    false,
-                    formatter);
-        }
-	*/
     }
 }
