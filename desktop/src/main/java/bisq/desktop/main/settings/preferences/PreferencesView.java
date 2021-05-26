@@ -241,11 +241,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         Tuple2<TextField, Button> btcExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer"));
         btcExplorerTextField = btcExp.first;
         editCustomBtcExplorer = btcExp.second;
-        /* l0nelyc0w: remove dao
-        Tuple2<TextField, Button> bsqExp = addTextFieldWithEditButton(root, ++gridRow, Res.get("setting.preferences.explorer.bsq"));
-        bsqExplorerTextField = bsqExp.first;
-        editCustomBsqExplorer = bsqExp.second;
-	*/
 
         Tuple3<Label, InputTextField, ToggleButton> tuple = addTopLabelInputTextFieldSlideToggleButton(root, ++gridRow,
                 Res.get("setting.preferences.txFee"), Res.get("setting.preferences.useCustomValue"));
@@ -331,13 +326,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
                 preferences.setIgnoreTradersList(Arrays.asList(StringUtils.deleteWhitespace(newValue).split(",")));
             }
         };
-
-        // referralId
-       /* referralIdInputTextField = addInputTextField(root, ++gridRow, Res.get("setting.preferences.refererId"));
-        referralIdListener = (observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue))
-                referralIdService.setReferralId(newValue);
-        };*/
 
 
         // ignoreDustThreshold
@@ -598,77 +586,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         GridPane.setHgrow(resetDontShowAgainButton, Priority.ALWAYS);
         GridPane.setColumnIndex(resetDontShowAgainButton, 0);
     }
-    /*
-    private void initializeDaoOptions() {
-        daoOptionsTitledGroupBg = addTitledGroupBg(root, ++gridRow, 4, Res.get("setting.preferences.daoOptions"), Layout.GROUP_DISTANCE);
-        resyncDaoFromResourcesButton = addButton(root, gridRow, Res.get("setting.preferences.dao.resyncFromResources.label"), Layout.TWICE_FIRST_ROW_AND_GROUP_DISTANCE);
-        resyncDaoFromResourcesButton.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(resyncDaoFromResourcesButton, Priority.ALWAYS);
-
-        resyncDaoFromGenesisButton = addButton(root, ++gridRow, Res.get("setting.preferences.dao.resyncFromGenesis.label"));
-        resyncDaoFromGenesisButton.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(resyncDaoFromGenesisButton, Priority.ALWAYS);
-
-        /*
-        bsqAverageTrimThresholdTextField = addInputTextField(root, ++gridRow,
-                Res.get("setting.preferences.bsqAverageTrimThreshold"));
-        bsqAverageTrimThresholdTextField.setText(FormattingUtils.formatToPercentWithSymbol(preferences.getBsqAverageTrimThreshold()));
-
-        bsqAverageTrimThresholdListener = (observable, oldValue, newValue) -> {
-            try {
-                double value = ParsingUtils.parsePercentStringToDouble(newValue);
-                double maxValue = 0.49;
-                checkArgument(value >= 0, "Input must be positive");
-                if (value <= maxValue) {
-                    preferences.setBsqAverageTrimThreshold(value);
-                } else {
-                    new Popup().warning(Res.get("setting.preferences.deviationToLarge",
-                            maxValue * 100)).show();
-                    UserThread.runAfter(() -> bsqAverageTrimThresholdTextField.setText(FormattingUtils.formatToPercentWithSymbol(
-                            preferences.getBsqAverageTrimThreshold())), 100, TimeUnit.MILLISECONDS);
-                }
-            } catch (NumberFormatException t) {
-                log.error("Exception: " + t.toString());
-                UserThread.runAfter(() -> bsqAverageTrimThresholdTextField.setText(FormattingUtils.formatToPercentWithSymbol(
-                        preferences.getBsqAverageTrimThreshold())), 100, TimeUnit.MILLISECONDS);
-            }
-        };
-        bsqAverageTrimThresholdFocusedListener = (observable1, oldValue1, newValue1) -> {
-            if (oldValue1 && !newValue1)
-                UserThread.runAfter(() -> bsqAverageTrimThresholdTextField.setText(FormattingUtils.formatToPercentWithSymbol(
-                        preferences.getBsqAverageTrimThreshold())), 100, TimeUnit.MILLISECONDS);
-        };
-
-
-        isDaoFullNodeToggleButton = addSlideToggleButton(root, ++gridRow, Res.get("setting.preferences.dao.isDaoFullNode"));
-	
-        rpcUserTextField = addInputTextField(root, ++gridRow, Res.get("setting.preferences.dao.rpcUser"));
-        rpcUserTextField.setVisible(false);
-        rpcUserTextField.setManaged(false);
-        rpcPwTextField = addPasswordTextField(root, ++gridRow, Res.get("setting.preferences.dao.rpcPw"));
-        rpcPwTextField.setVisible(false);
-        rpcPwTextField.setManaged(false);
-
-        // @Christoph: addPasswordTextField has by default column span 2. Would be better to dont set it there...
-        GridPane.setColumnSpan(rpcPwTextField, 1);
-        GridPane.setMargin(rpcPwTextField, new Insets(20, 0, 0, 0));
-
-        blockNotifyPortTextField = addInputTextField(root, ++gridRow, Res.get("setting.preferences.dao.blockNotifyPort"));
-        blockNotifyPortTextField.setVisible(false);
-        blockNotifyPortTextField.setManaged(false);
-
-        rpcUserListener = (observable, oldValue, newValue) -> preferences.setRpcUser(rpcUserTextField.getText());
-        rpcPwListener = (observable, oldValue, newValue) -> preferences.setRpcPw(rpcPwTextField.getText());
-        blockNotifyPortListener = (observable, oldValue, newValue) -> {
-            try {
-                int port = Integer.parseInt(blockNotifyPortTextField.getText());
-                preferences.setBlockNotifyPort(port);
-            } catch (Throwable ignore) {
-                log.warn("Invalid input for blockNotifyPort: {}", blockNotifyPortTextField.getText());
-            }
-        };
-    }
-    */
     private void initializeAutoConfirmOptions() {
         GridPane autoConfirmGridPane = new GridPane();
         GridPane.setHgrow(autoConfirmGridPane, Priority.ALWAYS);
@@ -953,101 +870,8 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
                     .show();
         });
 
-	/*
-        editCustomBsqExplorer.setOnAction(e -> {
-            EditCustomExplorerWindow urlWindow = new EditCustomExplorerWindow("BSQ",
-                    preferences.getBsqBlockChainExplorer(), preferences.getBsqBlockChainExplorers());
-            urlWindow
-                    .actionButtonText(Res.get("shared.save"))
-                    .onAction(() -> {
-                        preferences.setBsqBlockChainExplorer(urlWindow.getEditedBlockChainExplorer());
-                        bsqExplorerTextField.setText(preferences.getBsqBlockChainExplorer().name);
-                    })
-                    .closeButtonText(Res.get("shared.cancel"))
-                    .onClose(urlWindow::hide)
-                    .show();
-        });
-
-        // We use opposite property (useStandbyMode) in preferences to have the default value (false) set as we want it,
-        // so users who update gets set avoidStandbyMode=true (useStandbyMode=false)
-        if (displayStandbyModeFeature) {
-            avoidStandbyMode.setSelected(!preferences.isUseStandbyMode());
-            avoidStandbyMode.setOnAction(e -> preferences.setUseStandbyMode(!avoidStandbyMode.isSelected()));
-        } else {
-            preferences.setUseStandbyMode(false);
-        }
-	*/
     }
     
-    /*
-    private void activateDaoPreferences() {
-        boolean daoFullNode = preferences.isDaoFullNode();
-        isDaoFullNodeToggleButton.setSelected(daoFullNode);
-
-        bsqAverageTrimThresholdTextField.textProperty().addListener(bsqAverageTrimThresholdListener);
-        bsqAverageTrimThresholdTextField.focusedProperty().addListener(bsqAverageTrimThresholdFocusedListener);
-
-        String rpcUser = preferences.getRpcUser();
-        String rpcPw = preferences.getRpcPw();
-        int blockNotifyPort = preferences.getBlockNotifyPort();
-        if (daoFullNode && (rpcUser == null || rpcUser.isEmpty() ||
-                rpcPw == null || rpcPw.isEmpty() ||
-                blockNotifyPort <= 0)) {
-            log.warn("You have full DAO node selected but have not provided the rpc username, password and " +
-                    "block notify port. We reset daoFullNode to false");
-            isDaoFullNodeToggleButton.setSelected(false);
-        }
-        rpcUserTextField.setText(rpcUser);
-        rpcPwTextField.setText(rpcPw);
-        blockNotifyPortTextField.setText(blockNotifyPort > 0 ? String.valueOf(blockNotifyPort) : "");
-        updateDaoFields();
-
-        resyncDaoFromResourcesButton.setOnAction(e -> {
-            try {
-                daoFacade.resyncDaoStateFromResources(storageDir);
-                new Popup().attention(Res.get("setting.preferences.dao.resyncFromResources.popup"))
-                        .useShutDownButton()
-                        .hideCloseButton()
-                        .show();
-            } catch (Throwable t) {
-                t.printStackTrace();
-                log.error(t.toString());
-                new Popup().error(t.toString()).show();
-            }
-        });
-
-        resyncDaoFromGenesisButton.setOnAction(e ->
-                new Popup().attention(Res.get("setting.preferences.dao.resyncFromGenesis.popup"))
-                        .actionButtonText(Res.get("setting.preferences.dao.resyncFromGenesis.resync"))
-                        .onAction(() -> daoFacade.resyncDaoStateFromGenesis(() -> BisqApp.getShutDownHandler().run()))
-                        .closeButtonText(Res.get("shared.cancel"))
-                        .show());
-
-        isDaoFullNodeToggleButton.setOnAction(e -> {
-            String key = "daoFullModeInfoShown";
-            if (isDaoFullNodeToggleButton.isSelected() && preferences.showAgain(key)) {
-                String url = "https://bisq.network/docs/dao-full-node";
-                new Popup().backgroundInfo(Res.get("setting.preferences.dao.fullNodeInfo", url))
-                        .onAction(() -> GUIUtil.openWebPage(url))
-                        .actionButtonText(Res.get("setting.preferences.dao.fullNodeInfo.ok"))
-                        .closeButtonText(Res.get("setting.preferences.dao.fullNodeInfo.cancel"))
-                        .onClose(() -> UserThread.execute(() -> {
-                            isDaoFullNodeToggleButton.setSelected(false);
-                            updateDaoFields();
-                        }))
-                        .dontShowAgainId(key)
-                        .width(800)
-                        .show();
-            }
-
-            updateDaoFields();
-        });
-
-        rpcUserTextField.textProperty().addListener(rpcUserListener);
-        rpcPwTextField.textProperty().addListener(rpcPwListener);
-        blockNotifyPortTextField.textProperty().addListener(blockNotifyPortListener);
-    }
-    */
     private void activateAutoConfirmPreferences() {
         preferences.findAutoConfirmSettings("XMR").ifPresent(autoConfirmSettings -> {
             autoConfirmXmrToggle.setSelected(autoConfirmSettings.isEnabled());
@@ -1064,28 +888,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             filterManager.filterProperty().addListener(filterChangeListener);
         });
     }
-    /*
-    private void updateDaoFields() {
-        boolean isDaoFullNode = isDaoFullNodeToggleButton.isSelected();
-        GridPane.setRowSpan(daoOptionsTitledGroupBg, isDaoFullNode ? 6 : 3);
-        rpcUserTextField.setVisible(isDaoFullNode);
-        rpcUserTextField.setManaged(isDaoFullNode);
-        rpcPwTextField.setVisible(isDaoFullNode);
-        rpcPwTextField.setManaged(isDaoFullNode);
-        blockNotifyPortTextField.setVisible(isDaoFullNode);
-        blockNotifyPortTextField.setManaged(isDaoFullNode);
-        preferences.setDaoFullNode(isDaoFullNode);
-        if (!isDaoFullNode) {
-            rpcUserTextField.clear();
-            rpcPwTextField.clear();
-            blockNotifyPortTextField.clear();
-        }
-
-        rpcUserTextField.setDisable(daoOptionsSet);
-        rpcPwTextField.setDisable(daoOptionsSet);
-        blockNotifyPortTextField.setDisable(daoOptionsSet);
-    }
-    */
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1125,18 +927,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             avoidStandbyMode.setOnAction(null);
         }
     }
-    /*
-    private void deactivateDaoPreferences() {
-        resyncDaoFromResourcesButton.setOnAction(null);
-        resyncDaoFromGenesisButton.setOnAction(null);
-        bsqAverageTrimThresholdTextField.textProperty().removeListener(bsqAverageTrimThresholdListener);
-        bsqAverageTrimThresholdTextField.focusedProperty().removeListener(bsqAverageTrimThresholdFocusedListener);
-        isDaoFullNodeToggleButton.setOnAction(null);
-        rpcUserTextField.textProperty().removeListener(rpcUserListener);
-        rpcPwTextField.textProperty().removeListener(rpcPwListener);
-        blockNotifyPortTextField.textProperty().removeListener(blockNotifyPortListener);
-    }
-    */
     private void deactivateAutoConfirmPreferences() {
         preferences.findAutoConfirmSettings("XMR").ifPresent(autoConfirmSettings -> {
             autoConfirmXmrToggle.setOnAction(null);

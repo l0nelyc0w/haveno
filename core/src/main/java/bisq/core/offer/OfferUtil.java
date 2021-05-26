@@ -113,11 +113,7 @@ public class OfferUtil {
             if (!isValidFeePaymentCurrencyCode.test(feeCurrencyCode))
                 throw new IllegalStateException(format("%s cannot be used to pay trade fees",
                         feeCurrencyCode.toUpperCase()));
-
-            //if (feeCurrencyCode.equalsIgnoreCase("BSQ") && preferences.isPayFeeInBtc())
-            //    preferences.setPayFeeInBtc(false);
-            //else if (feeCurrencyCode.equalsIgnoreCase("BTC") && !preferences.isPayFeeInBtc())
-                preferences.setPayFeeInBtc(true);
+            preferences.setPayFeeInBtc(true);
         }
     }
 
@@ -314,19 +310,7 @@ public class OfferUtil {
             long marketPriceAsLong = roundDoubleToLong(
                     scaleUpByPowerOf10(marketPrice.getPrice(), Fiat.SMALLEST_UNIT_EXPONENT));
             Price userCurrencyPrice = Price.valueOf(userCurrencyCode, marketPriceAsLong);
-
-            //if (isCurrencyForMakerFeeBtc) {
-                return Optional.of(userCurrencyPrice.getVolumeByAmount(makerFee));
-	    /*
-            } else {
-                // We use the current market price for the fiat currency and the 30 day average BSQ price
-                Tuple2<Price, Price> tuple = AveragePriceUtil.getAveragePriceTuple(preferences,
-                        tradeStatisticsManager,
-                        30);
-                return Optional.empty();
-               
-            }
-	    */
+            return Optional.of(userCurrencyPrice.getVolumeByAmount(makerFee));
         } else {
             return Optional.empty();
         }

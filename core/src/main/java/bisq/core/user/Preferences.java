@@ -174,10 +174,10 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
     private final Config config;
     private final FeeService feeService;
     private final LocalBitcoinNode localBitcoinNode;
-    private final String btcNodesFromOptions, referralIdFromOptions,
-            rpcUserFromOptions, rpcPwFromOptions;
-    private final int blockNotifyPortFromOptions;
-    private final boolean fullDaoNodeFromOptions;
+    private final String btcNodesFromOptions;
+// referralIdFromOptions,
+//            rpcUserFromOptions, rpcPwFromOptions;
+//    private final int blockNotifyPortFromOptions;
     @Getter
     private final BooleanProperty useStandbyModeProperty = new SimpleBooleanProperty(prefPayload.isUseStandbyMode());
 
@@ -191,23 +191,22 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
                        Config config,
                        FeeService feeService,
                        LocalBitcoinNode localBitcoinNode,
-                       @Named(Config.BTC_NODES) String btcNodesFromOptions,
-                       @Named(Config.REFERRAL_ID) String referralId,
-                       @Named(Config.FULL_DAO_NODE) boolean fullDaoNode,
-                       @Named(Config.RPC_USER) String rpcUser,
-                       @Named(Config.RPC_PASSWORD) String rpcPassword,
-                       @Named(Config.RPC_BLOCK_NOTIFICATION_PORT) int rpcBlockNotificationPort) {
+                       @Named(Config.BTC_NODES) String btcNodesFromOptions)
+                       //@Named(Config.REFERRAL_ID) String referralId,
+                       //@Named(Config.RPC_USER) String rpcUser,
+                       //@Named(Config.RPC_PASSWORD) String rpcPassword,
+                       //@Named(Config.RPC_BLOCK_NOTIFICATION_PORT) int rpcBlockNotificationPort)
+                       {
 
         this.persistenceManager = persistenceManager;
         this.config = config;
         this.feeService = feeService;
         this.localBitcoinNode = localBitcoinNode;
         this.btcNodesFromOptions = btcNodesFromOptions;
-        this.referralIdFromOptions = referralId;
-        this.fullDaoNodeFromOptions = fullDaoNode;
-        this.rpcUserFromOptions = rpcUser;
-        this.rpcPwFromOptions = rpcPassword;
-        this.blockNotifyPortFromOptions = rpcBlockNotificationPort;
+        //this.referralIdFromOptions = referralId;
+        //this.rpcUserFromOptions = rpcUser;
+        //this.rpcPwFromOptions = rpcPassword;
+        //this.blockNotifyPortFromOptions = rpcBlockNotificationPort;
 
         useAnimationsProperty.addListener((ov) -> {
             prefPayload.setUseAnimations(useAnimationsProperty.get());
@@ -263,17 +262,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         setPreferredTradeCurrency(preferredTradeCurrency);
         setFiatCurrencies(prefPayload.getFiatCurrencies());
         setCryptoCurrencies(prefPayload.getCryptoCurrencies());
-        setBsqBlockChainExplorer(prefPayload.getBsqBlockChainExplorer());
         GlobalSettings.setDefaultTradeCurrency(preferredTradeCurrency);
-
-        // If a user has updated and the field was not set and get set to 0 by protobuf
-        // As there is no way to detect that a primitive value field was set we cannot apply
-        // a "marker" value like -1 to it. We also do not want to wrap the value in a new
-        // proto message as thats too much for that feature... So we accept that if the user
-        // sets the value to 0 it will be overwritten by the default at next startup.
-        if (prefPayload.getBsqAverageTrimThreshold() == 0) {
-            prefPayload.setBsqAverageTrimThreshold(0.05);
-        }
 
         setupPreferences();
     }
@@ -322,26 +311,13 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         useStandbyModeProperty.set(prefPayload.isUseStandbyMode());
         cssThemeProperty.set(prefPayload.getCssTheme());
 
-        // a list of previously-used federated explorers
-        // if user preference references any deprecated explorers we need to select a new valid explorer
-        String deprecatedExplorers = "(bsq.bisq.cc|bsq.vante.me|bsq.emzy.de|bsq.sqrrm.net|bsq.bisq.services|bsq.ninja).*";
 
         // if no valid Bitcoin block explorer is set, select the 1st valid Bitcoin block explorer
         ArrayList<BlockChainExplorer> btcExplorers = getBlockChainExplorers();
-        if (getBlockChainExplorer() == null ||
-                getBlockChainExplorer().name.length() == 0 ||
-                getBlockChainExplorer().name.matches(deprecatedExplorers)) {
+        if (getBlockChainExplorer() == null ||  getBlockChainExplorer().name.length() == 0 ){
             setBlockChainExplorer(btcExplorers.get(0));
+        
         }
-
-        // if no valid BSQ block explorer is set, randomly select a valid BSQ block explorer
-        ArrayList<BlockChainExplorer> bsqExplorers = getBsqBlockChainExplorers();
-        if (getBsqBlockChainExplorer() == null ||
-                getBsqBlockChainExplorer().name.length() == 0 ||
-                getBsqBlockChainExplorer().name.matches(deprecatedExplorers)) {
-            setBsqBlockChainExplorer(bsqExplorers.get((new Random()).nextInt(bsqExplorers.size())));
-        }
-
         tradeCurrenciesAsObservable.addAll(prefPayload.getFiatCurrencies());
         tradeCurrenciesAsObservable.addAll(prefPayload.getCryptoCurrencies());
         dontShowAgainMapAsObservable.putAll(getDontShowAgainMap());
@@ -358,13 +334,14 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             setBitcoinNodes(btcNodesFromOptions);
             setBitcoinNodesOptionOrdinal(BtcNodes.BitcoinNodesOption.CUSTOM.ordinal());
         }
+/*
         if (referralIdFromOptions != null && !referralIdFromOptions.isEmpty())
             setReferralId(referralIdFromOptions);
 
         if (prefPayload.getIgnoreDustThreshold() < Restrictions.getMinNonDustOutput().value) {
             setIgnoreDustThreshold(600);
         }
-
+*/
         // For users from old versions the 4 flags a false but we want to have it true by default
         // PhoneKeyAndToken is also null so we can use that to enable the flags
         if (prefPayload.getPhoneKeyAndToken() == null) {
@@ -468,11 +445,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
 
     public void setTacAcceptedV120(boolean tacAccepted) {
         prefPayload.setTacAcceptedV120(tacAccepted);
-        requestPersistence();
-    }
-
-    public void setBsqAverageTrimThreshold(double bsqAverageTrimThreshold) {
-        prefPayload.setBsqAverageTrimThreshold(bsqAverageTrimThreshold);
         requestPersistence();
     }
 
@@ -665,11 +637,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         requestPersistence();
     }
 
-    public void setBsqBlockChainExplorer(BlockChainExplorer bsqBlockChainExplorer) {
-        prefPayload.setBsqBlockChainExplorer(bsqBlockChainExplorer);
-        requestPersistence();
-    }
-
     private void setBlockChainExplorerTestNet(BlockChainExplorer blockChainExplorerTestNet) {
         prefPayload.setBlockChainExplorerTestNet(blockChainExplorerTestNet);
         requestPersistence();
@@ -756,15 +723,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         prefPayload.setTakeOfferSelectedPaymentAccountId(value);
         requestPersistence();
     }
-
-    public void setDaoFullNode(boolean value) {
-        // We only persist if we have not set the program argument
-        if (config.fullDaoNodeOptionSetExplicitly) {
-            prefPayload.setDaoFullNode(value);
-            requestPersistence();
-        }
-    }
-
+/*
     public void setRpcUser(String value) {
         // We only persist if we have not set the program argument
         if (!rpcUserFromOptions.isEmpty()) {
@@ -789,7 +748,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             requestPersistence();
         }
     }
-
+*/
     public void setIgnoreDustThreshold(int value) {
         prefPayload.setIgnoreDustThreshold(value);
         requestPersistence();
@@ -873,9 +832,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         }
     }
 
-    public ArrayList<BlockChainExplorer> getBsqBlockChainExplorers() {
-        return BSQ_MAIN_NET_EXPLORERS;
-    }
 
     public boolean showAgain(String key) {
         return !prefPayload.getDontShowAgainMap().containsKey(key) || !prefPayload.getDontShowAgainMap().get(key);
@@ -922,15 +878,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         return Math.max(prefPayload.getWithdrawalTxFeeInVbytes(),
                 feeService.getMinFeePerVByte());
     }
-
-    public boolean isDaoFullNode() {
-        if (config.fullDaoNodeOptionSetExplicitly) {
-            return fullDaoNodeFromOptions;
-        } else {
-            return prefPayload.isDaoFullNode();
-        }
-    }
-
+/*
     public String getRpcUser() {
         if (!rpcUserFromOptions.isEmpty()) {
             return rpcUserFromOptions;
@@ -959,7 +907,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             return prefPayload.getBlockNotifyPort();
         }
     }
-
+*/
     public List<String> getDefaultXmrTxProofServices() {
         if (config.useLocalhostForP2P) {
             return XMR_TX_PROOF_SERVICES_CLEAR_NET;
@@ -1042,8 +990,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
 
         void setSelectedPaymentAccountForCreateOffer(@Nullable PaymentAccount paymentAccount);
 
-        void setBsqBlockChainExplorer(BlockChainExplorer bsqBlockChainExplorer);
-
         void setPayFeeInBtc(boolean payFeeInBtc);
 
         void setFiatCurrencies(List<FiatCurrency> currencies);
@@ -1104,8 +1050,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
 
         void setBlockNotifyPort(int value);
 
-        boolean isDaoFullNode();
-
         String getRpcUser();
 
         String getRpcPw();
@@ -1113,8 +1057,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         int getBlockNotifyPort();
 
         void setTacAcceptedV120(boolean tacAccepted);
-
-        void setBsqAverageTrimThreshold(double bsqAverageTrimThreshold);
 
         void setAutoConfirmSettings(AutoConfirmSettings autoConfirmSettings);
 
