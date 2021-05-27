@@ -77,9 +77,9 @@ public class GuiceSetupTest {
         Res.setup();
         CurrencyUtil.setup();
 
-        //injector = Guice.createInjector(new BisqAppModule(new Config()));
+        injector = Guice.createInjector(new BisqAppModule(new Config()));
     }
-/*
+
     @Test
     public void testGuiceSetup() {
         injector.getInstance(AvoidStandbyModeService.class);
@@ -145,7 +145,7 @@ public class GuiceSetupTest {
 
         assertNotSingleton(PersistenceManager.class);
     }
-*/
+
     private void assertSingleton(Class<?> type) {
         assertSame(injector.getInstance(type), injector.getInstance(type));
     }
