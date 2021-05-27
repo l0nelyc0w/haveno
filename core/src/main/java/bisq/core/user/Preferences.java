@@ -111,15 +111,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             new BlockChainExplorer("SoChain. Wow.", "https://chain.so/tx/BTCTEST/", "https://chain.so/address/BTCTEST/"),
             new BlockChainExplorer("Blockchair", "https://blockchair.com/bitcoin/testnet/transaction/", "https://blockchair.com/bitcoin/testnet/address/")
     ));
-    private static final ArrayList<BlockChainExplorer> BTC_DAO_TEST_NET_EXPLORERS = new ArrayList<>(Collections.singletonList(
-            new BlockChainExplorer("BTC DAO-testnet explorer", "https://bisq.network/explorer/btc/dao_testnet/tx/", "https://bisq.network/explorer/btc/dao_testnet/address/")
-    ));
-
-    public static final ArrayList<BlockChainExplorer> BSQ_MAIN_NET_EXPLORERS = new ArrayList<>(Arrays.asList(
-            new BlockChainExplorer("mempool.space (@wiz)", "https://mempool.space/bisq/tx/", "https://mempool.space/bisq/address/"),
-            new BlockChainExplorer("mempool.emzy.de (@emzy)", "https://mempool.emzy.de/bisq/tx/", "https://mempool.emzy.de/bisq/address/"),
-            new BlockChainExplorer("mempool.bisq.services (@devinbileck)", "https://mempool.bisq.services/bisq/tx/", "https://mempool.bisq.services/bisq/address/")
-    ));
     private static final ArrayList<BlockChainExplorer> XMR_MAIN_NET_EXPLORERS = new ArrayList<>(Arrays.asList(
             new BlockChainExplorer("xmrchain.net", "https://xmrchain.net/tx/", "")
     ));
@@ -174,10 +165,9 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
     private final Config config;
     private final FeeService feeService;
     private final LocalBitcoinNode localBitcoinNode;
-    private final String btcNodesFromOptions;
-// referralIdFromOptions,
-//            rpcUserFromOptions, rpcPwFromOptions;
-//    private final int blockNotifyPortFromOptions;
+    private final String btcNodesFromOptions, referralIdFromOptions,
+            rpcUserFromOptions, rpcPwFromOptions;
+    private final int blockNotifyPortFromOptions;
     @Getter
     private final BooleanProperty useStandbyModeProperty = new SimpleBooleanProperty(prefPayload.isUseStandbyMode());
 
@@ -802,12 +792,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             case XMR_TESTNET:
             case XMR_STAGENET:
                 return prefPayload.getBlockChainExplorerTestNet();
-            case BTC_DAO_TESTNET:
-                return BTC_DAO_TEST_NET_EXPLORERS.get(0);
-            case BTC_DAO_BETANET:
-                return prefPayload.getBlockChainExplorerMainNet();
-            case BTC_DAO_REGTEST:
-                return BTC_DAO_TEST_NET_EXPLORERS.get(0);
             default:
                 throw new RuntimeException("BaseCurrencyNetwork not defined. BaseCurrencyNetwork=" + baseCurrencyNetwork);
         }
@@ -821,12 +805,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
             case XMR_TESTNET:
             case XMR_STAGENET:
                 return BTC_TEST_NET_EXPLORERS;
-            case BTC_DAO_TESTNET:
-                return BTC_DAO_TEST_NET_EXPLORERS;
-            case BTC_DAO_BETANET:
-                return BTC_MAIN_NET_EXPLORERS;
-            case BTC_DAO_REGTEST:
-                return BTC_DAO_TEST_NET_EXPLORERS;
             default:
                 throw new RuntimeException("BaseCurrencyNetwork not defined. BaseCurrencyNetwork=" + baseCurrencyNetwork);
         }

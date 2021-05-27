@@ -134,7 +134,7 @@ public abstract class BisqExecutable implements GracefulShutDownHandler, BisqSet
         // we need to setup the handler after the application is created.
         CommonSetup.setupUncaughtExceptionHandler(this);
         //setupGuice();
-        setupAvoidStandbyMode();
+        //setupAvoidStandbyMode();
 
         hasDowngraded = BisqSetup.hasDowngraded();
         if (hasDowngraded) {
