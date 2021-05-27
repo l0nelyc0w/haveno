@@ -18,6 +18,6 @@ public class GuiceSetupTest {
         CurrencyUtil.setup();
 
         ModuleForAppWithP2p module = new ModuleForAppWithP2p(new Config());
-//        Guice.createInjector(module).getInstance(AppSetupWithP2PAndDAO.class);
+        Guice.createInjector(module).getInstance(AppSetupWithP2PAndDAO.class);
     }
 }

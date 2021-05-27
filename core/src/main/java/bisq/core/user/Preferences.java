@@ -165,9 +165,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
     private final Config config;
     private final FeeService feeService;
     private final LocalBitcoinNode localBitcoinNode;
-    private final String btcNodesFromOptions, referralIdFromOptions,
-            rpcUserFromOptions, rpcPwFromOptions;
-    private final int blockNotifyPortFromOptions;
+    private final String btcNodesFromOptions;
     @Getter
     private final BooleanProperty useStandbyModeProperty = new SimpleBooleanProperty(prefPayload.isUseStandbyMode());
 
@@ -181,22 +179,13 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
                        Config config,
                        FeeService feeService,
                        LocalBitcoinNode localBitcoinNode,
-                       @Named(Config.BTC_NODES) String btcNodesFromOptions)
-                       //@Named(Config.REFERRAL_ID) String referralId,
-                       //@Named(Config.RPC_USER) String rpcUser,
-                       //@Named(Config.RPC_PASSWORD) String rpcPassword,
-                       //@Named(Config.RPC_BLOCK_NOTIFICATION_PORT) int rpcBlockNotificationPort)
-                       {
+                       @Named(Config.BTC_NODES) String btcNodesFromOptions) {
 
         this.persistenceManager = persistenceManager;
         this.config = config;
         this.feeService = feeService;
         this.localBitcoinNode = localBitcoinNode;
         this.btcNodesFromOptions = btcNodesFromOptions;
-        //this.referralIdFromOptions = referralId;
-        //this.rpcUserFromOptions = rpcUser;
-        //this.rpcPwFromOptions = rpcPassword;
-        //this.blockNotifyPortFromOptions = rpcBlockNotificationPort;
 
         useAnimationsProperty.addListener((ov) -> {
             prefPayload.setUseAnimations(useAnimationsProperty.get());
