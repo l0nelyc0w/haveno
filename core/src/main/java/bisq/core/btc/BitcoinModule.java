@@ -58,7 +58,8 @@ public class BitcoinModule extends AppModule {
         // otherwise the specified host or default (localhost)
         String regTestHost = config.bitcoinRegtestHost;
         if (regTestHost.isEmpty()) {
-	    throw new RuntimeException("regTest host empty");
+            regTestHost = Config.DEFAULT_REGTEST_HOST; 
+	    //throw new RuntimeException("regTest host empty");
         }
 
         RegTestHost.HOST = regTestHost;
