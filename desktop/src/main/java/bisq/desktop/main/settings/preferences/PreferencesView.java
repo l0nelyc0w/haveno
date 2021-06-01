@@ -169,9 +169,6 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
                            Config config,
                            User user,
                            @Named(FormattingUtils.BTC_FORMATTER_KEY) CoinFormatter formatter,
-                           @Named(Config.RPC_USER) String rpcUser,
-                           @Named(Config.RPC_PASSWORD) String rpcPassword,
-                           @Named(Config.RPC_BLOCK_NOTIFICATION_PORT) int rpcBlockNotificationPort,
                            @Named(Config.STORAGE_DIR) File storageDir) {
         super(model);
         this.user = user;
