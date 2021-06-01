@@ -822,24 +822,13 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
             }
         };
 
-        /* l0nelyc0w
         tradeFeeInBtcToggleListener = (observable, oldValue, newValue) -> {
-            if (newValue && tradeFeeInBsqToggle.isSelected())
-                tradeFeeInBsqToggle.setSelected(false);
-
-            if (!newValue && !tradeFeeInBsqToggle.isSelected())
-                tradeFeeInBsqToggle.setSelected(true);
-
             setIsCurrencyForMakerFeeBtc(newValue);
         };
-
+        
         tradeFeeVisibleListener = (observable, oldValue, newValue) -> {
-            if (DevEnv.isDaoActivated()) {
-                tradeFeeInBtcToggle.setVisible(newValue);
-                tradeFeeInBsqToggle.setVisible(newValue);
-            }
+            tradeFeeInBtcToggle.setVisible(newValue);
         };
-	*/
 
         isMinBuyerSecurityDepositListener = ((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -856,11 +845,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
 
     private void setIsCurrencyForMakerFeeBtc(boolean isCurrencyForMakerFeeBtc) {
         model.setIsCurrencyForMakerFeeBtc(true);
-        if (DevEnv.isDaoActivated()) {
-	    tradeFeeInBtcLabel.setOpacity(1);
-            //tradeFeeInBtcLabel.setOpacity(isCurrencyForMakerFeeBtc ? 1 : 0.3);
-            //tradeFeeInBsqLabel.setOpacity(isCurrencyForMakerFeeBtc ? 0.3 : 1);
-        }
+	tradeFeeInBtcLabel.setOpacity(1);
     }
 
     protected void updatePriceToggle() {

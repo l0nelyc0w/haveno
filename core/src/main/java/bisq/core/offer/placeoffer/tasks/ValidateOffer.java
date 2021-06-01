@@ -43,7 +43,7 @@ public class ValidateOffer extends Task<PlaceOfferModel> {
             // Coins
             checkCoinNotNullOrZero(offer.getAmount(), "Amount");
             checkCoinNotNullOrZero(offer.getMinAmount(), "MinAmount");
-            checkCoinNotNullOrZero(offer.getMakerFee(), "MakerFee");
+//            checkCoinNotNullOrZero(offer.getMakerFee(), "MakerFee");
             checkCoinNotNullOrZero(offer.getBuyerSecurityDeposit(), "buyerSecurityDeposit");
             checkCoinNotNullOrZero(offer.getSellerSecurityDeposit(), "sellerSecurityDeposit");
             checkCoinNotNullOrZero(offer.getTxFee(), "txFee");
