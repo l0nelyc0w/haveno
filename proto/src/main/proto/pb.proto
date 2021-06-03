@@ -925,7 +925,7 @@ message OfferPayload {
     int64 block_height_at_offer_creation = 21;
     int64 tx_fee = 22;
     int64 maker_fee = 23;
-    bool is_currency_for_maker_fee_btc = 24;
+    reserved 24;
     int64 buyer_security_deposit = 25;
     int64 seller_security_deposit = 26;
     int64 max_trade_limit = 27;
