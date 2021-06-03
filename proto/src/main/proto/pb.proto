@@ -868,19 +868,18 @@ message OfferPayload {
     int64 block_height_at_offer_creation = 23;
     int64 tx_fee = 24;
     int64 maker_fee = 25;
-    bool is_currency_for_maker_fee_btc = 26;
-    int64 buyer_security_deposit = 27;
-    int64 seller_security_deposit = 28;
-    int64 max_trade_limit = 29;
-    int64 max_trade_period = 30;
-    bool use_auto_close = 31;
-    bool use_re_open_after_auto_close = 32;
-    int64 lower_close_price = 33;
-    int64 upper_close_price = 34;
-    bool is_private_offer = 35;
-    string hash_of_challenge = 36;
-    map<string, string> extra_data = 37;
-    int32 protocol_version = 38;
+    int64 buyer_security_deposit = 26;
+    int64 seller_security_deposit = 27;
+    int64 max_trade_limit = 28;
+    int64 max_trade_period = 29;
+    bool use_auto_close = 30;
+    bool use_re_open_after_auto_close = 31;
+    int64 lower_close_price = 32;
+    int64 upper_close_price = 33;
+    bool is_private_offer = 34;
+    string hash_of_challenge = 35;
+    map<string, string> extra_data = 36;
+    int32 protocol_version = 37;
 }
 
 message AccountAgeWitness {

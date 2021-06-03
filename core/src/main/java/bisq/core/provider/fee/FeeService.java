@@ -23,6 +23,7 @@ import bisq.common.handlers.FaultHandler;
 import bisq.common.util.Tuple2;
 import bisq.core.util.param.Param;
 
+import org.bitcoinj.utils.MonetaryFormat;
 import org.bitcoinj.core.Coin;
 
 import com.google.inject.Inject;
@@ -40,6 +41,7 @@ import java.time.Instant;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import bisq.core.util.ParsingUtils;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -61,33 +63,28 @@ public class FeeService {
     // fee service would not deliver data.
     private static final long BTC_DEFAULT_TX_FEE = 50;
     private static final long MIN_PAUSE_BETWEEN_REQUESTS_IN_MIN = 2;
+    private static final MonetaryFormat btcCoinFormat = Config.baseCurrencyNetworkParameters().getMonetaryFormat();
 
-
-    private static Coin getFeeFromParamAsCoin(Param parm) {
-        return Coin.ZERO;
-    }
 
     public static Coin getMakerFeePerBtc(boolean currencyForFeeIsBtc) {
-        return getFeeFromParamAsCoin(Param.UNDEFINED);
-        //return getFeeFromParamAsCoin(Param.DEFAULT_MAKER_FEE_BTC);
+         return ParsingUtils.parseToCoin("0.001", btcCoinFormat);        
     }
 
     public static Coin getMinMakerFee(boolean currencyForFeeIsBtc) {
-        return getFeeFromParamAsCoin(Param.UNDEFINED);
+         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);     
     }
 
     public static Coin getTakerFeePerBtc(boolean currencyForFeeIsBtc) {
-        return getFeeFromParamAsCoin(Param.UNDEFINED);
+         return ParsingUtils.parseToCoin("0.003", btcCoinFormat);       
     }
 
     public static Coin getMinTakerFee(boolean currencyForFeeIsBtc) {
-        return getFeeFromParamAsCoin(Param.UNDEFINED);
+         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);       
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Class fields
     ///////////////////////////////////////////////////////////////////////////////////////////
-
     private final FeeProvider feeProvider;
     private final IntegerProperty feeUpdateCounter = new SimpleIntegerProperty(0);
     private long txFeePerVbyte = BTC_DEFAULT_TX_FEE;
