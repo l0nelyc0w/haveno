@@ -80,14 +80,11 @@ public class MempoolService {
     
     public boolean canRequestBeMade(OfferPayload offerPayload) {
         // when validating a new offer, wait 1 block for the tx to propagate
-	// l0nelyc0w: should compare offerPayload with XMR stagenet height
-        //return offerPayload.getBlockHeightAtOfferCreation() < daoStateService.getChainHeight() && canRequestBeMade();
         return canRequestBeMade();
     }
 
     public void validateOfferMakerTx(OfferPayload offerPayload, Consumer<TxValidator> resultHandler) {
-        throw new RuntimeException("l0nelyc0w");
-        //validateOfferMakerTx(new TxValidator( offerPayload.getOfferFeePaymentTxId(), Coin.valueOf(offerPayload.getAmount()), resultHandler));
+        validateOfferMakerTx(new TxValidator( offerPayload.getOfferFeePaymentTxId(), Coin.valueOf(offerPayload.getAmount())), resultHandler);
     }
 
     public void validateOfferMakerTx(TxValidator txValidator, Consumer<TxValidator> resultHandler) {
