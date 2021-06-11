@@ -214,34 +214,12 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
                 walletFundedNotification.show();
             }
         };
-        /*
         tradeFeeInBtcToggleListener = (observable, oldValue, newValue) -> {
-            if (newValue && tradeFeeInBsqToggle.isSelected())
-                tradeFeeInBsqToggle.setSelected(false);
-
-            if (!newValue && !tradeFeeInBsqToggle.isSelected())
-                tradeFeeInBsqToggle.setSelected(true);
-
-            setIsCurrencyForMakerFeeBtc(newValue);
+            setIsCurrencyForMakerFeeBtc(true);
         };
-        tradeFeeInBsqToggleListener = (observable, oldValue, newValue) -> {
-            if (newValue && tradeFeeInBtcToggle.isSelected())
-                tradeFeeInBtcToggle.setSelected(false);
-
-            if (!newValue && !tradeFeeInBtcToggle.isSelected())
-                tradeFeeInBtcToggle.setSelected(true);
-
-            setIsCurrencyForMakerFeeBtc(!newValue);
-        };
-	
 
         tradeFeeVisibleListener = (observable, oldValue, newValue) -> {
-            if (DevEnv.isDaoActivated()) {
-                tradeFeeInBtcToggle.setVisible(newValue);
-                tradeFeeInBsqToggle.setVisible(newValue);
-            }
         };
-	*/
 
         GUIUtil.focusWhenAddedToScene(amountTextField);
     }
@@ -302,20 +280,16 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         maybeShowFasterPaymentsWarning(lastPaymentAccount);
         maybeShowCashByMailWarning(lastPaymentAccount, model.dataModel.getOffer());
 
-        if (!DevEnv.isDaoActivated() && !model.isRange()) {
-            nextButton.setVisible(false);
-            cancelButton1.setVisible(false);
-            if (model.isOfferAvailable.get())
-                showNextStepAfterAmountIsSet();
-        }
+        nextButton.setVisible(false);
+        cancelButton1.setVisible(false);
+        if (model.isOfferAvailable.get())
+            showNextStepAfterAmountIsSet();
 
         boolean currencyForMakerFeeBtc = model.dataModel.isCurrencyForTakerFeeBtc();
         tradeFeeInBtcToggle.setSelected(currencyForMakerFeeBtc);
 
-        if (!DevEnv.isDaoActivated()) {
-            tradeFeeInBtcToggle.setVisible(false);
-            tradeFeeInBtcToggle.setManaged(false);
-        }
+        tradeFeeInBtcToggle.setVisible(false);
+        tradeFeeInBtcToggle.setManaged(false);
     }
 
     @Override
@@ -453,10 +427,8 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         offerAvailabilityBusyAnimation.setManaged(false);
         offerAvailabilityLabel.setVisible(false);
         offerAvailabilityLabel.setManaged(false);
-        /*
+        
         tradeFeeInBtcToggle.setMouseTransparent(true);
-        tradeFeeInBsqToggle.setMouseTransparent(true);
-	*/
 
         int delay = 500;
         int diff = 100;
@@ -467,13 +439,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         transitions.fadeOutAndRemove(advancedOptionsBox, delay);
 
         model.onShowPayFundsScreen();
-        /*
-        if (DevEnv.isDaoActivated()) {
-            paymentAccountsComboBox.setMouseTransparent(true);
-            paymentAccountsComboBox.setDisable(true);
-            paymentAccountsComboBox.setFocusTraversable(false);
-        }
-	*/
 
         amountTextField.setMouseTransparent(true);
         amountTextField.setDisable(false);
@@ -690,8 +655,7 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
             if (isOfferAvailable) {
                 offerAvailabilityBusyAnimation.stop();
                 offerAvailabilityBusyAnimation.setVisible(false);
-                if (!DevEnv.isDaoActivated() && !model.isRange() && !model.showPayFundsScreenDisplayed.get())
-                    showNextStepAfterAmountIsSet();
+                showNextStepAfterAmountIsSet();
             }
 
             offerAvailabilityLabel.setVisible(!isOfferAvailable);
@@ -908,9 +872,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
     }
 
     private void showNextStepAfterAmountIsSet() {
-        if (DevEnv.isDaoTradingActivated())
-            showFeeOption();
-        else
             onShowPayFundsScreen();
     }
 
@@ -1149,12 +1110,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         tradeFeeInBtcLabel.setMouseTransparent(true);
         tradeFeeInBtcLabel.setId("trade-fee-textfield");
 
-	/*
-        tradeFeeInBsqLabel = new Label();
-        tradeFeeInBsqLabel.setMouseTransparent(true);
-        tradeFeeInBsqLabel.setId("trade-fee-textfield");
-        */
-
         VBox vBox = new VBox();
         vBox.setSpacing(6);
         vBox.setMaxWidth(300);
@@ -1164,12 +1119,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         tradeFeeInBtcToggle = new AutoTooltipSlideToggleButton();
         tradeFeeInBtcToggle.setText("BTC"); // TODO (woodser): update to XMR
         tradeFeeInBtcToggle.setPadding(new Insets(-8, 5, -10, 5));
-
-	/*
-        tradeFeeInBsqToggle = new AutoTooltipSlideToggleButton();
-        tradeFeeInBsqToggle.setText("BSQ");
-        tradeFeeInBsqToggle.setPadding(new Insets(-9, 5, -9, 5));
-	*/
 
         VBox tradeFeeToggleButtonBox = new VBox();
         tradeFeeToggleButtonBox.getChildren().addAll(tradeFeeInBtcToggle);
@@ -1193,24 +1142,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
     // Utils
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    /*
-    private void showInsufficientBsqFundsForBtcFeePaymentPopup() {
-        Coin takerFee = model.dataModel.getTakerFee(false);
-        String message = null;
-        if (takerFee != null)
-            message = Res.get("popup.warning.insufficientBsqFundsForBtcFeePayment",
-                    bsqFormatter.formatCoinWithCode(takerFee.subtract(model.dataModel.getUsableBsqBalance())));
-
-        else if (model.dataModel.getUsableBsqBalance().isZero())
-            message = Res.get("popup.warning.noBsqFundsForBtcFeePayment");
-
-        if (message != null)
-            new Popup().warning(message)
-                    .actionButtonTextWithGoTo("navigation.dao.wallet.receive")
-                    .onAction(() -> navigation.navigateTo(MainView.class, DaoView.class, BsqWalletView.class, BsqReceiveView.class))
-                    .show();
-    }
-    */
 
     private void maybeShowTakeOfferFromUnsignedAccountWarning(Offer offer) {
         // warn if you are selling BTC to unsigned account (#5343)
