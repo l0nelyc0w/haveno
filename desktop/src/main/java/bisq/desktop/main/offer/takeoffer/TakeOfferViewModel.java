@@ -175,9 +175,7 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
 
         updateSpinnerInfo();
 
-        if (!DevEnv.isDaoActivated()) {
-            isTradeFeeVisible.setValue(false);
-        }
+        isTradeFeeVisible.setValue(false);
     }
 
     @Override
@@ -273,8 +271,7 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
     }
 
     private void applyTakerFee() {
-        tradeFeeDescription.set(DevEnv.isDaoActivated() ? Res.get("createOffer.tradeFee.descriptionBSQEnabled") :
-                Res.get("createOffer.tradeFee.descriptionBTCOnly"));
+        tradeFeeDescription.set(Res.get("createOffer.tradeFee.descriptionBTCOnly"));
         Coin takerFeeAsCoin = dataModel.getTakerFee();
         if (takerFeeAsCoin == null) {
             return;
@@ -753,7 +750,7 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
     }
 
     private CoinFormatter getFormatterForTakerFee() {
-        return btcFormatter; 
+        return btcFormatter;
     }
 
     public Callback<ListView<PaymentAccount>, ListCell<PaymentAccount>> getPaymentAccountListCellFactory(

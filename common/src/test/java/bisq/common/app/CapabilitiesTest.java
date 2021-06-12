@@ -70,7 +70,6 @@ public class CapabilitiesTest {
                 Capability.ACK_MSG,
                 Capability.PROPOSAL,
                 Capability.BLIND_VOTE,
-                Capability.DAO_STATE,
                 Capability.BUNDLE_OF_ENVELOPES,
                 Capability.MEDIATION,
                 Capability.SIGNED_ACCOUNT_AGE_WITNESS,

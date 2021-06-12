@@ -107,12 +107,6 @@ public class SeedNodeMain extends ExecutableForAppWithP2p {
 
         seedNode.setInjector(injector);
 
-	/* remove dao
-        if (DevEnv.isDaoActivated()) {
-            injector.getInstance(DaoStateSnapshotService.class).setDaoRequiresRestartHandler(() -> gracefulShutDown(() -> {
-            }));
-        }
-	*/
     }
 
     @Override

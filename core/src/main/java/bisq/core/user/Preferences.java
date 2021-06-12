@@ -295,7 +295,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         ArrayList<BlockChainExplorer> btcExplorers = getBlockChainExplorers();
         if (getBlockChainExplorer() == null ||  getBlockChainExplorer().name.length() == 0 ){
             setBlockChainExplorer(btcExplorers.get(0));
-        
+
         }
         tradeCurrenciesAsObservable.addAll(prefPayload.getFiatCurrencies());
         tradeCurrenciesAsObservable.addAll(prefPayload.getCryptoCurrencies());
@@ -337,10 +337,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
                         getAutoConfirmSettingsList().add(xmrAutoConfirmSettings);
                     });
         }
-
-        // We set the capability in CoreNetworkCapabilities if the program argument is set.
-        // If we have set it in the preferences view we handle it here.
-        CoreNetworkCapabilities.maybeApplyDaoFullMode(config);
 
         initialReadDone = true;
         requestPersistence();
@@ -1008,8 +1004,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         void setBuyerSecurityDepositAsPercent(double buyerSecurityDepositAsPercent);
 
         double getBuyerSecurityDepositAsPercent();
-
-        void setDaoFullNode(boolean value);
 
         void setRpcUser(String value);
 

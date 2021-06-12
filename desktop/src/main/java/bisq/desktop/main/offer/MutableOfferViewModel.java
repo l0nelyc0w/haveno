@@ -494,8 +494,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
     private void applyMakerFee() {
         tradeFeeCurrencyCode.set(dataModel.isCurrencyForMakerFeeBtc() ? Res.getBaseCurrencyCode() : "BSQ");
-        tradeFeeDescription.set(DevEnv.isDaoActivated() ? Res.get("createOffer.tradeFee.descriptionBSQEnabled") :
-                Res.get("createOffer.tradeFee.descriptionBTCOnly"));
+        tradeFeeDescription.set(Res.get("createOffer.tradeFee.descriptionBTCOnly"));
 
         Coin makerFeeAsCoin = dataModel.getMakerFee();
         if (makerFeeAsCoin == null) {
