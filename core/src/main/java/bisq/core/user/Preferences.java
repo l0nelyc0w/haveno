@@ -595,11 +595,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         requestPersistence();
     }
 
-    public void setPayFeeInBtc(boolean payFeeInBtc) {
-        prefPayload.setPayFeeInBtc(payFeeInBtc);
-        requestPersistence();
-    }
-
     private void setFiatCurrencies(List<FiatCurrency> currencies) {
         fiatCurrenciesAsObservable.setAll(currencies.stream()
                 .map(fiatCurrency -> new FiatCurrency(fiatCurrency.getCurrency()))
@@ -824,11 +819,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         }
 
         return value == 0 ? Restrictions.getDefaultBuyerSecurityDepositAsPercent() : value;
-    }
-
-    //TODO remove and use isPayFeeInBtc instead
-    public boolean getPayFeeInBtc() {
-        return prefPayload.isPayFeeInBtc();
     }
 
     @Override

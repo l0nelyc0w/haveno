@@ -95,7 +95,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
     private int cssTheme;
     @Nullable
     private PaymentAccount selectedPaymentAccountForCreateOffer;
-    private boolean payFeeInBtc = true;
     @Nullable
     private List<String> bridgeAddresses;
     private int bridgeOptionOrdinal;
@@ -179,7 +178,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
                 .setBuyerSecurityDepositAsLong(buyerSecurityDepositAsLong)
                 .setUseAnimations(useAnimations)
                 .setCssTheme(cssTheme)
-                .setPayFeeInBtc(payFeeInBtc)
                 .setBridgeOptionOrdinal(bridgeOptionOrdinal)
                 .setTorTransportOrdinal(torTransportOrdinal)
                 .setBitcoinNodesOptionOrdinal(bitcoinNodesOptionOrdinal)
@@ -269,7 +267,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
                 proto.getUseAnimations(),
                 proto.getCssTheme(),
                 paymentAccount,
-                proto.getPayFeeInBtc(),
                 proto.getBridgeAddressesList().isEmpty() ? null : new ArrayList<>(proto.getBridgeAddressesList()),
                 proto.getBridgeOptionOrdinal(),
                 proto.getTorTransportOrdinal(),

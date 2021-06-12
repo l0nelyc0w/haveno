@@ -211,8 +211,7 @@ public final class GrpcClient {
                                             long minAmount,
                                             String fixedPrice,
                                             double securityDeposit,
-                                            String paymentAcctId,
-                                            String makerFeeCurrencyCode) {
+                                            String paymentAcctId) {
         return createOffer(direction,
                 currencyCode,
                 amount,
@@ -221,8 +220,7 @@ public final class GrpcClient {
                 fixedPrice,
                 0.00,
                 securityDeposit,
-                paymentAcctId,
-                makerFeeCurrencyCode);
+                paymentAcctId);
     }
 
     public OfferInfo createMarketBasedPricedOffer(String direction,
@@ -231,8 +229,7 @@ public final class GrpcClient {
                                                   long minAmount,
                                                   double marketPriceMargin,
                                                   double securityDeposit,
-                                                  String paymentAcctId,
-                                                  String makerFeeCurrencyCode) {
+                                                  String paymentAcctId) {
         return createOffer(direction,
                 currencyCode,
                 amount,
@@ -241,8 +238,7 @@ public final class GrpcClient {
                 "0",
                 marketPriceMargin,
                 securityDeposit,
-                paymentAcctId,
-                makerFeeCurrencyCode);
+                paymentAcctId);
     }
 
     public OfferInfo createOffer(String direction,
@@ -253,8 +249,7 @@ public final class GrpcClient {
                                  String fixedPrice,
                                  double marketPriceMargin,
                                  double securityDeposit,
-                                 String paymentAcctId,
-                                 String makerFeeCurrencyCode) {
+                                 String paymentAcctId) {
         var request = CreateOfferRequest.newBuilder()
                 .setDirection(direction)
                 .setCurrencyCode(currencyCode)
@@ -265,7 +260,6 @@ public final class GrpcClient {
                 .setMarketPriceMargin(marketPriceMargin)
                 .setBuyerSecurityDeposit(securityDeposit)
                 .setPaymentAccountId(paymentAcctId)
-                .setMakerFeeCurrencyCode(makerFeeCurrencyCode)
                 .build();
         return grpcStubs.offersService.createOffer(request).getOffer();
     }
@@ -376,17 +370,16 @@ public final class GrpcClient {
                 .collect(toList());
     }
 
-    public TakeOfferReply getTakeOfferReply(String offerId, String paymentAccountId, String takerFeeCurrencyCode) {
+    public TakeOfferReply getTakeOfferReply(String offerId, String paymentAccountId) {
         var request = TakeOfferRequest.newBuilder()
                 .setOfferId(offerId)
                 .setPaymentAccountId(paymentAccountId)
-                .setTakerFeeCurrencyCode(takerFeeCurrencyCode)
                 .build();
         return grpcStubs.tradesService.takeOffer(request);
     }
 
-    public TradeInfo takeOffer(String offerId, String paymentAccountId, String takerFeeCurrencyCode) {
-        var reply = getTakeOfferReply(offerId, paymentAccountId, takerFeeCurrencyCode);
+    public TradeInfo takeOffer(String offerId, String paymentAccountId) {
+        var reply = getTakeOfferReply(offerId, paymentAccountId);
         if (reply.hasTrade())
             return reply.getTrade();
         else

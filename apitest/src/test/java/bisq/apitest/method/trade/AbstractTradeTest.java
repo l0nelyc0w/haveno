@@ -35,16 +35,14 @@ public class AbstractTradeTest extends AbstractOfferTest {
     }
 
     protected final TradeInfo takeAlicesOffer(String offerId,
-                                              String paymentAccountId,
-                                              String takerFeeCurrencyCode) {
-        return bobClient.takeOffer(offerId, paymentAccountId, takerFeeCurrencyCode);
+                                              String paymentAccountId) {
+        return bobClient.takeOffer(offerId, paymentAccountId);
     }
 
     @SuppressWarnings("unused")
     protected final TradeInfo takeBobsOffer(String offerId,
-                                            String paymentAccountId,
-                                            String takerFeeCurrencyCode) {
-        return aliceClient.takeOffer(offerId, paymentAccountId, takerFeeCurrencyCode);
+                                            String paymentAccountId) {
+        return aliceClient.takeOffer(offerId, paymentAccountId);
     }
 
     protected final void verifyExpectedProtocolStatus(TradeInfo trade) {

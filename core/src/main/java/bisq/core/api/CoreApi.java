@@ -20,7 +20,6 @@ package bisq.core.api;
 import bisq.core.api.model.AddressBalanceInfo;
 import bisq.core.api.model.BalancesInfo;
 import bisq.core.api.model.TxFeeRateInfo;
-import bisq.core.btc.wallet.TxBroadcaster;
 import bisq.core.monetary.Price;
 import bisq.core.offer.Offer;
 import bisq.core.offer.OfferPayload;
@@ -148,7 +147,6 @@ public class CoreApi {
                                    double buyerSecurityDeposit,
                                    long triggerPrice,
                                    String paymentAccountId,
-                                   String makerFeeCurrencyCode,
                                    Consumer<Offer> resultHandler) {
         coreOffersService.createAndPlaceOffer(currencyCode,
                 directionAsString,
@@ -160,7 +158,6 @@ public class CoreApi {
                 buyerSecurityDeposit,
                 triggerPrice,
                 paymentAccountId,
-                makerFeeCurrencyCode,
                 resultHandler);
     }
 
@@ -238,13 +235,11 @@ public class CoreApi {
 
     public void takeOffer(String offerId,
                           String paymentAccountId,
-                          String takerFeeCurrencyCode,
                           Consumer<Trade> resultHandler,
                           ErrorMessageHandler errorMessageHandler) {
         Offer offer = coreOffersService.getOffer(offerId);
         coreTradesService.takeOffer(offer,
                 paymentAccountId,
-                takerFeeCurrencyCode,
                 resultHandler,
                 errorMessageHandler);
     }

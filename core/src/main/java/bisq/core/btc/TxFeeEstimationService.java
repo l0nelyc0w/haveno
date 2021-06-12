@@ -114,12 +114,6 @@ public class TxFeeEstimationService {
                     "if the user pays from an external wallet. In that case we use an estimated tx vsize of {} vbytes.", estimatedTxVsize);
         }
 
-        if (!preferences.isPayFeeInBtc()) {
-            // If we pay the fee in BSQ we have one input more which adds about 150 bytes
-            // TODO: Clarify if there is always just one additional input or if there can be more.
-            estimatedTxVsize += BSQ_INPUT_INCREASE;
-        }
-
         Coin txFee;
         int vsize;
         if (isTaker) {

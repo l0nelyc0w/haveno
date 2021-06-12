@@ -339,7 +339,6 @@ public class CliMain {
                     var fixedPrice = opts.getFixedPrice();
                     var marketPriceMargin = opts.getMktPriceMarginAsBigDecimal();
                     var securityDeposit = toSecurityDepositAsPct(opts.getSecurityDeposit());
-                    var makerFeeCurrencyCode = opts.getMakerFeeCurrencyCode();
                     var offer = client.createOffer(direction,
                             currencyCode,
                             amount,
@@ -348,8 +347,7 @@ public class CliMain {
                             fixedPrice,
                             marketPriceMargin.doubleValue(),
                             securityDeposit,
-                            paymentAcctId,
-                            makerFeeCurrencyCode);
+                            paymentAcctId);
                     out.println(formatOfferTable(singletonList(offer), currencyCode));
                     return;
                 }
@@ -426,8 +424,7 @@ public class CliMain {
                     }
                     var offerId = opts.getOfferId();
                     var paymentAccountId = opts.getPaymentAccountId();
-                    var takerFeeCurrencyCode = opts.getTakerFeeCurrencyCode();
-                    var trade = client.takeOffer(offerId, paymentAccountId, takerFeeCurrencyCode);
+                    var trade = client.takeOffer(offerId, paymentAccountId);
                     out.printf("trade %s successfully taken%n", trade.getTradeId());
                     return;
                 }

@@ -102,8 +102,7 @@ public class TakerBotProtocol extends BotProtocol {
     private final Function<OfferInfo, TradeInfo> takeOffer = (offer) -> {
         initProtocolStep.accept(TAKE_OFFER);
         checkIfShutdownCalled("Interrupted before taking offer.");
-        String feeCurrency = RANDOM.nextBoolean() ? "BSQ" : "BTC";
-        return botClient.takeOffer(offer.getId(), paymentAccount, feeCurrency);
+        return botClient.takeOffer(offer.getId(), paymentAccount);
     };
 
     private void createMakeOfferScript() {

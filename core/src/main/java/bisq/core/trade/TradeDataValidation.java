@@ -22,7 +22,6 @@ import bisq.core.offer.Offer;
 import bisq.core.support.SupportType;
 import bisq.core.support.dispute.Dispute;
 import bisq.core.util.validation.RegexValidatorFactory;
-import bisq.core.util.param.Param;
 
 import bisq.network.p2p.NodeAddress;
 
