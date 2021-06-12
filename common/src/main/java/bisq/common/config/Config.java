@@ -110,11 +110,9 @@ public class Config {
     public static final String RPC_BLOCK_NOTIFICATION_PORT = "rpcBlockNotificationPort";
     public static final String RPC_BLOCK_NOTIFICATION_HOST = "rpcBlockNotificationHost";
     public static final String DUMP_BLOCKCHAIN_DATA = "dumpBlockchainData";
-    public static final String FULL_DAO_NODE = "fullDaoNode";
     public static final String GENESIS_TX_ID = "genesisTxId";
     public static final String GENESIS_BLOCK_HEIGHT = "genesisBlockHeight";
     public static final String GENESIS_TOTAL_SUPPLY = "genesisTotalSupply";
-    public static final String DAO_ACTIVATED = "daoActivated";
     public static final String DUMP_DELAYED_PAYOUT_TXS = "dumpDelayedPayoutTxs";
     public static final String ALLOW_FAULTY_DELAYED_TXS = "allowFaultyDelayedTxs";
     public static final String API_PASSWORD = "apiPassword";
@@ -130,7 +128,6 @@ public class Config {
     public static final int UNSPECIFIED_PORT = -1;
     public static final String DEFAULT_REGTEST_HOST = "localhost";
     public static final int DEFAULT_NUM_CONNECTIONS_FOR_BTC = 9; // down from BitcoinJ default of 12
-    public static final boolean DEFAULT_FULL_DAO_NODE = false;
     static final String DEFAULT_CONFIG_FILE_NAME = "bisq.properties";
 
     // Static fields that provide access to Config properties in locations where injecting
@@ -163,7 +160,6 @@ public class Config {
     public final NetworkParameters networkParameters;
     public final boolean ignoreLocalBtcNode;
     public final String bitcoinRegtestHost;
-    public final boolean daoActivated;
     public final String referralId;
     public final boolean useDevMode;
     public final boolean useDevModeHeader;
@@ -202,8 +198,6 @@ public class Config {
     public final int rpcBlockNotificationPort;
     public final String rpcBlockNotificationHost;
     public final boolean dumpBlockchainData;
-    public final boolean fullDaoNode;
-    public final boolean fullDaoNodeOptionSetExplicitly;
     public final String genesisTxId;
     public final int genesisBlockHeight;
     public final long genesisTotalSupply;
@@ -592,14 +586,6 @@ public class Config {
                         .ofType(boolean.class)
                         .defaultsTo(false);
 
-        ArgumentAcceptingOptionSpec<Boolean> fullDaoNodeOpt =
-                parser.accepts(FULL_DAO_NODE, "If set to true the node requests the blockchain data via RPC requests " +
-                        "from Bitcoin Core and provide the validated BSQ txs to the network. It requires that the " +
-                        "other RPC properties are set as well.")
-                        .withRequiredArg()
-                        .ofType(Boolean.class)
-                        .defaultsTo(DEFAULT_FULL_DAO_NODE);
-
         ArgumentAcceptingOptionSpec<String> genesisTxIdOpt =
                 parser.accepts(GENESIS_TX_ID, "Genesis transaction ID when not using the hard coded one")
                         .withRequiredArg()
@@ -617,12 +603,6 @@ public class Config {
                         .withRequiredArg()
                         .ofType(long.class)
                         .defaultsTo(-1L);
-
-        ArgumentAcceptingOptionSpec<Boolean> daoActivatedOpt =
-                parser.accepts(DAO_ACTIVATED, "Developer flag. If true it enables dao phase 2 features.")
-                        .withRequiredArg()
-                        .ofType(boolean.class)
-                        .defaultsTo(true);
 
         ArgumentAcceptingOptionSpec<Boolean> dumpDelayedPayoutTxsOpt =
                 parser.accepts(DUMP_DELAYED_PAYOUT_TXS, "Dump delayed payout transactions to file")
@@ -774,12 +754,9 @@ public class Config {
             this.rpcBlockNotificationPort = options.valueOf(rpcBlockNotificationPortOpt);
             this.rpcBlockNotificationHost = options.valueOf(rpcBlockNotificationHostOpt);
             this.dumpBlockchainData = options.valueOf(dumpBlockchainDataOpt);
-            this.fullDaoNode = options.valueOf(fullDaoNodeOpt);
-            this.fullDaoNodeOptionSetExplicitly = options.has(fullDaoNodeOpt);
             this.genesisTxId = options.valueOf(genesisTxIdOpt);
             this.genesisBlockHeight = options.valueOf(genesisBlockHeightOpt);
             this.genesisTotalSupply = options.valueOf(genesisTotalSupplyOpt);
-            this.daoActivated = options.valueOf(daoActivatedOpt);
             this.dumpDelayedPayoutTxs = options.valueOf(dumpDelayedPayoutTxsOpt);
             this.allowFaultyDelayedTxs = options.valueOf(allowFaultyDelayedTxsOpt);
             this.apiPassword = options.valueOf(apiPasswordOpt);

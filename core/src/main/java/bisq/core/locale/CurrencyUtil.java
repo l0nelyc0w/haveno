@@ -580,14 +580,14 @@ public class CurrencyUtil {
         return new CryptoCurrency(asset.getTickerSymbol(), asset.getName(), asset instanceof Token);
     }
 
-    
+
 
     public static boolean assetMatchesCurrencyCode(Asset asset, String currencyCode) {
         return currencyCode.equals(asset.getTickerSymbol());
     }
 
     public static Optional<Asset> findAsset(AssetRegistry assetRegistry, String currencyCode,
-                                            BaseCurrencyNetwork baseCurrencyNetwork, boolean daoTradingActivated) {
+                                            BaseCurrencyNetwork baseCurrencyNetwork) {
         List<Asset> assets = assetRegistry.stream()
                 .filter(asset -> assetMatchesCurrencyCode(asset, currencyCode)).collect(Collectors.toList());
 

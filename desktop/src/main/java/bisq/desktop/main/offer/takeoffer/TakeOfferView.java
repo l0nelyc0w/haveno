@@ -218,6 +218,7 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
             setIsCurrencyForMakerFeeBtc(true);
         };
 
+
         tradeFeeVisibleListener = (observable, oldValue, newValue) -> {
         };
 
@@ -280,10 +281,12 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         maybeShowFasterPaymentsWarning(lastPaymentAccount);
         maybeShowCashByMailWarning(lastPaymentAccount, model.dataModel.getOffer());
 
-        nextButton.setVisible(false);
-        cancelButton1.setVisible(false);
-        if (model.isOfferAvailable.get())
-            showNextStepAfterAmountIsSet();
+        if (!model.isRange()) {
+            nextButton.setVisible(false);
+            cancelButton1.setVisible(false);
+            if (model.isOfferAvailable.get())
+                showNextStepAfterAmountIsSet();
+        }
 
         boolean currencyForMakerFeeBtc = model.dataModel.isCurrencyForTakerFeeBtc();
         tradeFeeInBtcToggle.setSelected(currencyForMakerFeeBtc);
@@ -655,7 +658,8 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
             if (isOfferAvailable) {
                 offerAvailabilityBusyAnimation.stop();
                 offerAvailabilityBusyAnimation.setVisible(false);
-                showNextStepAfterAmountIsSet();
+                if (!model.isRange() && !model.showPayFundsScreenDisplayed.get())
+                    showNextStepAfterAmountIsSet();
             }
 
             offerAvailabilityLabel.setVisible(!isOfferAvailable);
@@ -872,10 +876,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
     }
 
     private void showNextStepAfterAmountIsSet() {
-            onShowPayFundsScreen();
-    }
-
-    private void showFeeOption() {
             onShowPayFundsScreen();
     }
 

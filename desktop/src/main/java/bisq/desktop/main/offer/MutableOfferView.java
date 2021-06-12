@@ -303,7 +303,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
         }
 
         updatePriceToggle();
-        
+
     }
 
     // called form parent as the view does not get notified when the tab is closed
@@ -335,7 +335,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
                     model.onPlaceOffer(offer, () -> {
                     });
                 }
-            } 
+            }
         }
     }
 
@@ -791,7 +791,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
         tradeFeeInBtcToggleListener = (observable, oldValue, newValue) -> {
             setIsCurrencyForMakerFeeBtc(newValue);
         };
-        
+
         tradeFeeVisibleListener = (observable, oldValue, newValue) -> {
             tradeFeeInBtcToggle.setVisible(newValue);
         };
@@ -1025,10 +1025,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
 
         nextButton.setOnAction(e -> {
             if (model.isPriceInRange()) {
-                if (DevEnv.isDaoTradingActivated())
-                    showFeeOption();
-                else
-                    onShowPayFundsScreen();
+                onShowPayFundsScreen();
             }
         });
     }
@@ -1042,12 +1039,6 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
         cancelButton1.setManaged(false);
         advancedOptionsBox.setVisible(false);
         advancedOptionsBox.setManaged(false);
-    }
-
-    private void showFeeOption() {
-	boolean isPreferredFeeCurrencyBtc = true;
-        onShowPayFundsScreen();
-        
     }
 
     private VBox getBuyerSecurityDepositBox() {
