@@ -57,9 +57,6 @@ public class TakeBuyBTCOfferTest extends AbstractTradeTest {
 
     // Alice is maker/buyer, Bob is taker/seller.
 
-    // Maker and Taker fees are in BSQ.
-    private static final String TRADE_FEE_CURRENCY_CODE = BSQ;
-
     @Test
     @Order(1)
     public void testTakeAlicesBuyOffer(final TestInfo testInfo) {
@@ -71,10 +68,8 @@ public class TakeBuyBTCOfferTest extends AbstractTradeTest {
                     12_500_000L, // min-amount = amount
                     0.00,
                     getDefaultBuyerSecurityDepositAsPercent(),
-                    alicesUsdAccount.getId(),
-                    TRADE_FEE_CURRENCY_CODE);
+                    alicesUsdAccount.getId());
             var offerId = alicesOffer.getId();
-            assertFalse(alicesOffer.getIsCurrencyForMakerFeeBtc());
 
             // Wait for Alice's AddToOfferBook task.
             // Wait times vary;  my logs show >= 2 second delay.
@@ -83,7 +78,7 @@ public class TakeBuyBTCOfferTest extends AbstractTradeTest {
             assertEquals(1, alicesUsdOffers.size());
 
             PaymentAccount bobsUsdAccount = createDummyF2FAccount(bobClient, "US");
-            var trade = takeAlicesOffer(offerId, bobsUsdAccount.getId(), TRADE_FEE_CURRENCY_CODE);
+            var trade = takeAlicesOffer(offerId, bobsUsdAccount.getId());
             assertNotNull(trade);
             assertEquals(offerId, trade.getTradeId());
             // Cache the trade id for the other tests.

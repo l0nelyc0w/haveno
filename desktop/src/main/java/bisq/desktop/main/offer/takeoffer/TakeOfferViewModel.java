@@ -265,11 +265,6 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
         }
     }
 
-    public void setIsCurrencyForTakerFeeBtc(boolean isCurrencyForTakerFeeBtc) {
-        dataModel.setPreferredCurrencyForTakerFeeBtc(isCurrencyForTakerFeeBtc);
-        applyTakerFee();
-    }
-
     private void applyTakerFee() {
         tradeFeeDescription.set(Res.get("createOffer.tradeFee.descriptionBTCOnly"));
         Coin takerFeeAsCoin = dataModel.getTakerFee();
@@ -281,14 +276,7 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
         tradeFee.set(getFormatterForTakerFee().formatCoin(takerFeeAsCoin));
         tradeFeeInBtcWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
                 dataModel.getTakerFeeInBtc(),
-                true,
                 btcFormatter));
-	/*
-        tradeFeeInBsqWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
-                dataModel.getTakerFeeInBsq(),
-                false,
-                bsqFormatter));
-        */
     }
 
 
@@ -699,9 +687,8 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
             return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                     dataModel.getTakerFeeInBtc(),
                     dataModel.getAmount().get(),
-                    true,
                     btcFormatter,
-                    FeeService.getMinMakerFee(dataModel.isCurrencyForTakerFeeBtc()));
+                    FeeService.getMinMakerFee());
     }
 
     public String getTakerFeePercentage() {
@@ -718,7 +705,6 @@ class TakeOfferViewModel extends ActivatableWithDataModel<TakeOfferDataModel> im
         return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                 dataModel.getTotalTxFee(),
                 dataModel.getAmount().get(),
-                true,
                 btcFormatter,
                 Coin.ZERO
         );

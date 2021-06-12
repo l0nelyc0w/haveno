@@ -66,9 +66,6 @@ public class TakeBuyBSQOfferTest extends AbstractTradeTest {
 
     // Alice is maker / bsq buyer (btc seller), Bob is taker / bsq seller (btc buyer).
 
-    // Maker and Taker fees are in BSQ.
-    private static final String TRADE_FEE_CURRENCY_CODE = BSQ;
-
     @BeforeAll
     public static void setUp() {
         AbstractOfferTest.setUp();
@@ -90,17 +87,15 @@ public class TakeBuyBSQOfferTest extends AbstractTradeTest {
                     7_500_000L,
                     "0.000035",   // FIXED PRICE IN BTC (satoshis) FOR 1 BSQ
                     getDefaultBuyerSecurityDepositAsPercent(),
-                    alicesBsqAcct.getId(),
-                    TRADE_FEE_CURRENCY_CODE);
+                    alicesBsqAcct.getId());
             log.info("ALICE'S BUY BSQ (SELL BTC) OFFER:\n{}", formatOfferTable(singletonList(alicesOffer), BSQ));
             genBtcBlocksThenWait(1, 5000);
             var offerId = alicesOffer.getId();
-            assertFalse(alicesOffer.getIsCurrencyForMakerFeeBtc());
 
             var alicesBsqOffers = aliceClient.getMyCryptoCurrencyOffers(btcTradeDirection, BSQ);
             assertEquals(1, alicesBsqOffers.size());
 
-            var trade = takeAlicesOffer(offerId, bobsBsqAcct.getId(), TRADE_FEE_CURRENCY_CODE);
+            var trade = takeAlicesOffer(offerId, bobsBsqAcct.getId());
             assertNotNull(trade);
             assertEquals(offerId, trade.getTradeId());
             // Cache the trade id for the other tests.

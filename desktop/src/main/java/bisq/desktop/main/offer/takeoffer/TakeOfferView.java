@@ -163,9 +163,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
     private ChangeListener<Boolean> amountFocusedListener, getShowWalletFundedNotificationListener;
 
     private InfoInputTextField volumeInfoTextField;
-    private AutoTooltipSlideToggleButton tradeFeeInBtcToggle;
-    private ChangeListener<Boolean> tradeFeeInBtcToggleListener, tradeFeeInListener,
-            tradeFeeVisibleListener;
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Constructor, lifecycle
@@ -214,19 +211,8 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
                 walletFundedNotification.show();
             }
         };
-        tradeFeeInBtcToggleListener = (observable, oldValue, newValue) -> {
-            setIsCurrencyForMakerFeeBtc(true);
-        };
-
-
-        tradeFeeVisibleListener = (observable, oldValue, newValue) -> {
-        };
 
         GUIUtil.focusWhenAddedToScene(amountTextField);
-    }
-
-    private void setIsCurrencyForMakerFeeBtc(boolean isCurrencyForMakerFeeBtc) {
-        model.setIsCurrencyForTakerFeeBtc(isCurrencyForMakerFeeBtc);
     }
 
     @Override
@@ -287,12 +273,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
             if (model.isOfferAvailable.get())
                 showNextStepAfterAmountIsSet();
         }
-
-        boolean currencyForMakerFeeBtc = model.dataModel.isCurrencyForTakerFeeBtc();
-        tradeFeeInBtcToggle.setSelected(currencyForMakerFeeBtc);
-
-        tradeFeeInBtcToggle.setVisible(false);
-        tradeFeeInBtcToggle.setManaged(false);
     }
 
     @Override
@@ -391,12 +371,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
             return;
         }
 
-        if (!model.dataModel.isTakerFeeValid()) {
-            throw new RuntimeException("showInsufficientBsqFundsForBtcFeePaymentPopup();");
-
-            //return;
-        }
-
         if (DevEnv.isDevMode()) {
             balanceSubscription.unsubscribe();
             model.onTakeOffer(() -> {
@@ -430,8 +404,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         offerAvailabilityBusyAnimation.setManaged(false);
         offerAvailabilityLabel.setVisible(false);
         offerAvailabilityLabel.setManaged(false);
-        
-        tradeFeeInBtcToggle.setMouseTransparent(true);
 
         int delay = 500;
         int diff = 100;
@@ -721,15 +693,11 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
     private void addListeners() {
         amountTextField.focusedProperty().addListener(amountFocusedListener);
         model.dataModel.getShowWalletFundedNotification().addListener(getShowWalletFundedNotificationListener);
-        model.isTradeFeeVisible.addListener(tradeFeeVisibleListener);
-        tradeFeeInBtcToggle.selectedProperty().addListener(tradeFeeInBtcToggleListener);
     }
 
     private void removeListeners() {
         amountTextField.focusedProperty().removeListener(amountFocusedListener);
         model.dataModel.getShowWalletFundedNotification().removeListener(getShowWalletFundedNotificationListener);
-        model.isTradeFeeVisible.removeListener(tradeFeeVisibleListener);
-        tradeFeeInBtcToggle.selectedProperty().removeListener(tradeFeeInBtcToggleListener);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1116,21 +1084,7 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().addAll(tradeFeeInBtcLabel);
 
-        tradeFeeInBtcToggle = new AutoTooltipSlideToggleButton();
-        tradeFeeInBtcToggle.setText("BTC"); // TODO (woodser): update to XMR
-        tradeFeeInBtcToggle.setPadding(new Insets(-8, 5, -10, 5));
-
-        VBox tradeFeeToggleButtonBox = new VBox();
-        tradeFeeToggleButtonBox.getChildren().addAll(tradeFeeInBtcToggle);
-
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(vBox, tradeFeeToggleButtonBox);
-        hBox.setMinHeight(47);
-        hBox.setMaxHeight(hBox.getMinHeight());
-        HBox.setHgrow(vBox, Priority.ALWAYS);
-        HBox.setHgrow(tradeFeeToggleButtonBox, Priority.NEVER);
-
-        final Tuple2<Label, VBox> tradeInputBox = getTradeInputBox(hBox, Res.get("createOffer.tradeFee.descriptionBSQEnabled"));
+        final Tuple2<Label, VBox> tradeInputBox = getTradeInputBox(vBox, Res.get("createOffer.tradeFee.descriptionBSQEnabled"));
 
         tradeFeeDescriptionLabel = tradeInputBox.first;
 
@@ -1183,18 +1137,6 @@ public class TakeOfferView extends ActivatableViewAndModel<AnchorPane, TakeOffer
                         .show();
             }, 500, TimeUnit.MILLISECONDS);
         }
-    }
-
-    private Tuple2<Label, VBox> getTradeInputBox(HBox amountValueBox, String promptText) {
-        Label descriptionLabel = new AutoTooltipLabel(promptText);
-        descriptionLabel.setId("input-description-label");
-        descriptionLabel.setPrefWidth(170);
-
-        VBox box = new VBox();
-        box.setPadding(new Insets(10, 0, 0, 0));
-        box.setSpacing(2);
-        box.getChildren().addAll(descriptionLabel, amountValueBox);
-        return new Tuple2<>(descriptionLabel, box);
     }
 
     // As we don't use binding here we need to recreate it on mouse over to reflect the current state

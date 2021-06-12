@@ -503,10 +503,7 @@ class TakeOfferDataModel extends OfferDataModel {
         // The mining fee for the takeOfferFee tx is deducted from the createOfferFee and not visible to the trader
         final Coin takerFee = getTakerFee();
         if (offer != null && amount.get() != null && takerFee != null) {
-            Coin feeAndSecDeposit = getTotalTxFee().add(securityDeposit);
-            if (isCurrencyForTakerFeeBtc()) {
-                feeAndSecDeposit = feeAndSecDeposit.add(takerFee);
-            }
+            Coin feeAndSecDeposit = getTotalTxFee().add(securityDeposit).add(takerFee);
             if (isBuyOffer())
                 totalToPayAsCoin.set(feeAndSecDeposit.add(amount.get()));
             else
@@ -530,20 +527,15 @@ class TakeOfferDataModel extends OfferDataModel {
     }
 
     @Nullable
-    Coin getTakerFee(boolean isCurrencyForTakerFeeBtc) {
+    Coin getTakerFee() {
         Coin amount = this.amount.get();
         if (amount != null) {
             // TODO write unit test for that
-            Coin feePerBtc = CoinUtil.getFeePerBtc(FeeService.getTakerFeePerBtc(isCurrencyForTakerFeeBtc), amount);
-            return CoinUtil.maxCoin(feePerBtc, FeeService.getMinTakerFee(isCurrencyForTakerFeeBtc));
+            Coin feePerBtc = CoinUtil.getFeePerBtc(FeeService.getTakerFeePerBtc(), amount);
+            return CoinUtil.maxCoin(feePerBtc, FeeService.getMinTakerFee());
         } else {
             return null;
         }
-    }
-
-    @Nullable
-    public Coin getTakerFee() {
-        return getTakerFee(isCurrencyForTakerFeeBtc());
     }
 
     public void swapTradeToSavings() {
@@ -614,11 +606,7 @@ class TakeOfferDataModel extends OfferDataModel {
     }
 
     public Coin getTotalTxFee() {
-        Coin totalTxFees = txFeeFromFeeService.add(getTxFeeForDepositTx()).add(getTxFeeForPayoutTx());
-        if (isCurrencyForTakerFeeBtc())
-            return totalTxFees;
-        else
-            return totalTxFees.subtract(getTakerFee() != null ? getTakerFee() : Coin.ZERO);
+        return txFeeFromFeeService.add(getTxFeeForDepositTx()).add(getTxFeeForPayoutTx());
     }
 
     @NotNull
@@ -673,25 +661,7 @@ class TakeOfferDataModel extends OfferDataModel {
         return paymentAccount.isHalCashAccount();
     }
 
-    public boolean isCurrencyForTakerFeeBtc() {
-        return offerUtil.isCurrencyForTakerFeeBtc(amount.get());
-    }
-
-    public void setPreferredCurrencyForTakerFeeBtc(boolean isCurrencyForTakerFeeBtc) {
-        preferences.setPayFeeInBtc(isCurrencyForTakerFeeBtc);
-    }
-
-    public boolean isPreferredFeeCurrencyBtc() {
-        return preferences.isPayFeeInBtc();
-    }
-
     public Coin getTakerFeeInBtc() {
-        return offerUtil.getTakerFee(true, amount.get());
-    }
-
-  
-
-    boolean isTakerFeeValid() {
-        return preferences.getPayFeeInBtc();
+        return offerUtil.getTakerFee(amount.get());
     }
 }

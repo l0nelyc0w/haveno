@@ -125,7 +125,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     public final StringProperty triggerPrice = new SimpleStringProperty("");
     final StringProperty tradeFee = new SimpleStringProperty();
     final StringProperty tradeFeeInBtcWithFiat = new SimpleStringProperty();
-    final StringProperty tradeFeeCurrencyCode = new SimpleStringProperty();
     final StringProperty tradeFeeDescription = new SimpleStringProperty();
     final BooleanProperty isTradeFeeVisible = new SimpleBooleanProperty(false);
 
@@ -493,7 +492,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     }
 
     private void applyMakerFee() {
-        tradeFeeCurrencyCode.set(dataModel.isCurrencyForMakerFeeBtc() ? Res.getBaseCurrencyCode() : "BSQ");
         tradeFeeDescription.set(Res.get("createOffer.tradeFee.descriptionBTCOnly"));
 
         Coin makerFeeAsCoin = dataModel.getMakerFee();
@@ -505,7 +503,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         tradeFee.set(getFormatterForMakerFee().formatCoin(makerFeeAsCoin));
         tradeFeeInBtcWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
                 dataModel.getMakerFeeInBtc(),
-                true,
                 btcFormatter));
     }
 
@@ -682,11 +679,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
             return false;
         }
 
-    }
-
-    public void setIsCurrencyForMakerFeeBtc(boolean isCurrencyForMakerFeeBtc) {
-        dataModel.setPreferredCurrencyForMakerFeeBtc(isCurrencyForMakerFeeBtc);
-        applyMakerFee();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1011,9 +1003,8 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                 dataModel.getMakerFeeInBtc(),
                 dataModel.getAmount().get(),
-                true,
                 btcFormatter,
-                FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
+                FeeService.getMinMakerFee());
     }
 
     public String getMakerFeePercentage() {
@@ -1037,7 +1028,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                 dataModel.getTxFee(),
                 dataModel.getAmount().get(),
-                true,
                 btcFormatter,
                 Coin.ZERO
         );
