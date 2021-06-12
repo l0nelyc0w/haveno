@@ -114,14 +114,14 @@ import monero.wallet.MoneroWallet;
 @Slf4j
 public class WalletsSetup {
 
-    public static final String PRE_SEGWIT_WALLET_BACKUP = "pre_segwit_bisq_BTC.wallet.backup";
+    public static final String PRE_SEGWIT_WALLET_BACKUP = "pre_segwit_haveno_BTC.wallet.backup";
 
     @Getter
     public final BooleanProperty walletsSetupFailed = new SimpleBooleanProperty();
 
     private static final long STARTUP_TIMEOUT = 180;
-    private static final String BSQ_WALLET_FILE_NAME = "bisq_BSQ.wallet";
-    private static final String SPV_CHAIN_FILE_NAME = "bisq.spvchain";
+    private static final String BSQ_WALLET_FILE_NAME = "haveno_BSQ.wallet";
+    private static final String SPV_CHAIN_FILE_NAME = "haveno.spvchain";
 
     private final RegTestHost regTestHost;
     private final AddressEntryList addressEntryList;
@@ -131,7 +131,7 @@ public class WalletsSetup {
     private final Config config;
     private final LocalBitcoinNode localBitcoinNode;
     private final BtcNodes btcNodes;
-    private final String btcWalletFileName;
+    private final String xmrWalletFileName;
     private final int numConnectionsForBtc;
     private final String userAgent;
     private final NetworkParameters params;
@@ -179,7 +179,7 @@ public class WalletsSetup {
         this.socks5DiscoverMode = evaluateMode(socks5DiscoverModeString);
         this.walletDir = walletDir;
 
-        btcWalletFileName = "bisq_" + config.baseCurrencyNetwork.getCurrencyCode() + ".wallet";
+        xmrWalletFileName = "haveno_" + config.baseCurrencyNetwork.getCurrencyCode();
         params = Config.baseCurrencyNetworkParameters();
         PeerGroup.setIgnoreHttpSeeds(true);
     }
@@ -210,7 +210,7 @@ public class WalletsSetup {
 
         walletConfig = new WalletConfig(params,
                 walletDir,
-                "bisq") {
+                "haveno") {
             @Override
             protected void onSetupCompleted() {
                 //We are here in the btcj thread Thread[ STARTING,5,main]
@@ -277,13 +277,13 @@ public class WalletsSetup {
         walletConfig.setNumConnectionsForBtc(numConnectionsForBtc);
 
         String checkpointsPath = null;
-        if (params.equals(MainNetParams.get())) {
+        if (params.getId().equals(NetworkParameters.ID_MAINNET)) {
             // Checkpoints are block headers that ship inside our app: for a new user, we pick the last header
             // in the checkpoints file and then download the rest from the network. It makes things much faster.
             // Checkpoint files are made using the BuildCheckpoints tool and usually we have to download the
             // last months worth or more (takes a few seconds).
             checkpointsPath = "/wallet/checkpoints.txt";
-        } else if (params.equals(TestNet3Params.get())) {
+        } else if (params.getId().equals(NetworkParameters.ID_TESTNET)) {
             checkpointsPath = "/wallet/checkpoints.testnet.txt";
         }
         if (checkpointsPath != null) {
@@ -291,7 +291,7 @@ public class WalletsSetup {
         }
 
 
-        if (params == RegTestParams.get()) {
+        if (params.getId().equals(NetworkParameters.ID_REGTEST)) {
             walletConfig.setMinBroadcastConnections(1);
             if (regTestHost == RegTestHost.LOCALHOST) {
                 walletConfig.connectToLocalHost();
@@ -424,7 +424,9 @@ public class WalletsSetup {
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     public void backupWallets() {
-        FileUtil.rollingBackup(walletDir, btcWalletFileName, 20);
+        FileUtil.rollingBackup(walletDir, xmrWalletFileName, 20);
+        FileUtil.rollingBackup(walletDir, xmrWalletFileName + ".keys", 20);
+        FileUtil.rollingBackup(walletDir, xmrWalletFileName + ".address.txt", 20);
         FileUtil.rollingBackup(walletDir, BSQ_WALLET_FILE_NAME, 20);
     }
 

@@ -715,7 +715,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
             } else if (amount.get() != null && btcValidator.getMaxTradeLimit() != null && btcValidator.getMaxTradeLimit().value == OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT.value) {
                 amount.set(btcFormatter.formatCoin(btcValidator.getMaxTradeLimit()));
                 new Popup().information(Res.get("popup.warning.tradeLimitDueAccountAgeRestriction.buyer",
-                        btcFormatter.formatCoinWithCode(OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT),
+                        btcFormatter.formatCoinWithCode(getEffectiveLimit()),
                         Res.get("offerbook.warning.newVersionAnnouncement")))
                         .width(900)
                         .show();
@@ -730,6 +730,10 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 updateMarketPriceToManual();
             }
         }
+    }
+
+    private Coin getEffectiveLimit() {
+      return btcValidator.getMaxValue() == null ? btcValidator.getMaxTradeLimit() : btcValidator.getMaxValue();
     }
 
     public void onFocusOutMinAmountTextField(boolean oldValue, boolean newValue) {
@@ -1193,7 +1197,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 PaymentMethod.hasChargebackRisk(dataModel.getPaymentAccount().getPaymentMethod(), dataModel.getTradeCurrency().getCode())) {
             Coin checkAmount = dataModel.getMinAmount().get() == null ? dataModel.getAmount().get() : dataModel.getMinAmount().get();
             if (checkAmount != null && !checkAmount.isGreaterThan(OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT)) {
-                GUIUtil.showMakeOfferToUnsignedAccountWarning();
+                GUIUtil.showMakeOfferToUnsignedAccountWarning(btcFormatter);
             }
         }
     }
