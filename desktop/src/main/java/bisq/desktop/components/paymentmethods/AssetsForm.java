@@ -211,9 +211,10 @@ public class AssetsForm extends PaymentMethodForm {
         currencyComboBox.getEditor().focusedProperty().addListener(observable ->
                 currencyComboBox.setPromptText(""));
 
-        //((AutocompleteComboBox<TradeCurrency>) currencyComboBox).setAutocompleteItems()
+        ((AutocompleteComboBox<TradeCurrency>) currencyComboBox).setAutocompleteItems(
+                CurrencyUtil.getActiveSortedCryptoCurrencies(filterManager));
         currencyComboBox.setVisibleRowCount(Math.min(currencyComboBox.getItems().size(), 10));
-        
+
         currencyComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(TradeCurrency tradeCurrency) {
