@@ -1908,7 +1908,6 @@ message PreferencesPayload {
     repeated TradeCurrency crypto_currencies = 4;
     BlockChainExplorer block_chain_explorer_main_net = 5;
     BlockChainExplorer block_chain_explorer_test_net = 6;
-    BlockChainExplorer bsq_block_chain_explorer = 7;
     string backup_directory = 8;
     bool auto_select_arbitrators = 9;
     map<string, bool> dont_show_again_map = 10;
