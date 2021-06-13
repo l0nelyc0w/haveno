@@ -18,7 +18,6 @@
 package bisq.core.user;
 
 import bisq.core.btc.nodes.BtcNodes;
-import bisq.core.btc.nodes.LocalBitcoinNode;
 import bisq.core.btc.wallet.Restrictions;
 import bisq.core.locale.Country;
 import bisq.core.locale.CountryUtil;
@@ -30,7 +29,6 @@ import bisq.core.locale.TradeCurrency;
 import bisq.core.payment.PaymentAccount;
 import bisq.core.payment.PaymentAccountUtil;
 import bisq.core.provider.fee.FeeService;
-import bisq.core.setup.CoreNetworkCapabilities;
 
 import bisq.network.p2p.network.BridgeAddressProvider;
 
@@ -56,12 +54,10 @@ import javafx.collections.ObservableMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
@@ -164,7 +160,6 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
     private final PersistenceManager<PreferencesPayload> persistenceManager;
     private final Config config;
     private final FeeService feeService;
-    private final LocalBitcoinNode localBitcoinNode;
     private final String btcNodesFromOptions;
     @Getter
     private final BooleanProperty useStandbyModeProperty = new SimpleBooleanProperty(prefPayload.isUseStandbyMode());
@@ -178,13 +173,11 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
     public Preferences(PersistenceManager<PreferencesPayload> persistenceManager,
                        Config config,
                        FeeService feeService,
-                       LocalBitcoinNode localBitcoinNode,
                        @Named(Config.BTC_NODES) String btcNodesFromOptions) {
 
         this.persistenceManager = persistenceManager;
         this.config = config;
         this.feeService = feeService;
-        this.localBitcoinNode = localBitcoinNode;
         this.btcNodesFromOptions = btcNodesFromOptions;
 
         useAnimationsProperty.addListener((ov) -> {
@@ -801,8 +794,7 @@ public final class Preferences implements PersistedDataHost, BridgeAddressProvid
         // parameter is explicitly provided. On testnet there are very few Bitcoin tor
         // nodes and we don't provide tor nodes.
 
-        if ((!Config.baseCurrencyNetwork().isMainnet()
-                || localBitcoinNode.shouldBeUsed())
+        if ((!Config.baseCurrencyNetwork().isMainnet())
                 && !config.useTorForBtcOptionSetExplicitly)
             return false;
         else
