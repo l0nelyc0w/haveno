@@ -18,7 +18,6 @@
 package bisq.core.provider.mempool;
 
 import bisq.common.util.Tuple2;
-import bisq.core.util.param.Param;
 
 
 
@@ -176,7 +175,7 @@ public class TxValidator {
             return true;
         } else if (leniencyCalc > FEE_TOLERANCE) {
             log.info("Leniency rule: the fee was low, but above {} of what was expected {} {}", FEE_TOLERANCE, leniencyCalc, description);
-            return true; 
+            return true;
         } else {
             String feeUnderpaidMessage = "UNDERPAID. " + description;
             errorList.add(feeUnderpaidMessage);
@@ -185,7 +184,7 @@ public class TxValidator {
         return false;
 	*/
     //}
-    
+
     private static Tuple2<JsonArray, JsonArray> getVinAndVout(String jsonTxt) throws JsonSyntaxException {
         // there should always be "vout" at the top level
         // check that there are 2 or 3 vout elements: the fee, the reserved for trade, optional change
@@ -275,7 +274,7 @@ public class TxValidator {
         Coin feePerBtc = Coin.valueOf(Math.round(feePerBtcAsDouble * fact));
         return maxCoin(feePerBtc, minFee);
     }
-    
+
     private Coin getMakerFeeRateBtc(long blockHeight) {
         return daoStateService.getParamValueAsCoin(Param.UNDEFINED, (int) blockHeight);
     }

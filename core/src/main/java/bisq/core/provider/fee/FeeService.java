@@ -21,7 +21,6 @@ import bisq.common.UserThread;
 import bisq.common.config.Config;
 import bisq.common.handlers.FaultHandler;
 import bisq.common.util.Tuple2;
-import bisq.core.util.param.Param;
 
 import org.bitcoinj.utils.MonetaryFormat;
 import org.bitcoinj.core.Coin;
@@ -66,20 +65,20 @@ public class FeeService {
     private static final MonetaryFormat btcCoinFormat = Config.baseCurrencyNetworkParameters().getMonetaryFormat();
 
 
-    public static Coin getMakerFeePerBtc(boolean currencyForFeeIsBtc) {
-         return ParsingUtils.parseToCoin("0.001", btcCoinFormat);        
+    public static Coin getMakerFeePerBtc() {
+         return ParsingUtils.parseToCoin("0.001", btcCoinFormat);
     }
 
-    public static Coin getMinMakerFee(boolean currencyForFeeIsBtc) {
-         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);     
+    public static Coin getMinMakerFee() {
+         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);
     }
 
-    public static Coin getTakerFeePerBtc(boolean currencyForFeeIsBtc) {
-         return ParsingUtils.parseToCoin("0.003", btcCoinFormat);       
+    public static Coin getTakerFeePerBtc() {
+         return ParsingUtils.parseToCoin("0.003", btcCoinFormat);
     }
 
-    public static Coin getMinTakerFee(boolean currencyForFeeIsBtc) {
-         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);       
+    public static Coin getMinTakerFee() {
+         return ParsingUtils.parseToCoin("0.00005", btcCoinFormat);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////

@@ -25,8 +25,6 @@ import bisq.core.monetary.Volume;
 import bisq.core.offer.OfferUtil;
 import bisq.core.util.coin.CoinFormatter;
 
-import bisq.common.app.DevEnv;
-
 import org.bitcoinj.core.Coin;
 
 import java.util.Optional;
@@ -34,19 +32,15 @@ import java.util.Optional;
 public class FeeUtil {
     public static String getTradeFeeWithFiatEquivalent(OfferUtil offerUtil,
                                                        Coin tradeFee,
-                                                       boolean isCurrencyForMakerFeeBtc,
                                                        CoinFormatter formatter) {
 
-        Optional<Volume> optionalBtcFeeInFiat = offerUtil.getFeeInUserFiatCurrency(tradeFee,
-                isCurrencyForMakerFeeBtc,
-                formatter);
+        Optional<Volume> optionalBtcFeeInFiat = offerUtil.getFeeInUserFiatCurrency(tradeFee);
         return DisplayUtils.getFeeWithFiatAmount(tradeFee, optionalBtcFeeInFiat, formatter);
     }
 
     public static String getTradeFeeWithFiatEquivalentAndPercentage(OfferUtil offerUtil,
                                                                     Coin tradeFee,
                                                                     Coin tradeAmount,
-                                                                    boolean isCurrencyForMakerFeeBtc,
                                                                     CoinFormatter formatter,
                                                                     Coin minTradeFee) {
             String feeAsBtc = formatter.formatCoinWithCode(tradeFee);
@@ -56,15 +50,13 @@ public class FeeUtil {
                         .replace("(", "")
                         .replace(")", "");
             }
-            
+
 	    else {
                 percentage = GUIUtil.getPercentage(tradeFee, tradeAmount) +
                         " " + Res.get("guiUtil.ofTradeAmount");
             }
-	   
-            return offerUtil.getFeeInUserFiatCurrency(tradeFee,
-                    isCurrencyForMakerFeeBtc,
-                    formatter)
+
+            return offerUtil.getFeeInUserFiatCurrency(tradeFee)
                     .map(DisplayUtils::formatAverageVolumeWithCode)
                     .map(feeInFiat -> Res.get("feeOptionWindow.btcFeeWithFiatAndPercentage", feeAsBtc, feeInFiat, percentage))
                     .orElseGet(() -> Res.get("feeOptionWindow.btcFeeWithPercentage", feeAsBtc, percentage));

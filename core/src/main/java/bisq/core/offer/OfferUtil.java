@@ -34,15 +34,12 @@ import bisq.core.trade.statistics.ReferralIdService;
 import bisq.core.trade.statistics.TradeStatisticsManager;
 import bisq.core.user.AutoConfirmSettings;
 import bisq.core.user.Preferences;
-import bisq.core.util.AveragePriceUtil;
-import bisq.core.util.coin.CoinFormatter;
 import bisq.core.util.coin.CoinUtil;
 
 import bisq.network.p2p.P2PService;
 
 import bisq.common.app.Capabilities;
 import bisq.common.util.MathUtils;
-import bisq.common.util.Tuple2;
 
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Transaction;
@@ -66,8 +63,6 @@ import static bisq.common.util.MathUtils.roundDoubleToLong;
 import static bisq.common.util.MathUtils.scaleUpByPowerOf10;
 import static bisq.core.btc.wallet.Restrictions.getMaxBuyerSecurityDepositAsPercent;
 import static bisq.core.btc.wallet.Restrictions.getMinBuyerSecurityDepositAsPercent;
-import static bisq.core.btc.wallet.Restrictions.getMinNonDustOutput;
-import static bisq.core.btc.wallet.Restrictions.isDust;
 import static bisq.core.offer.OfferPayload.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -106,15 +101,6 @@ public class OfferUtil {
         this.p2PService = p2PService;
         this.referralIdService = referralIdService;
         this.tradeStatisticsManager = tradeStatisticsManager;
-    }
-
-    public void maybeSetFeePaymentCurrencyPreference(String feeCurrencyCode) {
-        if (!feeCurrencyCode.isEmpty()) {
-            if (!isValidFeePaymentCurrencyCode.test(feeCurrencyCode))
-                throw new IllegalStateException(format("%s cannot be used to pay trade fees",
-                        feeCurrencyCode.toUpperCase()));
-            preferences.setPayFeeInBtc(true);
-        }
     }
 
     /**
@@ -182,8 +168,7 @@ public class OfferUtil {
      */
     @Nullable
     public Coin getMakerFee(@Nullable Coin amount) {
-        boolean isCurrencyForMakerFeeBtc = isCurrencyForMakerFeeBtc(amount);
-        return CoinUtil.getMakerFee(isCurrencyForMakerFeeBtc, amount);
+        return CoinUtil.getMakerFee(amount);
     }
 
     public Coin getTxFeeByVsize(Coin txFeePerVbyteFromFeeService, int vsizeInVbytes) {
@@ -199,41 +184,21 @@ public class OfferUtil {
         return (txVsize + 233) / 2;
     }
 
-    /**
-     * Checks if the maker fee should be paid in BTC, this can be the case due to user
-     *
-     * @param amount           the amount of BTC to trade
-     * @return {@code true} if BTC is preferred or the trade amount is nonnull and there
-     */
-    public boolean isCurrencyForMakerFeeBtc(@Nullable Coin amount) {
-        boolean payFeeInBtc = preferences.getPayFeeInBtc();
-        return payFeeInBtc;
-    }
-
-
     @Nullable
-    public Coin getTakerFee(boolean isCurrencyForTakerFeeBtc, @Nullable Coin amount) {
+    public Coin getTakerFee(@Nullable Coin amount) {
         if (amount != null) {
-            Coin feePerBtc = CoinUtil.getFeePerBtc(FeeService.getTakerFeePerBtc(isCurrencyForTakerFeeBtc), amount);
-            return CoinUtil.maxCoin(feePerBtc, FeeService.getMinTakerFee(isCurrencyForTakerFeeBtc));
+            Coin feePerBtc = CoinUtil.getFeePerBtc(FeeService.getTakerFeePerBtc(), amount);
+            return CoinUtil.maxCoin(feePerBtc, FeeService.getMinTakerFee());
         } else {
             return null;
         }
     }
 
-    public boolean isCurrencyForTakerFeeBtc(Coin amount) {
-        boolean payFeeInBtc = preferences.getPayFeeInBtc();
-        return payFeeInBtc;
-    }
-
-
     public boolean isBlockChainPaymentMethod(Offer offer) {
         return offer != null && offer.getPaymentMethod().isAsset();
     }
 
-    public Optional<Volume> getFeeInUserFiatCurrency(Coin makerFee,
-                                                     boolean isCurrencyForMakerFeeBtc,
-						     CoinFormatter bsqFormatter) {
+    public Optional<Volume> getFeeInUserFiatCurrency(Coin makerFee) {
         String userCurrencyCode = preferences.getPreferredTradeCurrency().getCode();
         if (CurrencyUtil.isCryptoCurrency(userCurrencyCode)) {
             // In case the user has selected a altcoin as preferredTradeCurrency
@@ -243,9 +208,8 @@ public class OfferUtil {
         }
 
         return getFeeInUserFiatCurrency(makerFee,
-                isCurrencyForMakerFeeBtc,
-                userCurrencyCode,
-		bsqFormatter);
+                userCurrencyCode
+        );
     }
 
     public Map<String, String> getExtraDataMap(PaymentAccount paymentAccount,
@@ -302,9 +266,7 @@ public class OfferUtil {
     }
 
     private Optional<Volume> getFeeInUserFiatCurrency(Coin makerFee,
-                                                      boolean isCurrencyForMakerFeeBtc,
-                                                      String userCurrencyCode,
-						      CoinFormatter bsqFormatter) {
+                                                      String userCurrencyCode) {
         MarketPrice marketPrice = priceFeedService.getMarketPrice(userCurrencyCode);
         if (marketPrice != null && makerFee != null) {
             long marketPriceAsLong = roundDoubleToLong(

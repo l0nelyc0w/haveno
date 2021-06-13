@@ -125,7 +125,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     public final StringProperty triggerPrice = new SimpleStringProperty("");
     final StringProperty tradeFee = new SimpleStringProperty();
     final StringProperty tradeFeeInBtcWithFiat = new SimpleStringProperty();
-    final StringProperty tradeFeeCurrencyCode = new SimpleStringProperty();
     final StringProperty tradeFeeDescription = new SimpleStringProperty();
     final BooleanProperty isTradeFeeVisible = new SimpleBooleanProperty(false);
 
@@ -493,7 +492,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
     }
 
     private void applyMakerFee() {
-        tradeFeeCurrencyCode.set(dataModel.isCurrencyForMakerFeeBtc() ? Res.getBaseCurrencyCode() : "BSQ");
         tradeFeeDescription.set(Res.get("createOffer.tradeFee.descriptionBTCOnly"));
 
         Coin makerFeeAsCoin = dataModel.getMakerFee();
@@ -505,7 +503,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         tradeFee.set(getFormatterForMakerFee().formatCoin(makerFeeAsCoin));
         tradeFeeInBtcWithFiat.set(FeeUtil.getTradeFeeWithFiatEquivalent(offerUtil,
                 dataModel.getMakerFeeInBtc(),
-                true,
                 btcFormatter));
     }
 
@@ -684,11 +681,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
 
     }
 
-    public void setIsCurrencyForMakerFeeBtc(boolean isCurrencyForMakerFeeBtc) {
-        dataModel.setPreferredCurrencyForMakerFeeBtc(isCurrencyForMakerFeeBtc);
-        applyMakerFee();
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Handle focus
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -715,7 +707,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
             } else if (amount.get() != null && btcValidator.getMaxTradeLimit() != null && btcValidator.getMaxTradeLimit().value == OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT.value) {
                 amount.set(btcFormatter.formatCoin(btcValidator.getMaxTradeLimit()));
                 new Popup().information(Res.get("popup.warning.tradeLimitDueAccountAgeRestriction.buyer",
-                        btcFormatter.formatCoinWithCode(OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT),
+                        btcFormatter.formatCoinWithCode(getEffectiveLimit()),
                         Res.get("offerbook.warning.newVersionAnnouncement")))
                         .width(900)
                         .show();
@@ -730,6 +722,10 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 updateMarketPriceToManual();
             }
         }
+    }
+
+    private Coin getEffectiveLimit() {
+      return btcValidator.getMaxValue() == null ? btcValidator.getMaxTradeLimit() : btcValidator.getMaxValue();
     }
 
     public void onFocusOutMinAmountTextField(boolean oldValue, boolean newValue) {
@@ -1007,9 +1003,8 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                 dataModel.getMakerFeeInBtc(),
                 dataModel.getAmount().get(),
-                true,
                 btcFormatter,
-                FeeService.getMinMakerFee(dataModel.isCurrencyForMakerFeeBtc()));
+                FeeService.getMinMakerFee());
     }
 
     public String getMakerFeePercentage() {
@@ -1033,7 +1028,6 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
         return FeeUtil.getTradeFeeWithFiatEquivalentAndPercentage(offerUtil,
                 dataModel.getTxFee(),
                 dataModel.getAmount().get(),
-                true,
                 btcFormatter,
                 Coin.ZERO
         );
@@ -1193,7 +1187,7 @@ public abstract class MutableOfferViewModel<M extends MutableOfferDataModel> ext
                 PaymentMethod.hasChargebackRisk(dataModel.getPaymentAccount().getPaymentMethod(), dataModel.getTradeCurrency().getCode())) {
             Coin checkAmount = dataModel.getMinAmount().get() == null ? dataModel.getAmount().get() : dataModel.getMinAmount().get();
             if (checkAmount != null && !checkAmount.isGreaterThan(OfferRestrictions.TOLERATED_SMALL_TRADE_AMOUNT)) {
-                GUIUtil.showMakeOfferToUnsignedAccountWarning();
+                GUIUtil.showMakeOfferToUnsignedAccountWarning(btcFormatter);
             }
         }
     }

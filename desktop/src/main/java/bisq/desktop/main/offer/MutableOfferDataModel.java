@@ -450,11 +450,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
         });
     }
 
-    void setPreferredCurrencyForMakerFeeBtc(boolean preferredCurrencyForMakerFeeBtc) {
-        preferences.setPayFeeInBtc(preferredCurrencyForMakerFeeBtc);
-    }
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Getters
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -501,10 +496,6 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
 
     public double getMarketPriceMargin() {
         return marketPriceMargin;
-    }
-
-    boolean isMakerFeeValid() {
-        return preferences.getPayFeeInBtc();
     }
 
     long getMaxTradeLimit() {
@@ -727,26 +718,13 @@ public abstract class MutableOfferDataModel extends OfferDataModel {
         this.marketPriceAvailable = marketPriceAvailable;
     }
 
-    public Coin getMakerFee(boolean isCurrencyForMakerFeeBtc) {
-        return CoinUtil.getMakerFee(isCurrencyForMakerFeeBtc, amount.get());
-    }
-
     public Coin getMakerFee() {
         return offerUtil.getMakerFee(amount.get());
     }
 
     public Coin getMakerFeeInBtc() {
-        return CoinUtil.getMakerFee(true, amount.get());
+        return CoinUtil.getMakerFee(amount.get());
     }
-
-    public boolean isCurrencyForMakerFeeBtc() {
-        return offerUtil.isCurrencyForMakerFeeBtc(amount.get());
-    }
-
-    boolean isPreferredFeeCurrencyBtc() {
-        return preferences.isPayFeeInBtc();
-    }
-
 
     boolean canPlaceOffer() {
         return GUIUtil.isBootstrappedOrShowPopup(p2PService) &&

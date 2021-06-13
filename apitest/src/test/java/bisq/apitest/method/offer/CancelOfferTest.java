@@ -53,8 +53,7 @@ public class CancelOfferTest extends AbstractOfferTest {
                 10000000L,
                 0.00,
                 getDefaultBuyerSecurityDepositAsPercent(),
-                paymentAccountId,
-                BSQ);
+                paymentAccountId);
     };
 
     @Test

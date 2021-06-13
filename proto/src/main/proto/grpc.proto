@@ -121,7 +121,6 @@ message CreateOfferRequest {
     double buyerSecurityDeposit = 8;
     uint64 triggerPrice = 9;
     string paymentAccountId = 10;
-    string makerFeeCurrencyCode = 11;
 }
 
 message CreateOfferReply {
@@ -147,7 +146,6 @@ message OfferInfo {
     uint64 minVolume = 9;
     uint64 buyerSecurityDeposit = 10;
     uint64 triggerPrice = 11;
-    bool isCurrencyForMakerFeeBtc = 12;
     string paymentAccountId = 13;
     string paymentMethodId = 14;
     string paymentMethodShortName = 15;
@@ -303,7 +301,6 @@ service Trades {
 message TakeOfferRequest {
     string offerId = 1;
     string paymentAccountId = 2;
-    string takerFeeCurrencyCode = 3;
 }
 
 message TakeOfferReply {
@@ -374,7 +371,7 @@ message TradeInfo {
     bool isWithdrawn = 23;
     string contractAsJson = 24;
     ContractInfo contract = 25;
-    
+
     string makerDepositTxId = 100;
     string takerDepositTxId = 101;
 }
@@ -392,7 +389,7 @@ message ContractInfo {
     string makerPayoutAddressString = 10;
     string takerPayoutAddressString = 11;
     uint64 lockTime = 12;
-    
+
     string arbitratorNodeAddress = 100;
 }
 

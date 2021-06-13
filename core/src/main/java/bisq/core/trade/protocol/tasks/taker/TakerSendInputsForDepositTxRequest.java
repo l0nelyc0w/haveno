@@ -106,7 +106,6 @@ public class TakerSendInputsForDepositTxRequest extends TradeTask {
                     trade.getTradePrice().getValue(),
                     trade.getTxFee().getValue(),
                     trade.getTakerFee().getValue(),
-                    true,
                     processModel.getRawTransactionInputs(),
                     processModel.getChangeOutputValue(),
                     processModel.getChangeOutputAddress(),
