@@ -58,7 +58,7 @@ public class BitcoinModule extends AppModule {
         // otherwise the specified host or default (localhost)
         String regTestHost = config.bitcoinRegtestHost;
         if (regTestHost.isEmpty()) {
-            regTestHost = Config.DEFAULT_REGTEST_HOST; 
+            regTestHost = Config.DEFAULT_REGTEST_HOST;
 	    //throw new RuntimeException("regTest host empty");
         }
 
@@ -77,7 +77,6 @@ public class BitcoinModule extends AppModule {
         bindConstant().annotatedWith(named(Config.USER_AGENT)).to(config.userAgent);
         bindConstant().annotatedWith(named(Config.NUM_CONNECTIONS_FOR_BTC)).to(config.numConnectionsForBtc);
         bindConstant().annotatedWith(named(Config.USE_ALL_PROVIDED_NODES)).to(config.useAllProvidedNodes);
-        bindConstant().annotatedWith(named(Config.IGNORE_LOCAL_BTC_NODE)).to(config.ignoreLocalBtcNode);
         bindConstant().annotatedWith(named(Config.SOCKS5_DISCOVER_MODE)).to(config.socks5DiscoverMode);
         bind(new TypeLiteral<List<String>>(){}).annotatedWith(named(PROVIDERS)).toInstance(config.providers);
 

@@ -57,18 +57,6 @@ public enum BaseCurrencyNetwork {
         return "XMR_TESTNET".equals(name());
     }
 
-    public boolean isDaoTestNet() {
-        return "BTC_DAO_TESTNET".equals(name());
-    }
-
-    public boolean isDaoRegTest() {
-        return "BTC_DAO_REGTEST".equals(name());
-    }
-
-    public boolean isDaoBetaNet() {
-        return "BTC_DAO_BETANET".equals(name());
-    }
-
     public boolean isStagenet() {
         return "XMR_STAGENET".equals(name());
     }
