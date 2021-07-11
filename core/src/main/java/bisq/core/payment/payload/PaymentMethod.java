@@ -304,17 +304,10 @@ public final class PaymentMethod implements PersistablePayload, Comparable<Payme
                 .orElseGet(() -> new PaymentMethod(Res.get("shared.na")));
     }
 
-
     public Coin getMaxTradeLimitAsCoin(String currencyCode) {
         // Hack for SF as the smallest unit is 1 SF ;-( and price is about 3 BTC!
         if (currencyCode.equals("SF"))
-
     		return Coin.parseCoin("4");
-	
- 	// l0nelyc0w
-	return Coin.parseCoin("1");
-
-	/*
 
         // We use the class field maxTradeLimit only for mapping the risk factor.
         long riskFactor;
@@ -334,10 +327,8 @@ public final class PaymentMethod implements PersistablePayload, Comparable<Payme
         TradeLimits tradeLimits = TradeLimits.getINSTANCE();
         checkNotNull(tradeLimits, "tradeLimits must not be null");
         long maxTradeLimit = tradeLimits.getMaxTradeLimit().value;
-        return Coin.valueOf(tradeLimits.getRoundedRiskBasedTradeLimit(maxTradeLimit, riskFactor)); 
-	*/
+        return Coin.valueOf(tradeLimits.getRoundedRiskBasedTradeLimit(maxTradeLimit, riskFactor));
     }
-    
 
     public String getShortName() {
         // in cases where translation is not found, Res.get() simply returns the key string
