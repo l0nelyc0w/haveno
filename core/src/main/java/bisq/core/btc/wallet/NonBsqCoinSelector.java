@@ -53,7 +53,7 @@ public class NonBsqCoinSelector extends BisqDefaultCoinSelector {
         // below outputIsNotInBsqState would be true.
         if (parentTransaction.getConfidence().getConfidenceType() != TransactionConfidence.ConfidenceType.BUILDING)
             return false;
-        //l0nelyc0w
+
         return true;
 
     }

@@ -75,8 +75,7 @@ public final class RefundManager extends DisputeManager<RefundDisputeList> {
                          TradeManager tradeManager,
                          ClosedTradableManager closedTradableManager,
                          OpenOfferManager openOfferManager,
-                         // TODO (woodser): remove daoFacade, priceFeedService?
-			 // (l0nelyc0w): removed daoFacade, will test without priceFeedService
+                         // TODO (woodser): remove priceFeedService?
                          KeyRing keyRing,
                          RefundDisputeListService refundDisputeListService,
                          Config config,
