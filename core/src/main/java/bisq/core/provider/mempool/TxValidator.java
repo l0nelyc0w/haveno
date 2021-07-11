@@ -51,8 +51,6 @@ public class TxValidator {
     private final String txId;
     private Coin amount;
     @Nullable
-    private Boolean isFeeCurrencyBtc = true;
-    @Nullable
     private Long chainHeight;
     @Setter
     private String jsonTxt;

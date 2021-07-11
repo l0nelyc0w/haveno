@@ -43,18 +43,12 @@ import com.google.common.collect.ImmutableList;
  * */
 public class BisqKeyChainFactory extends DefaultKeyChainFactory {
 
-    private boolean isBsqWallet;
-
-    public BisqKeyChainFactory(boolean isBsqWallet) {
-        this.isBsqWallet = isBsqWallet;
-    }
-
     @Override
     public DeterministicKeyChain makeKeyChain(Protos.Key key, Protos.Key firstSubKey, DeterministicSeed seed, KeyCrypter crypter, boolean isMarried, Script.ScriptType outputScriptType, ImmutableList<ChildNumber> accountPath) {
         ImmutableList<ChildNumber> maybeUpdatedAccountPath = accountPath;
         if (DeterministicKeyChain.ACCOUNT_ZERO_PATH.equals(accountPath)) {
             // This is a bitcoinj 0.14 wallet that has no account path in the serialized mnemonic
-            KeyChainGroupStructure structure = new BisqKeyChainGroupStructure(isBsqWallet);
+            KeyChainGroupStructure structure = new BisqKeyChainGroupStructure();
             maybeUpdatedAccountPath = structure.accountPathFor(outputScriptType);
         }
 
