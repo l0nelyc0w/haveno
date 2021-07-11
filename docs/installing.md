@@ -38,7 +38,7 @@ and in a second window:
 ./monerod --stagenet --no-igd --hide-my-port --data-dir node2 --p2p-bind-ip 127.0.0.1 --rpc-bind-ip 0.0.0.0 --confirm-external-bind --add-exclusive-node 127.0.0.1:48080 --rpc-login superuser:abctesting123 --rpc-access-control-origins http://localhost:8080 --fixed-difficulty 10
 ```
 
-Now mine the first 130 blocks to a random address before using so wallets only use the latest output type. For example, in a daemon: 
+Now mine the first 130 blocks to a random address before using so wallets only use the latest output type. For example, in a daemon:
 
 ```
 start_mining 56k9Yra1pxwcTYzqKcnLip8mymSQdEfA6V7476W9XhSiHPp1hAboo1F6na7kxTxwvXU6JjDQtu8VJdGj9FEcjkxGJfsyyah 1
@@ -61,13 +61,13 @@ It could be useful to rename the terminal to have a better overview of what term
 1. Run the seed node in one terminal:
 
 ```
-./haveno-seednode --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=2002 --appName=haveno-XMR_STAGENET_Seed_2002 --daoActivated=false
+./haveno-seednode --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=2002 --appName=haveno-XMR_STAGENET_Seed_2002
 ```
 
 2. Run the Arbitrator instance:
 
 ```
-./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=4444 --appName=haveno-XMR_STAGENET_arbitrator --daoActivated=false --apiPassword=apitest --apiPort=9998
+./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=4444 --appName=haveno-XMR_STAGENET_arbitrator --apiPassword=apitest --apiPort=9998
 ```
 
 The (temporary) Haveno user interface will open. Once Haveno launches:
@@ -80,13 +80,13 @@ Make sure to register arbitrator and mediator. Without them it's not possible to
 5. Run Alice:
 
 ```
-./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=5555 --appName=haveno-XMR_STAGENET_Alice --daoActivated=false --apiPassword=apitest --apiPort=9999
+./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=5555 --appName=haveno-XMR_STAGENET_Alice --apiPassword=apitest --apiPort=9999
 ```
 
 6. Run Bob:
 
 ```
-./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=6666 --appName=haveno-XMR_STAGENET_Bob  --daoActivated=false --apiPassword=apitest --apiPort=10000
+./haveno-desktop --baseCurrencyNetwork=XMR_STAGENET --useLocalhostForP2P=true --useDevPrivilegeKeys=true --nodePort=6666 --appName=haveno-XMR_STAGENET_Bob --apiPassword=apitest --apiPort=10000
 ```
 
 ## 5. Get yourself some stagenet coins
