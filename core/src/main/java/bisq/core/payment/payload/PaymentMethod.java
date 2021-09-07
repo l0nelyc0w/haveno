@@ -324,9 +324,12 @@ public final class PaymentMethod implements PersistablePayload, Comparable<Payme
             log.error("maxTradeLimit is not matching one of our default values. maxTradeLimit=" + Coin.valueOf(maxTradeLimit).toFriendlyString());
         }
 
-        TradeLimits tradeLimits = TradeLimits.getINSTANCE();
-        checkNotNull(tradeLimits, "tradeLimits must not be null");
+         //TradeLimits tradeLimits = TradeLimits.getINSTANCE();
+          TradeLimits tradeLimits = new TradeLimits();
+//        checkNotNull(tradeLimits, "tradeLimits must not be null");
         long maxTradeLimit = tradeLimits.getMaxTradeLimit().value;
+//        long maxTradeLimit = Coin.parseCoin("1").value;
+
         return Coin.valueOf(tradeLimits.getRoundedRiskBasedTradeLimit(maxTradeLimit, riskFactor));
     }
 

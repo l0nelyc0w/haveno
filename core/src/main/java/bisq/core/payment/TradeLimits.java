@@ -59,7 +59,7 @@ public class TradeLimits {
      * @return the maximum trade limit set by the DAO.
      */
     public Coin getMaxTradeLimit() {
-       return  Coin.parseCoin("1"); 
+       return  Coin.parseCoin("1");
        // return daoStateService.gtParamValueAsCoin(Param.MAX_TRADE_LIMIT, periodService.getChainHeight());
     }
 
