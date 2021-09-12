@@ -1576,7 +1576,6 @@ message Trade {
     Contract contract = 16;
     string contract_as_json = 17;
     bytes contract_hash = 18;
-<<<<<<< HEAD
     NodeAddress arbitrator_node_address = 19;
     NodeAddress mediator_node_address = 20;
     bytes arbitrator_btc_pub_key = 21;
@@ -1601,36 +1600,6 @@ message Trade {
     NodeAddress taker_node_address = 101;
     PubKeyRing taker_pub_key_ring = 102;
     PubKeyRing maker_pub_key_ring = 103;
-=======
-    string taker_contract_signature = 19;
-    string maker_contract_signature = 20;
-    NodeAddress arbitrator_node_address = 21;
-    NodeAddress mediator_node_address = 22;
-    bytes arbitrator_btc_pub_key = 23;
-    string taker_payment_account_id = 24;
-    string error_message = 25;
-    PubKeyRing arbitrator_pub_key_ring = 26;
-    PubKeyRing mediator_pub_key_ring = 27;
-    string counter_currency_tx_id = 28;
-    repeated ChatMessage chat_message = 29;
-    MediationResultState mediation_result_state = 30;
-    int64 lock_time = 31;
-    bytes delayed_payout_tx_bytes = 32;
-    NodeAddress refund_agent_node_address = 33;
-    PubKeyRing refund_agent_pub_key_ring = 34;
-    RefundResultState refund_result_state = 35;
-    int64 last_refresh_request_date = 36 [deprecated = true];
-    string counter_currency_extra_data = 37;
-    string asset_tx_proof_result = 38; // name of AssetTxProofResult enum
-    string uid = 39;
-
-    NodeAddress taker_node_address = 100;
-    PubKeyRing taker_pub_key_ring = 101;
-    string taker_deposit_tx_id = 102;
-    NodeAddress maker_node_address = 103;
-    PubKeyRing maker_pub_key_ring = 104;
-    string maker_deposit_tx_id = 105;
->>>>>>> f760714dfd (remove "fee currency", XMR assumed)
 }
 
 message BuyerAsMakerTrade {
@@ -1674,7 +1643,6 @@ message ProcessModel {
     bytes mediated_payout_tx_signature = 18;
     int64 buyer_payout_amount_from_mediation = 19;
     int64 seller_payout_amount_from_mediation = 20;
-<<<<<<< HEAD
     
     string maker_signature = 1001;
     NodeAddress arbitrator_node_address = 1002;
@@ -1689,25 +1657,10 @@ message ProcessModel {
     bool multisig_setup_complete = 1011;
     bool maker_ready_to_fund_multisig = 1012;
     bool multisig_deposit_initiated = 1013;
-=======
-
-    TradingPeer maker = 1001;
-    TradingPeer taker = 1002;
-    TradingPeer arbitrator = 1003;
-    NodeAddress temp_trading_peer_node_address = 1004;
-    string prepared_multisig_hex = 1005;
-    string made_multisig_hex = 1006;
-    bool multisig_setup_complete = 1007;
-    bool maker_ready_to_fund_multisig = 1008;
-    bool multisig_deposit_initiated = 1009;
-    string taker_prepared_deposit_tx_id = 1010;
-    string maker_prepared_deposit_tx_id = 1011;
->>>>>>> f760714dfd (remove "fee currency", XMR assumed)
 }
 
 message TradingPeer {
     string account_id = 1;
-<<<<<<< HEAD
     string payment_account_id = 2;
     string payment_method_id = 3;
     bytes payment_account_payload_hash = 4;
@@ -1735,26 +1688,6 @@ message TradingPeer {
     string deposit_tx_hash = 1007;
     string deposit_tx_hex = 1008;
     string deposit_tx_key = 1009;
-=======
-    PaymentAccountPayload payment_account_payload = 2;
-    string payout_address_string = 3;
-    string contract_as_json = 4;
-    string contract_signature = 5;
-    bytes signature = 6;	// TODO (woodser): remove unused fields? this was buyer-signed payout tx as bytes
-    PubKeyRing pub_key_ring = 7;
-    bytes multi_sig_pub_key = 8;
-    repeated RawTransactionInput raw_transaction_inputs = 9;
-    int64 change_output_value = 10;
-    string change_output_address = 11;
-    bytes account_age_witness_nonce = 12;
-    bytes account_age_witness_signature = 13;
-    int64 current_date = 14;
-    bytes mediated_payout_tx_signature = 15;
-
-    string prepared_multisig_hex = 1001;
-    string made_multisig_hex = 1002;
-    string signed_payout_tx_hex = 1003;
->>>>>>> f760714dfd (remove "fee currency", XMR assumed)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

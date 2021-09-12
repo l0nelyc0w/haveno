@@ -102,12 +102,10 @@ public class OpenOfferManagerTest {
         when(p2PService.getPeerManager()).thenReturn(mock(PeerManager.class));
 
         final OpenOfferManager manager = new OpenOfferManager(coreContext,
-<<<<<<< HEAD
                 null,
                 null,
                 null,
                 p2PService,
-                null,
                 null,
                 null,
                 null,
@@ -121,29 +119,8 @@ public class OpenOfferManagerTest {
                 null,
                 null,
                 null,
-                null,
                 persistenceManager,
                 signedOfferPersistenceManager);
-=======
-                null,              //CreateOfferService
-                null,              //KeyRing
-                null,              //User
-                p2PService,        //P2PService
-                null,              //BtcWalletService
-                null,              //XmrWalletService
-                null,              //TradeWalletService
-                offerBookService,  //OfferBookService
-                null,              //ClosedTradableManager
-                null,              //PriceFeedService
-                null,              //Preferences
-                null,              //TradeStatisticsManager
-                null,              //ArbitratorManager
-                null,              //MediatorManager
-                null,              //RefundAgentManager
-                null,              //FilterManager
-                null,              //Broadcaster
-                persistenceManager);
->>>>>>> 4207d7ad16 (editing core unit testing)
 
         AtomicBoolean startEditOfferSuccessful = new AtomicBoolean(false);
 
@@ -166,12 +143,10 @@ public class OpenOfferManagerTest {
 
 
         final OpenOfferManager manager = new OpenOfferManager(coreContext,
-<<<<<<< HEAD
                 null,
                 null,
                 null,
                 p2PService,
-                null,
                 null,
                 null,
                 null,
@@ -185,29 +160,8 @@ public class OpenOfferManagerTest {
                 null,
                 null,
                 null,
-                null,
                 persistenceManager,
                 signedOfferPersistenceManager);
-=======
-                null,              //CreateOfferService
-                null,              //KeyRing
-                null,              //User
-                p2PService,        //P2PService
-                null,              //BtcWalletService
-                null,              //XmrWalletService
-                null,              //TradeWalletService
-                offerBookService,  //OfferBookService
-                null,              //ClosedTradableManager
-                null,              //PriceFeedService
-                null,              //Preferences
-                null,              //TradeStatisticsManager
-                null,              //ArbitratorManager
-                null,              //MediatorManager
-                null,              //RefundAgentManager
-                null,              //FilterManager
-                null,              //Broadcaster
-                persistenceManager);
->>>>>>> 4207d7ad16 (editing core unit testing)
 
         AtomicBoolean startEditOfferSuccessful = new AtomicBoolean(false);
 
