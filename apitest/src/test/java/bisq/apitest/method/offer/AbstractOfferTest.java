@@ -66,18 +66,6 @@ public abstract class AbstractOfferTest extends MethodTest {
                 bobdaemon);
     }
 
-
-    public static void createBsqPaymentAccounts() {
-        alicesBsqAcct = aliceClient.createCryptoCurrencyPaymentAccount("Alice's BSQ Account",
-                BSQ,
-                aliceClient.getUnusedBsqAddress(),
-                false);
-        bobsBsqAcct = bobClient.createCryptoCurrencyPaymentAccount("Bob's BSQ Account",
-                BSQ,
-                bobClient.getUnusedBsqAddress(),
-                false);
-    }
-
     protected double getScaledOfferPrice(double offerPrice, String currencyCode) {
         int precision = isCryptoCurrency(currencyCode) ? Altcoin.SMALLEST_UNIT_EXPONENT : Fiat.SMALLEST_UNIT_EXPONENT;
         return scaleDownByPowerOf10(offerPrice, precision);

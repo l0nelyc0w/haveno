@@ -124,8 +124,6 @@ desktop/build:
 
 # Unpack and customize a Bitcoin regtest node and Alice and Bob Bisq
 # nodes that have been preconfigured with a blockchain containing the
-# BSQ genesis transaction
-.localnet:
 	# Unpack the old dao-setup.zip and move things around for more
 	# concise and intuitive naming. This is a temporary measure until we
 	# clean these resources up more thoroughly.

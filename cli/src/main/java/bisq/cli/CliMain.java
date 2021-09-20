@@ -215,36 +215,6 @@ public class CliMain {
                     out.println(formatAddressBalanceTbl(fundingAddresses));
                     return;
                 }
-                case getunusedbsqaddress: {
-                    if (new SimpleMethodOptionParser(args).parse().isForHelp()) {
-                        out.println(client.getMethodHelp(method));
-                        return;
-                    }
-                    var address = client.getUnusedBsqAddress();
-                    out.println(address);
-                    return;
-                }
-                case sendbsq: {
-                    var opts = new SendBsqOptionParser(args).parse();
-                    if (opts.isForHelp()) {
-                        out.println(client.getMethodHelp(method));
-                        return;
-                    }
-                    var address = opts.getAddress();
-                    var amount = opts.getAmount();
-                    verifyStringIsValidDecimal(OPT_AMOUNT, amount);
-
-                    var txFeeRate = opts.getFeeRate();
-                    if (!txFeeRate.isEmpty())
-                        verifyStringIsValidLong(OPT_TX_FEE_RATE, txFeeRate);
-
-                    var txInfo = client.sendBsq(address, amount, txFeeRate);
-                    out.printf("%s bsq sent to %s in tx %s%n",
-                            amount,
-                            address,
-                            txInfo.getTxId());
-                    return;
-                }
                 case sendbtc: {
                     var opts = new SendBtcOptionParser(args).parse();
                     if (opts.isForHelp()) {
@@ -266,23 +236,6 @@ public class CliMain {
                             amount,
                             address,
                             txInfo.getTxId());
-                    return;
-                }
-                case verifybsqsenttoaddress: {
-                    var opts = new VerifyBsqSentToAddressOptionParser(args).parse();
-                    if (opts.isForHelp()) {
-                        out.println(client.getMethodHelp(method));
-                        return;
-                    }
-                    var address = opts.getAddress();
-                    var amount = opts.getAmount();
-                    verifyStringIsValidDecimal(OPT_AMOUNT, amount);
-
-                    var bsqWasSent = client.verifyBsqSentToAddress(address, amount);
-                    out.printf("%s bsq %s sent to address %s%n",
-                            amount,
-                            bsqWasSent ? "has been" : "has not been",
-                            address);
                     return;
                 }
                 case gettxfeerate: {
@@ -726,17 +679,10 @@ public class CliMain {
             stream.println();
             stream.format(rowFormat, getfundingaddresses.name(), "", "Get BTC funding addresses");
             stream.println();
-            stream.format(rowFormat, getunusedbsqaddress.name(), "", "Get unused BSQ address");
-            stream.println();
-            stream.format(rowFormat, sendbsq.name(), "--address=<bsq-address> --amount=<bsq-amount>  \\", "Send BSQ");
-            stream.format(rowFormat, "", "[--tx-fee-rate=<sats/byte>]", "");
-            stream.println();
             stream.format(rowFormat, sendbtc.name(), "--address=<btc-address> --amount=<btc-amount> \\", "Send BTC");
             stream.format(rowFormat, "", "[--tx-fee-rate=<sats/byte>]", "");
             stream.format(rowFormat, "", "[--memo=<\"memo\">]", "");
             stream.println();
-            stream.format(rowFormat, verifybsqsenttoaddress.name(), "--address=<bsq-address> --amount=<bsq-amount>",
-                    "Verify amount was sent to BSQ wallet address");
             stream.println();
             stream.format(rowFormat, gettxfeerate.name(), "", "Get current tx fee rate in sats/byte");
             stream.println();
