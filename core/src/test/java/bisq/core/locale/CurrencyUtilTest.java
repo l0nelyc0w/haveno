@@ -64,18 +64,6 @@ public class CurrencyUtilTest {
     public void testFindAsset() {
         MockAssetRegistry assetRegistry = new MockAssetRegistry();
 
-        // on testnet/regtest it is allowed
-        assertEquals(CurrencyUtil.findAsset(assetRegistry, "BSQ",
-                BaseCurrencyNetwork.XMR_TESTNET).get().getTickerSymbol(), "BSQ");
-
-        // With daoTradingActivated we can request BSQ
-        assertEquals(CurrencyUtil.findAsset(assetRegistry, "BSQ",
-                BaseCurrencyNetwork.XMR_MAINNET).get().getTickerSymbol(), "BSQ");
-
-        // Test if not matching ticker is failing
-        Assert.assertFalse(CurrencyUtil.findAsset(assetRegistry, "BSQ1",
-                BaseCurrencyNetwork.XMR_MAINNET).isPresent());
-
         // Add a mock coin which has no mainnet version, needs to fail if we are on mainnet
         MockTestnetCoin.Testnet mockTestnetCoin = new MockTestnetCoin.Testnet();
         try {
@@ -106,20 +94,7 @@ public class CurrencyUtilTest {
         assertEquals(CurrencyUtil.findAsset(assetRegistry, "ETH",
                 BaseCurrencyNetwork.XMR_STAGENET).get().getTickerSymbol(), "ETH");
         assertEquals(Coin.Network.MAINNET, ether.getNetwork());
-
-        // We test if network matches exactly if there are distinct network types defined like with BSQ
-        Coin bsq = (Coin) CurrencyUtil.findAsset(assetRegistry, "BSQ", BaseCurrencyNetwork.XMR_MAINNET).get();
-        assertEquals("BSQ", bsq.getTickerSymbol());
-        assertEquals(Coin.Network.MAINNET, bsq.getNetwork());
-
-        bsq = (Coin) CurrencyUtil.findAsset(assetRegistry, "BSQ", BaseCurrencyNetwork.XMR_TESTNET).get();
-        assertEquals("BSQ", bsq.getTickerSymbol());
-        assertEquals(Coin.Network.TESTNET, bsq.getNetwork());
-
-        bsq = (Coin) CurrencyUtil.findAsset(assetRegistry, "BSQ", BaseCurrencyNetwork.XMR_STAGENET).get();
-        assertEquals("BSQ", bsq.getTickerSymbol());
-        assertEquals(Coin.Network.STAGENET, bsq.getNetwork());
-    }
+     }
 
     @Test
     public void testGetNameAndCodeOfRemovedAsset() {

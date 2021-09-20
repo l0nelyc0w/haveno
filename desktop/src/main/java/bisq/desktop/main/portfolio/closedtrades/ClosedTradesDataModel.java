@@ -32,7 +32,6 @@ import bisq.core.trade.Trade;
 import bisq.core.trade.closed.ClosedTradableManager;
 import bisq.core.trade.statistics.TradeStatisticsManager;
 import bisq.core.user.Preferences;
-import bisq.core.util.AveragePriceUtil;
 import bisq.core.util.VolumeUtil;
 
 import bisq.common.util.Tuple2;
@@ -174,7 +173,7 @@ class ClosedTradesDataModel extends ActivatableDataModel {
             if (expectBtcFee) {
                 return offer.getMakerFee().value;
             } else { return 0; }
-            
+
         } else {
             Trade trade = (Trade) tradable;
             String takerFeeTxId = trade.getTakerFeeTxId();

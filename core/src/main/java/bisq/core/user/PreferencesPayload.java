@@ -109,7 +109,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
     private boolean useMarketNotifications = true;
     private boolean usePriceNotifications = true;
     private boolean useStandbyMode = false;
-    private boolean isDaoFullNode = false;
     @Nullable
     private String rpcUser;
     @Nullable
@@ -121,7 +120,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
     private double buyerSecurityDepositAsPercentForCrypto = getDefaultBuyerSecurityDepositAsPercent();
     private int blockNotifyPort;
     private boolean tacAcceptedV120;
-    private double bsqAverageTrimThreshold = 0.05;
 
     // Added at 1.3.8
     private List<AutoConfirmSettings> autoConfirmSettingsList = new ArrayList<>();
@@ -184,13 +182,11 @@ public final class PreferencesPayload implements PersistableEnvelope {
                 .setUseMarketNotifications(useMarketNotifications)
                 .setUsePriceNotifications(usePriceNotifications)
                 .setUseStandbyMode(useStandbyMode)
-                .setIsDaoFullNode(isDaoFullNode)
                 .setBuyerSecurityDepositAsPercent(buyerSecurityDepositAsPercent)
                 .setIgnoreDustThreshold(ignoreDustThreshold)
                 .setBuyerSecurityDepositAsPercentForCrypto(buyerSecurityDepositAsPercentForCrypto)
                 .setBlockNotifyPort(blockNotifyPort)
                 .setTacAcceptedV120(tacAcceptedV120)
-                .setBsqAverageTrimThreshold(bsqAverageTrimThreshold)
                 .addAllAutoConfirmSettings(autoConfirmSettingsList.stream()
                         .map(autoConfirmSettings -> ((protobuf.AutoConfirmSettings) autoConfirmSettings.toProtoMessage()))
                         .collect(Collectors.toList()))
@@ -275,7 +271,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
                 proto.getUseMarketNotifications(),
                 proto.getUsePriceNotifications(),
                 proto.getUseStandbyMode(),
-                proto.getIsDaoFullNode(),
                 proto.getRpcUser().isEmpty() ? null : proto.getRpcUser(),
                 proto.getRpcPw().isEmpty() ? null : proto.getRpcPw(),
                 proto.getTakeOfferSelectedPaymentAccountId().isEmpty() ? null : proto.getTakeOfferSelectedPaymentAccountId(),
@@ -284,7 +279,6 @@ public final class PreferencesPayload implements PersistableEnvelope {
                 proto.getBuyerSecurityDepositAsPercentForCrypto(),
                 proto.getBlockNotifyPort(),
                 proto.getTacAcceptedV120(),
-                proto.getBsqAverageTrimThreshold(),
                 proto.getAutoConfirmSettingsList().isEmpty() ? new ArrayList<>() :
                         new ArrayList<>(proto.getAutoConfirmSettingsList().stream()
                                 .map(AutoConfirmSettings::fromProto)

@@ -853,7 +853,7 @@ message OfferPayload {
     string hash_of_challenge = 34;
     map<string, string> extra_data = 35;
     int32 protocol_version = 36;
-    
+
     NodeAddress arbitrator_node_address = 1001;
     string arbitrator_signature = 1002;
     repeated string reserve_tx_key_images = 1003;
@@ -1319,7 +1319,7 @@ message PersistableEnvelope {
         MailboxMessageList mailbox_message_list = 32;
         IgnoredMailboxMap ignored_mailbox_map = 33;
         RemovedPayloadsMap removed_payloads_map = 34;
-        
+
         XmrAddressEntryList xmr_address_entry_list = 1001;
         SignedOfferList signed_offer_list = 1002;
     }
@@ -1486,7 +1486,7 @@ message Tradable {
         SellerAsMakerTrade seller_as_maker_trade = 4;
         SellerAsTakerTrade seller_as_taker_trade = 5;
         ArbitratorTrade arbitrator_trade = 6;
-        
+
         SignedOffer signed_offer = 1001;
     }
 }
@@ -1595,7 +1595,7 @@ message Trade {
     string counter_currency_extra_data = 35;
     string asset_tx_proof_result = 36; // name of AssetTxProofResult enum
     string uid = 37;
-    
+
     NodeAddress maker_node_address = 100; // TODO (woodser): move these into TradingPeer
     NodeAddress taker_node_address = 101;
     PubKeyRing taker_pub_key_ring = 102;
@@ -1643,7 +1643,7 @@ message ProcessModel {
     bytes mediated_payout_tx_signature = 18;
     int64 buyer_payout_amount_from_mediation = 19;
     int64 seller_payout_amount_from_mediation = 20;
-    
+
     string maker_signature = 1001;
     NodeAddress arbitrator_node_address = 1002;
     TradingPeer maker = 1003;
@@ -1678,7 +1678,7 @@ message TradingPeer {
     bytes account_age_witness_signature = 16;
     int64 current_date = 17;
     bytes mediated_payout_tx_signature = 18;
-    
+
     string reserve_tx_hash = 1001;
     string reserve_tx_hex = 1002;
     string reserve_tx_key = 1003;
@@ -1790,7 +1790,7 @@ message PreferencesPayload {
     int32 css_theme = 54;
     bool tac_accepted_v120 = 55;
     repeated AutoConfirmSettings auto_confirm_settings = 56;
-    double bsq_average_trim_threshold = 57;
+    double bsq_average_trim_threshold = 57 [deprecated = true];
     bool hide_non_account_payment_methods = 58;
     bool show_offers_matching_my_accounts = 59;
     bool deny_api_taker = 60;

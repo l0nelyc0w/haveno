@@ -31,7 +31,6 @@ import bisq.core.provider.price.MarketPrice;
 import bisq.core.provider.price.PriceFeedService;
 import bisq.core.trade.statistics.TradeStatisticsManager;
 import bisq.core.user.Preferences;
-import bisq.core.util.AveragePriceUtil;
 import bisq.core.util.FormattingUtils;
 import bisq.core.util.ParsingUtils;
 import bisq.core.util.validation.InputValidator;
@@ -55,8 +54,6 @@ public class PriceUtil {
     private final PriceFeedService priceFeedService;
     private final TradeStatisticsManager tradeStatisticsManager;
     private final Preferences preferences;
-    @Nullable
-    private Price bsq30DayAveragePrice;
 
     @Inject
     public PriceUtil(PriceFeedService priceFeedService,
@@ -117,19 +114,6 @@ public class PriceUtil {
         return Price.valueOf(currencyCode, roundedToLong);
     }
 
-    public void recalculateBsq30DayAveragePrice() {
-        bsq30DayAveragePrice = null;
-        bsq30DayAveragePrice = getBsq30DayAveragePrice();
-    }
-
-    public Price getBsq30DayAveragePrice() {
-        if (bsq30DayAveragePrice == null) {
-            bsq30DayAveragePrice = AveragePriceUtil.getAveragePriceTuple(preferences,
-                    tradeStatisticsManager, 30).second;
-        }
-        return bsq30DayAveragePrice;
-    }
-
     public boolean hasMarketPrice(Offer offer) {
         String currencyCode = offer.getCurrencyCode();
         checkNotNull(priceFeedService, "priceFeed must not be null");
@@ -145,19 +129,9 @@ public class PriceUtil {
         }
 
         if (!hasMarketPrice(offer)) {
-            if (offer.getCurrencyCode().equals("BSQ")) {
-                Price bsq30DayAveragePrice = getBsq30DayAveragePrice();
-                if (bsq30DayAveragePrice.isPositive()) {
-                    double scaled = MathUtils.scaleDownByPowerOf10(bsq30DayAveragePrice.getValue(), 8);
-                    return calculatePercentage(offer, scaled, direction);
-                } else {
-                    return Optional.empty();
-                }
-            } else {
-                log.trace("We don't have a market price. " +
-                        "That case could only happen if you don't have a price feed.");
-                return Optional.empty();
-            }
+            log.trace("We don't have a market price. " +
+                      "That case could only happen if you don't have a price feed.");
+            return Optional.empty();
         }
 
         String currencyCode = offer.getCurrencyCode();
