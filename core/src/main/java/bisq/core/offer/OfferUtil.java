@@ -75,16 +75,16 @@ import static java.lang.String.format;
 @Singleton
 public class OfferUtil {
 
-    private final AccountAgeWitnessService accountAgeWitnessService;
-    private final FilterManager filterManager;
-    private final Preferences preferences;
-    private final PriceFeedService priceFeedService;
-    private final P2PService p2PService;
-    private final ReferralIdService referralIdService;
-    private final TradeStatisticsManager tradeStatisticsManager;
+	private final AccountAgeWitnessService accountAgeWitnessService;
+	private final FilterManager filterManager;
+	private final Preferences preferences;
+	private final PriceFeedService priceFeedService;
+	private final P2PService p2PService;
+	private final ReferralIdService referralIdService;
+	private final TradeStatisticsManager tradeStatisticsManager;
 
-    private final Predicate<String> isValidFeePaymentCurrencyCode = (c) ->
-            c.equalsIgnoreCase("XMR");
+	private final Predicate<String> isValidFeePaymentCurrencyCode = (c) ->
+		c.equalsIgnoreCase("XMR");
 
     @Inject
     public OfferUtil(AccountAgeWitnessService accountAgeWitnessService,
@@ -160,7 +160,7 @@ public class OfferUtil {
     }
 
     /**
-     * Returns the makerFee as Coin, this can be priced in BTC or BSQ.
+     * Returns the makerFee as Coin, this can be priced in BTC.
      *
      * @param amount           the amount of BTC to trade
      * @return the maker fee for the given trade amount, or {@code null} if the amount

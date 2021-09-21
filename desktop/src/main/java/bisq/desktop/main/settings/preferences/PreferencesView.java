@@ -112,7 +112,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class PreferencesView extends ActivatableViewAndModel<GridPane, PreferencesViewModel> {
     private final User user;
     private final CoinFormatter formatter;
-    private TextField btcExplorerTextField, bsqExplorerTextField;
+    private TextField btcExplorerTextField;
     private ComboBox<String> userLanguageComboBox;
     private ComboBox<Country> userCountryComboBox;
     private ComboBox<TradeCurrency> preferredTradeCurrencyComboBox;
@@ -146,11 +146,11 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     private ObservableList<CryptoCurrency> cryptoCurrencies;
     private ObservableList<CryptoCurrency> allCryptoCurrencies;
     private ObservableList<TradeCurrency> tradeCurrencies;
-    private InputTextField deviationInputTextField, bsqAverageTrimThresholdTextField;
-    private ChangeListener<String> deviationListener, bsqAverageTrimThresholdListener, ignoreTradersListListener, ignoreDustThresholdListener,
+    private InputTextField deviationInputTextField;
+    private ChangeListener<String> deviationListener, ignoreTradersListListener, ignoreDustThresholdListener,
             rpcUserListener, rpcPwListener, blockNotifyPortListener,
             autoConfTradeLimitListener, autoConfServiceAddressListener;
-    private ChangeListener<Boolean> deviationFocusedListener, bsqAverageTrimThresholdFocusedListener;
+    private ChangeListener<Boolean> deviationFocusedListener;
     private ChangeListener<Boolean> useCustomFeeCheckboxListener;
     private ChangeListener<Number> transactionFeeChangeListener;
     private final boolean displayStandbyModeFeature;
@@ -868,7 +868,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
         });
 
     }
-    
+
     private void activateAutoConfirmPreferences() {
         preferences.findAutoConfirmSettings("XMR").ifPresent(autoConfirmSettings -> {
             autoConfirmXmrToggle.setSelected(autoConfirmSettings.isEnabled());
@@ -934,5 +934,5 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
             filterManager.filterProperty().removeListener(filterChangeListener);
         });
     }
-    
+
 }

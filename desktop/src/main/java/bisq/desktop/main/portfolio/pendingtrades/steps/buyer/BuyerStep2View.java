@@ -352,16 +352,6 @@ public class BuyerStep2View extends TradeStepView {
         confirmButton.setOnAction(e -> onPaymentStarted());
         busyAnimation = tuple3.second;
         statusLabel = tuple3.third;
-        /*
-        if (trade.getOffer().getCurrencyCode().equals("BSQ")) {
-            fillBsqButton = new AutoTooltipButton(Res.get("portfolio.pending.step2_buyer.fillInBsqWallet"));
-            hBox.getChildren().add(1, fillBsqButton);
-            fillBsqButton.setOnAction(e -> {
-                AssetsAccountPayload assetsAccountPayload = (AssetsAccountPayload) paymentAccountPayload;
-                Tuple2<Volume, String> data = new Tuple2<>(trade.getTradeVolume(), assetsAccountPayload.getAddress());
-                model.getNavigation().navigateToWithData(data, MainView,class);
-            });
-        }*/
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////

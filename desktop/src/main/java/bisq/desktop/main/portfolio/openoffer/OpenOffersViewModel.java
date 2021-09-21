@@ -64,7 +64,6 @@ class OpenOffersViewModel extends ActivatableWithDataModel<OpenOffersDataModel> 
 
     @Override
     protected void activate() {
-        //priceUtil.recalculateBsq30DayAveragePrice();
     }
 
     void onActivateOpenOffer(OpenOffer openOffer,
@@ -163,7 +162,7 @@ class OpenOffersViewModel extends ActivatableWithDataModel<OpenOffersDataModel> 
 
     public String getMakerFeeAsString(OpenOffer openOffer) {
         Offer offer = openOffer.getOffer();
-        return btcFormatter.formatCoinWithCode(offer.getMakerFee()); 
+        return btcFormatter.formatCoinWithCode(offer.getMakerFee());
     }
 
     String getTriggerPrice(OpenOfferListItem item) {
