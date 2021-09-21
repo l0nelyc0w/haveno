@@ -58,7 +58,7 @@ public class BotClient {
     }
 
     /**
-     * Returns current BSQ and BTC balance information.
+     * Returns current BTC balance information.
      * @return BalancesInfo
      */
     public BalancesInfo getBalance() {

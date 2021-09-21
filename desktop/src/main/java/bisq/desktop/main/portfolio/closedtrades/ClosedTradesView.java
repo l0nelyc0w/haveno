@@ -103,7 +103,6 @@ public class ClosedTradesView extends ActivatableViewAndModel<VBox, ClosedTrades
         VOLUME_CURRENCY(Res.get("shared.currency")),
         TX_FEE(Res.get("shared.txFee")),
         TRADE_FEE_BTC(Res.get("shared.tradeFee") + " BTC"),
-        TRADE_FEE_BSQ(Res.get("shared.tradeFee") + " BSQ"),
         BUYER_SEC(Res.get("shared.buyerSecurityDeposit")),
         SELLER_SEC(Res.get("shared.sellerSecurityDeposit")),
         OFFER_TYPE(Res.get("shared.offerType")),
@@ -231,7 +230,7 @@ public class ClosedTradesView extends ActivatableViewAndModel<VBox, ClosedTrades
         //
         tradeFeeColumn.setComparator(Comparator.comparing(item -> {
             String tradeFee = model.getTradeFee(item, true);
-            // We want to separate BSQ and BTC fees so we use a prefix
+            // We want to separate BTC fees so we use a prefix
                 return "BTC" + tradeFee;
         }, Comparator.nullsFirst(Comparator.naturalOrder())));
         buyerSecurityDepositColumn.setComparator(nullsFirstComparing(o ->

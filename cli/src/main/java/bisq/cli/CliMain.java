@@ -484,24 +484,6 @@ public class CliMain {
                     out.println(formatPaymentAcctTbl(singletonList(paymentAccount)));
                     return;
                 }
-                case createcryptopaymentacct: {
-                    var opts = new CreateCryptoCurrencyPaymentAcctOptionParser(args).parse();
-                    if (opts.isForHelp()) {
-                        out.println(client.getMethodHelp(method));
-                        return;
-                    }
-                    var accountName = opts.getAccountName();
-                    var currencyCode = opts.getCurrencyCode();
-                    var address = opts.getAddress();
-                    var isTradeInstant = opts.getIsTradeInstant();
-                    var paymentAccount = client.createCryptoCurrencyPaymentAccount(accountName,
-                            currencyCode,
-                            address,
-                            isTradeInstant);
-                    out.println("payment account saved");
-                    out.println(formatPaymentAcctTbl(singletonList(paymentAccount)));
-                    return;
-                }
                 case getpaymentaccts: {
                     if (new SimpleMethodOptionParser(args).parse().isForHelp()) {
                         out.println(client.getMethodHelp(method));

@@ -107,7 +107,7 @@ public class TakerBotProtocol extends BotProtocol {
 
     private void createMakeOfferScript() {
         String direction = RANDOM.nextBoolean() ? "BUY" : "SELL";
-        String feeCurrency = RANDOM.nextBoolean() ? "BSQ" : "BTC";
+        String feeCurrency = "BTC";
         boolean createMarginPricedOffer = RANDOM.nextBoolean();
         // If not using an F2F account, don't go over possible 0.01 BTC
         // limit if account is not signed.

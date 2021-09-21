@@ -174,31 +174,4 @@ public class TradeFormat {
                     ? formatOfferVolume(t.getOffer().getVolume())
                     : formatXmr(ParsingUtils.centinerosToAtomicUnits(t.getTradeAmountAsLong()));
 
-    private static final BiFunction<TradeInfo, Boolean, String> bsqReceiveAddress = (t, showBsqBuyerAddress) -> {
-        if (showBsqBuyerAddress) {
-            ContractInfo contract = t.getContract();
-            boolean isBuyerMakerAndSellerTaker = contract.getIsBuyerMakerAndSellerTaker();
-            return isBuyerMakerAndSellerTaker  // (is XMR buyer / maker)
-                    ? contract.getTakerPaymentAccountPayload().getAddress()
-                    : contract.getMakerPaymentAccountPayload().getAddress();
-        } else {
-            return "";
-        }
-    };
-
-    private static boolean shouldShowBsqBuyerAddress(TradeInfo tradeInfo, boolean isTaker) {
-        if (tradeInfo.getOffer().getBaseCurrencyCode().equals("XMR")) {
-            return false;
-        } else {
-            ContractInfo contract = tradeInfo.getContract();
-            // Do not forget buyer and seller refer to XMR buyer and seller, not BSQ
-            // buyer and seller.  If you are buying BSQ, you are the XMR seller.
-            boolean isBuyerMakerAndSellerTaker = contract.getIsBuyerMakerAndSellerTaker();
-            if (isTaker) {
-                return !isBuyerMakerAndSellerTaker;
-            } else {
-                return isBuyerMakerAndSellerTaker;
-            }
-        }
-    }
 }
