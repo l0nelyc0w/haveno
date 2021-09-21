@@ -71,15 +71,7 @@ public enum InventoryItem {
             true,
             new DeviationByIntegerDiff(1, 2), 2),
 
-    // Should be very close values
-    daoStateChainHeight("daoStateChainHeight",
-            true,
-            new DeviationByIntegerDiff(2, 4), 3),
-    numBsqBlocks("numBsqBlocks",
-            true,
-            new DeviationByIntegerDiff(2, 4), 3),
-
-    // Has to be same values at same block
+        // Has to be same values at same block
     daoStateHash("daoStateHash",
             false,
             new DeviationOfHashes(), 1),

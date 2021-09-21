@@ -1790,7 +1790,7 @@ message PreferencesPayload {
     int32 css_theme = 54;
     bool tac_accepted_v120 = 55;
     repeated AutoConfirmSettings auto_confirm_settings = 56;
-    double bsq_average_trim_threshold = 57 [deprecated = true];
+    reserved 57; // was bsq_average_trim_threshold
     bool hide_non_account_payment_methods = 58;
     bool show_offers_matching_my_accounts = 59;
     bool deny_api_taker = 60;
@@ -1877,7 +1877,7 @@ message Tx {
     // Because of the way how PB implements inheritance we need to use the super class as type
     repeated BaseTxOutput tx_outputs = 1;
     TxType txType = 2;
-    int64 burnt_bsq = 3;
+    reserved 3; // Was int64 burnt_bsq
 }
 
 enum TxType {
@@ -1886,7 +1886,6 @@ enum TxType {
     UNVERIFIED = 2;
     INVALID = 3;
     GENESIS = 4;
-    TRANSFER_BSQ = 5;
     PAY_TRADE_FEE = 6;
     PROPOSAL = 7;
     COMPENSATION_REQUEST = 8;
@@ -1939,7 +1938,7 @@ enum TxOutputType {
     PB_ERROR_TX_OUTPUT_TYPE = 0;
     UNDEFINED_OUTPUT = 1;
     GENESIS_OUTPUT = 2;
-    BSQ_OUTPUT = 3;
+    reserved 3; // Was BSQ_OUTPUT
     BTC_OUTPUT = 4;
     PROPOSAL_OP_RETURN_OUTPUT = 5;
     COMP_REQ_OP_RETURN_OUTPUT = 6;

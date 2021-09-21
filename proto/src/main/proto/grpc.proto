@@ -114,7 +114,6 @@ message CreateOfferRequest {
     string currency_code = 1;
     string direction = 2;
     string price = 3;
-<<<<<<< HEAD
     bool use_market_based_price = 4;
     double market_price_margin = 5;
     uint64 amount = 6 [jstype = JS_STRING];
@@ -122,16 +121,7 @@ message CreateOfferRequest {
     double buyer_security_deposit = 8;
     uint64 trigger_price = 9 [jstype = JS_STRING];
     string payment_account_id = 10;
-    string maker_fee_currency_code = 11;
-=======
-    bool useMarketBasedPrice = 4;
-    double marketPriceMargin = 5;
-    uint64 amount = 6;
-    uint64 minAmount = 7;
-    double buyerSecurityDeposit = 8;
-    uint64 triggerPrice = 9;
-    string paymentAccountId = 10;
->>>>>>> 50a091c455 (remove "fee currency", XMR assumed)
+    reserved 11;
 }
 
 message CreateOfferReply {
@@ -154,26 +144,15 @@ message OfferInfo {
     uint64 amount = 6;
     uint64 min_amount = 7;
     uint64 volume = 8;
-<<<<<<< HEAD
     uint64 min_volume = 9;
     uint64 buyer_security_deposit = 10;
     uint64 trigger_price = 11;
-    bool is_currency_for_maker_fee_btc = 12;
+    reserved 12;
     string payment_account_id = 13;
     string payment_method_id = 14;
     string payment_method_short_name = 15;
     string base_currency_code = 16;
     string counter_currency_code = 17;
-=======
-    uint64 minVolume = 9;
-    uint64 buyerSecurityDeposit = 10;
-    uint64 triggerPrice = 11;
-    string paymentAccountId = 13;
-    string paymentMethodId = 14;
-    string paymentMethodShortName = 15;
-    string baseCurrencyCode = 16;
-    string counterCurrencyCode = 17;
->>>>>>> 50a091c455 (remove "fee currency", XMR assumed)
     uint64 date = 18;
     string state = 19;
     uint64 seller_security_deposit = 20;
@@ -322,14 +301,9 @@ service Trades {
 }
 
 message TakeOfferRequest {
-<<<<<<< HEAD
     string offer_id = 1;
     string payment_account_id = 2;
-    string taker_fee_currency_code = 3;
-=======
-    string offerId = 1;
-    string paymentAccountId = 2;
->>>>>>> 50a091c455 (remove "fee currency", XMR assumed)
+    reserved 3;
 }
 
 message TakeOfferReply {
@@ -400,7 +374,6 @@ message TradeInfo {
     bool is_withdrawn = 23;
     string contract_as_json = 24;
     ContractInfo contract = 25;
-<<<<<<< HEAD
     
     string maker_deposit_tx_id = 100;
     string taker_deposit_tx_id = 101;
@@ -421,28 +394,6 @@ message ContractInfo {
     uint64 lock_time = 12;
     
     string arbitrator_node_address = 100;
-=======
-
-    string makerDepositTxId = 100;
-    string takerDepositTxId = 101;
-}
-
-message ContractInfo {
-    string buyerNodeAddress = 1;
-    string sellerNodeAddress = 2;
-    reserved 3; // was mediatorNodeAddress
-    reserved 4; // was refundAgendNodeAddress
-    bool isBuyerMakerAndSellerTaker = 5;
-    string makerAccountId = 6;
-    string takerAccountId = 7;
-    PaymentAccountPayloadInfo makerPaymentAccountPayload = 8;
-    PaymentAccountPayloadInfo takerPaymentAccountPayload = 9;
-    string makerPayoutAddressString = 10;
-    string takerPayoutAddressString = 11;
-    uint64 lockTime = 12;
-
-    string arbitratorNodeAddress = 100;
->>>>>>> 50a091c455 (remove "fee currency", XMR assumed)
 }
 
 message PaymentAccountPayloadInfo {
@@ -484,13 +435,7 @@ service Wallets {
     }
     rpc GetAddressBalance (GetAddressBalanceRequest) returns (GetAddressBalanceReply) {
     }
-    rpc GetUnusedBsqAddress (GetUnusedBsqAddressRequest) returns (GetUnusedBsqAddressReply) {
-    }
-    rpc SendBsq (SendBsqRequest) returns (SendBsqReply) {
-    }
     rpc SendBtc (SendBtcRequest) returns (SendBtcReply) {
-    }
-    rpc VerifyBsqSentToAddress (VerifyBsqSentToAddressRequest) returns (VerifyBsqSentToAddressReply) {
     }
     rpc GetTxFeeRate (GetTxFeeRateRequest) returns (GetTxFeeRateReply) {
     }
@@ -535,23 +480,6 @@ message GetAddressBalanceReply {
     AddressBalanceInfo address_balance_info = 1;
 }
 
-message GetUnusedBsqAddressRequest {
-}
-
-message GetUnusedBsqAddressReply {
-     string address = 1;
-}
-
-message SendBsqRequest {
-    string address = 1;
-    string amount = 2;
-    string tx_fee_rate = 3;
-}
-
-message SendBsqReply {
-    TxInfo tx_info = 1;
-}
-
 message SendBtcRequest {
     string address = 1;
     string amount = 2;
@@ -561,15 +489,6 @@ message SendBtcRequest {
 
 message SendBtcReply {
     TxInfo tx_info = 1;
-}
-
-message VerifyBsqSentToAddressRequest {
-    string address = 1;
-    string amount = 2;
-}
-
-message VerifyBsqSentToAddressReply {
-    bool is_amount_received = 1;
 }
 
 message GetTxFeeRateRequest {
@@ -642,18 +561,9 @@ message BalancesInfo {
     // Field names are shortened for readability's sake, i.e.,
     // balancesInfo.getBtc().getAvailableBalance() is cleaner than
     // balancesInfo.getBtcBalanceInfo().getAvailableBalance().
-    BsqBalanceInfo bsq = 1;
+    reserved 1;
     BtcBalanceInfo btc = 2;
     XmrBalanceInfo xmr = 3;
-}
-
-message BsqBalanceInfo {
-    uint64 available_confirmed_balance = 1;
-    uint64 unverified_balance = 2;
-    uint64 unconfirmed_change_balance = 3;
-    uint64 locked_for_voting_balance = 4;
-    uint64 lockup_bonds_balance = 5;
-    uint64 unlocking_bonds_balance = 6;
 }
 
 message BtcBalanceInfo {

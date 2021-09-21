@@ -58,10 +58,6 @@ public class CurrencyFormat {
         return BTC_FORMAT.format(BigDecimal.valueOf(sats).divide(SATOSHI_DIVISOR));
     }
 
-    @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
-    public static String formatBsq(long sats) {
-        return BSQ_FORMAT.format(BigDecimal.valueOf(sats).divide(BSQ_SATOSHI_DIVISOR));
-    }
     public static String formatXmr(BigInteger amount) {
         return "" + MoneroUtils.atomicUnitsToXmr(amount);
     }

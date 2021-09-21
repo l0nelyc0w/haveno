@@ -204,10 +204,7 @@ public class InventoryMonitor implements SetupListener {
                 .collect(Collectors.toSet());
         Map<InventoryItem, Double> averageValues = Average.of(requestInfoSet);
 
-        String daoStateChainHeight = result != null &&
-                result.containsKey(InventoryItem.daoStateChainHeight) ?
-                result.get(InventoryItem.daoStateChainHeight) :
-                null;
+        String daoStateChainHeight = null;
         List.of(InventoryItem.values()).forEach(inventoryItem -> {
             String value = result != null ? result.get(inventoryItem) : null;
             Tuple2<Double, Double> tuple = inventoryItem.getDeviationAndAverage(averageValues, value);
