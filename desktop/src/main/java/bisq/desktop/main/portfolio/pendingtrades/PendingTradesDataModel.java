@@ -309,26 +309,6 @@ public class PendingTradesDataModel extends ActivatableDataModel {
         }
     }
 
-    Coin getTradeFeeAsBsq() {
-        Trade trade = getTrade();
-        if (trade != null) {
-            if (isMaker()) {
-                Offer offer = trade.getOffer();
-                if (offer != null) {
-                        return Coin.ZERO; // getTradeFeeInBTC is used for BTC
-                } else {
-                    log.error("offer is null");
-                    return Coin.ZERO;
-                }
-            } else {
-              return Coin.ZERO; // getTradeFeeInBTC is used for BTC
-            }
-        } else {
-            log.error("Trade is null at getTotalFees");
-            return Coin.ZERO;
-        }
-    }
-
     @Nullable
     public PaymentAccountPayload getSellersPaymentAccountPayload() {
         if (getTrade() == null) return null;

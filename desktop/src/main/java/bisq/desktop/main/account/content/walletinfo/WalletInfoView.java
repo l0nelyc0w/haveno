@@ -59,7 +59,7 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
     private final CoinFormatter btcFormatter;
     private int gridRow = 0;
     private Button openDetailsButton;
-    private TextField btcTextField, bsqTextField;
+    private TextField btcTextField;
     private BalanceListener btcWalletBalanceListener;
 
 
@@ -90,7 +90,6 @@ public class WalletInfoView extends ActivatableView<GridPane, Void> {
         addMultilineLabel(root, gridRow, Res.get("account.menu.walletInfo.path.info"), Layout.FIRST_ROW_AND_GROUP_DISTANCE, Double.MAX_VALUE);
         addTopLabelTextField(root, ++gridRow, Res.get("account.menu.walletInfo.walletSelector", "BTC", "legacy"), "44'/0'/0'", -Layout.FLOATING_LABEL_DISTANCE);
         addTopLabelTextField(root, ++gridRow, Res.get("account.menu.walletInfo.walletSelector", "BTC", "segwit"), "44'/0'/1'", -Layout.FLOATING_LABEL_DISTANCE);
-        addTopLabelTextField(root, ++gridRow, Res.get("account.menu.walletInfo.walletSelector", "BSQ", ""), "44'/142'/0'", -Layout.FLOATING_LABEL_DISTANCE);
 
         openDetailsButton = addButtonAfterGroup(root, ++gridRow, Res.get("account.menu.walletInfo.openDetails"));
 
