@@ -69,14 +69,12 @@ import bisq.cli.opts.GetTradeOptionParser;
 import bisq.cli.opts.GetTransactionOptionParser;
 import bisq.cli.opts.RegisterDisputeAgentOptionParser;
 import bisq.cli.opts.RemoveWalletPasswordOptionParser;
-import bisq.cli.opts.SendBsqOptionParser;
 import bisq.cli.opts.SendBtcOptionParser;
 import bisq.cli.opts.SetTxFeeRateOptionParser;
 import bisq.cli.opts.SetWalletPasswordOptionParser;
 import bisq.cli.opts.SimpleMethodOptionParser;
 import bisq.cli.opts.TakeOfferOptionParser;
 import bisq.cli.opts.UnlockWalletOptionParser;
-import bisq.cli.opts.VerifyBsqSentToAddressOptionParser;
 import bisq.cli.opts.WithdrawFundsOptionParser;
 
 /**
@@ -168,9 +166,6 @@ public class CliMain {
                     var currencyCode = opts.getCurrencyCode();
                     var balances = client.getBalances(currencyCode);
                     switch (currencyCode.toUpperCase()) {
-                        case "BSQ":
-                            out.println(formatBsqBalanceInfoTbl(balances.getBsq()));
-                            break;
                         case "BTC":
                             out.println(formatBtcBalanceInfoTbl(balances.getBtc()));
                             break;
@@ -671,7 +666,7 @@ public class CliMain {
             stream.format(rowFormat, "------", "------", "------------");
             stream.format(rowFormat, getversion.name(), "", "Get server version");
             stream.println();
-            stream.format(rowFormat, getbalance.name(), "[--currency-code=<bsq|btc>]", "Get server wallet balances");
+            stream.format(rowFormat, getbalance.name(), "[--currency-code=<btc>]", "Get server wallet balances");
             stream.println();
             stream.format(rowFormat, getaddressbalance.name(), "--address=<btc-address>", "Get server wallet address balance");
             stream.println();
@@ -699,7 +694,7 @@ public class CliMain {
             stream.format(rowFormat, "", "[--min-amount=<min-btc-amount>] \\", "");
             stream.format(rowFormat, "", "--fixed-price=<price> | --market-price=margin=<percent> \\", "");
             stream.format(rowFormat, "", "--security-deposit=<percent> \\", "");
-            stream.format(rowFormat, "", "[--fee-currency=<bsq|btc>]", "");
+            stream.format(rowFormat, "", "[--fee-currency=<btc>]", "");
             stream.println();
             stream.format(rowFormat, canceloffer.name(), "--offer-id=<offer-id>", "Cancel offer with id");
             stream.println();
@@ -715,7 +710,7 @@ public class CliMain {
             stream.println();
             stream.format(rowFormat, takeoffer.name(), "--offer-id=<offer-id> \\", "Take offer with id");
             stream.format(rowFormat, "", "--payment-account=<payment-account-id>", "");
-            stream.format(rowFormat, "", "[--fee-currency=<btc|bsq>]", "");
+            stream.format(rowFormat, "", "[--fee-currency=<btc>]", "");
             stream.println();
             stream.format(rowFormat, gettrade.name(), "--trade-id=<trade-id> \\", "Get trade summary or full contract");
             stream.format(rowFormat, "", "[--show-contract=<true|false>]", "");
@@ -735,11 +730,6 @@ public class CliMain {
             stream.format(rowFormat, getpaymentacctform.name(), "--payment-method-id=<payment-method-id>", "Get a new payment account form");
             stream.println();
             stream.format(rowFormat, createpaymentacct.name(), "--payment-account-form=<path>", "Create a new payment account");
-            stream.println();
-            stream.format(rowFormat, createcryptopaymentacct.name(), "--account-name=<name> \\", "Create a new cryptocurrency payment account");
-            stream.format(rowFormat, "", "--currency-code=<bsq> \\", "");
-            stream.format(rowFormat, "", "--address=<bsq-address>", "");
-            stream.format(rowFormat, "", "--trade-instant=<true|false>", "");
             stream.println();
             stream.format(rowFormat, getpaymentaccts.name(), "", "Get user payment accounts");
             stream.println();

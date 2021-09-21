@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInfo;
 
-import static bisq.cli.CurrencyFormat.formatBsqAmount;
 import static bisq.cli.TradeFormat.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
