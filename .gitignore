@@ -34,6 +34,5 @@ deploy
 /monitor/monitor-tor/*
 .java-version
 .localnet
-/apitest/src/main/resources/dao-setup*
 /monero-wallet-rpc
 /monerod

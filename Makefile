@@ -191,7 +191,6 @@ seednode: seednode/build
 		--baseCurrencyNetwork=XMR_STAGENET \
 		--useLocalhostForP2P=true \
 		--useDevPrivilegeKeys=true \
-		--fullDaoNode=true \
 		--rpcUser=bisqdao \
 		--rpcPassword=bsq \
 		--rpcBlockNotificationPort=5120 \
@@ -204,7 +203,6 @@ seednode2: seednode/build
 		--baseCurrencyNetwork=XMR_STAGENET \
 		--useLocalhostForP2P=true \
 		--useDevPrivilegeKeys=true \
-		--fullDaoNode=true \
 		--rpcUser=bisqdao \
 		--rpcPassword=bsq \
 		--rpcBlockNotificationPort=5121 \
@@ -227,7 +225,6 @@ alice: setup
 		--useLocalhostForP2P=true \
 		--useDevPrivilegeKeys=true \
 		--nodePort=5555 \
-		--fullDaoNode=true \
 		--rpcUser=bisqdao \
 		--rpcPassword=bsq \
 		--rpcBlockNotificationPort=5122 \

@@ -33,14 +33,6 @@ called `api-beta-test`.
 $ git clone https://github.com/bisq-network/bisq.git api-beta-test
 ```
 
-Change your current working directory to `api-beta-test`, build the source, and download / install Bisq’s
-pre-configured DAO / dev / regtest setup files.
-```
-$ cd api-beta-test
-$ ./gradlew clean build :apitest:installDaoSetup -x test    # if you want to skip Bisq tests
-$ ./gradlew clean build :apitest:installDaoSetup            # if you want to run Bisq tests
-```
-
 ## Running Api Test Harness
 
 If your bitcoin-core binaries are in your system `PATH`, start bitcoind in regtest-mode, Bisq seednode and arbitration
