@@ -1330,7 +1330,7 @@ public abstract class MutableOfferView<M extends MutableOfferViewModel<?>> exten
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().addAll(tradeFeeInBtcLabel);
 
-        final Tuple2<Label, VBox> tradeInputBox = getTradeInputBox(vBox, Res.get("createOffer.tradeFee.descriptionBSQEnabled"));
+        final Tuple2<Label, VBox> tradeInputBox = getTradeInputBox(vBox, Res.get("createOffer.tradeFee.description"));
 
         tradeFeeDescriptionLabel = tradeInputBox.first;
 
