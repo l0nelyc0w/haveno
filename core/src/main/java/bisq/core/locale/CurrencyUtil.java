@@ -629,7 +629,7 @@ public class CurrencyUtil {
                 .findAny();
     }
 
-    // Excludes all assets which got removed by DAO voting
+    // Excludes all assets which got removed by voting
     public static List<CryptoCurrency> getActiveSortedCryptoCurrencies(FilterManager filterManager) {
         return getAllSortedCryptoCurrencies().stream()
                 .filter(e -> !filterManager.isCurrencyBanned(e.getCode()))

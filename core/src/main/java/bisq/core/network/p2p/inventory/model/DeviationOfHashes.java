@@ -33,8 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class DeviationOfHashes implements DeviationType {
     public DeviationSeverity getDeviationSeverity(Collection<List<RequestInfo>> collection,
                                                   @Nullable String value,
-                                                  InventoryItem inventoryItem,
-                                                  String currentBlockHeight) {
+                                                  InventoryItem inventoryItem) {
         DeviationSeverity deviationSeverity = DeviationSeverity.OK;
         if (value == null) {
             return deviationSeverity;

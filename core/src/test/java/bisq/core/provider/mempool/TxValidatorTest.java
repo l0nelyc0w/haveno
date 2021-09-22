@@ -105,7 +105,6 @@ public class TxValidatorTest {
     }
 
     // initialize the TxValidator with offerData to be validated
-    // and mock the used DaoStateService
     private TxValidator createTxValidator(String offerData) {
         try {
             String[] y = offerData.split(",");

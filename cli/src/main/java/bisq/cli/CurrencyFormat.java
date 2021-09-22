@@ -46,9 +46,6 @@ public class CurrencyFormat {
     static final DecimalFormat BTC_FORMAT = new DecimalFormat("###,##0.00000000");
     static final DecimalFormat BTC_TX_FEE_FORMAT = new DecimalFormat("###,###,##0");
 
-    static final BigDecimal BSQ_SATOSHI_DIVISOR = new BigDecimal(100);
-    static final DecimalFormat BSQ_FORMAT = new DecimalFormat("###,###,###,##0.00");
-
     static final BigDecimal SECURITY_DEPOSIT_MULTIPLICAND = new BigDecimal("0.01");
 
     // TODO: (woodser): replace formatSatoshis(), formatBsq() with formatXmr()

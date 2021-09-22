@@ -242,7 +242,7 @@ public final class PaymentMethod implements PersistablePayload, Comparable<Payme
     private final long maxTradePeriod;
 
     // With v0.9.4 we changed context of that field. Before it was the hard coded trade limit. Now it is the default
-    // limit which will be used just in time to adjust the real trade limit based on the DAO param value and risk factor.
+    // limit based on the risk factor.
     // The risk factor is derived from the maxTradeLimit.
     // As that field is used in protobuffer definitions we cannot change it to reflect better the new context. We prefer
     // to keep the convention that PB fields has the same name as the Java class field (as we could rename it in

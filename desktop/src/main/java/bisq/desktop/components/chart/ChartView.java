@@ -344,7 +344,6 @@ public abstract class ChartView<T extends ChartViewModel<? extends ChartDataMode
         chart.setAnimated(false);
         chart.setLegendVisible(false);
         chart.setMinHeight(200);
-        chart.setId("charts-dao");
         return chart;
     }
 
@@ -730,7 +729,6 @@ public abstract class ChartView<T extends ChartViewModel<? extends ChartDataMode
                 }
                 String xValue = model.getTooltipDateConverter(data.getXValue());
                 String yValue = model.getYAxisStringConverter().toString(data.getYValue());
-                Tooltip.install(node, new Tooltip(Res.get("dao.factsAndFigures.supply.chart.tradeFee.toolTip", yValue, xValue)));
             });
         });
     }

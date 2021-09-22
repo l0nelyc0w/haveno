@@ -178,7 +178,6 @@ public class MainView extends InitializableView<StackPane, MainViewModel> {
         ToggleButton supportButton = new NavButton(SupportView.class, Res.get("mainView.menu.support"));
         ToggleButton settingsButton = new NavButton(SettingsView.class, Res.get("mainView.menu.settings"));
         ToggleButton accountButton = new NavButton(AccountView.class, Res.get("mainView.menu.account"));
-//        ToggleButton daoButton = new NavButton(DaoView.class, Res.get("mainView.menu.dao"));
 
         JFXBadge portfolioButtonWithBadge = new JFXBadge(portfolioButton);
         JFXBadge supportButtonWithBadge = new JFXBadge(supportButton);
@@ -209,9 +208,6 @@ public class MainView extends InitializableView<StackPane, MainViewModel> {
                         settingsButton.fire();
                     } else if (Utilities.isAltOrCtrlPressed(KeyCode.DIGIT8, keyEvent)) {
                         accountButton.fire();
-//                    } else if (Utilities.isAltOrCtrlPressed(KeyCode.DIGIT9, keyEvent)) {
-//                        if (daoButton.isVisible())
-//                            daoButton.fire();
                     }
                 });
             }
@@ -393,29 +389,10 @@ public class MainView extends InitializableView<StackPane, MainViewModel> {
             }
         });
 
-        //daoStateMonitoringService.addListener(this);
-
         // Delay a bit to give time for rendering the splash screen
         UserThread.execute(() -> onApplicationStartedHandler.run());
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // DaoStateMonitoringService.Listener
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    /*
-    @Override
-    public void onChangeAfterBatchProcessing() {
-    }
-
-    @Override
-    public void onCheckpointFail() {
-
-        new Popup().attention(Res.get("dao.monitor.daoState.checkpoint.popup"))
-                .useShutDownButton()
-                .show();
-    }
-
-    */
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Helpers
     ///////////////////////////////////////////////////////////////////////////////////////////

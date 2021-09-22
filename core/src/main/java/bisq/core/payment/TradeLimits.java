@@ -52,15 +52,13 @@ public class TradeLimits {
 
 
     /**
-     * The default trade limits defined as statics in PaymentMethod are only used until the DAO
-     * is fully synchronized.
+     * The default trade limits
      *
      * @see bisq.core.payment.payload.PaymentMethod
-     * @return the maximum trade limit set by the DAO.
+     * @return the maximum trade limit
      */
     public Coin getMaxTradeLimit() {
        return  Coin.parseCoin("1");
-       // return daoStateService.gtParamValueAsCoin(Param.MAX_TRADE_LIMIT, periodService.getChainHeight());
     }
 
     // We possibly rounded value for the first month gets multiplied by 4 to get the trade limit after the account

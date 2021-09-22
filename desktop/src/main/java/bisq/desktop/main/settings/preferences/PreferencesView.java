@@ -138,7 +138,7 @@ public class PreferencesView extends ActivatableViewAndModel<GridPane, Preferenc
     private ComboBox<FiatCurrency> fiatCurrenciesComboBox;
     private ListView<CryptoCurrency> cryptoCurrenciesListView;
     private ComboBox<CryptoCurrency> cryptoCurrenciesComboBox;
-    private Button resetDontShowAgainButton, resyncDaoFromGenesisButton, resyncDaoFromResourcesButton, editCustomBtcExplorer;
+    private Button resetDontShowAgainButton, editCustomBtcExplorer;
     private ObservableList<String> languageCodes;
     private ObservableList<Country> countries;
     private ObservableList<FiatCurrency> fiatCurrencies;

@@ -54,7 +54,7 @@ public class BitcoinModule extends AppModule {
 
     @Override
     protected void configure() {
-        // If we have selected BTC_DAO_REGTEST or BTC_DAO_TESTNET we use our master regtest node,
+        // If we have selected or BTC_DAO_TESTNET we use our master regtest node,
         // otherwise the specified host or default (localhost)
         String regTestHost = config.bitcoinRegtestHost;
         if (regTestHost.isEmpty()) {

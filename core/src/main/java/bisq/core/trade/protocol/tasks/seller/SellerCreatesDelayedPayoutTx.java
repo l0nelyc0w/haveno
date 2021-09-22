@@ -43,26 +43,7 @@ public class SellerCreatesDelayedPayoutTx extends TradeTask {
         try {
             runInterceptHook();
             if (true) throw new RuntimeException("SellerCreatesDelayedPayoutTx not implemented for xmr");
-            /*
-            String donationAddressString = processModel.getDaoFacade().getParamValue(Param.RECIPIENT_BTC_ADDRESS);
-            Coin minerFee = trade.getTxFee();
-            TradeWalletService tradeWalletService = processModel.getTradeWalletService();
-            Transaction depositTx = checkNotNull(processModel.getDepositTx());
 
-            long lockTime = trade.getLockTime();
-            Transaction preparedDelayedPayoutTx = tradeWalletService.createDelayedUnsignedPayoutTx(depositTx,
-                    minerFee,
-                    lockTime);
-            TradeDataValidation.validateDelayedPayoutTx(trade,
-                    preparedDelayedPayoutTx,
-                    processModel.getBtcWalletService());
-
-            processModel.setPreparedDelayedPayoutTx(preparedDelayedPayoutTx);
-
-            processModel.getTradeManager().requestPersistence();
-
-            complete();
-	    */
         } catch (Throwable t) {
             failed(t);
         }
