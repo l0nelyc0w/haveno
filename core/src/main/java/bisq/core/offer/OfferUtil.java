@@ -31,7 +31,6 @@ import bisq.core.provider.fee.FeeService;
 import bisq.core.provider.price.MarketPrice;
 import bisq.core.provider.price.PriceFeedService;
 import bisq.core.trade.statistics.ReferralIdService;
-import bisq.core.trade.statistics.TradeStatisticsManager;
 import bisq.core.user.AutoConfirmSettings;
 import bisq.core.user.Preferences;
 import bisq.core.util.coin.CoinUtil;
@@ -81,7 +80,6 @@ public class OfferUtil {
 	private final PriceFeedService priceFeedService;
 	private final P2PService p2PService;
 	private final ReferralIdService referralIdService;
-	private final TradeStatisticsManager tradeStatisticsManager;
 
 	private final Predicate<String> isValidFeePaymentCurrencyCode = (c) ->
 		c.equalsIgnoreCase("XMR");
@@ -92,15 +90,13 @@ public class OfferUtil {
                      Preferences preferences,
                      PriceFeedService priceFeedService,
                      P2PService p2PService,
-                     ReferralIdService referralIdService,
-                     TradeStatisticsManager tradeStatisticsManager) {
+                     ReferralIdService referralIdService) {
         this.accountAgeWitnessService = accountAgeWitnessService;
         this.filterManager = filterManager;
         this.preferences = preferences;
         this.priceFeedService = priceFeedService;
         this.p2PService = p2PService;
         this.referralIdService = referralIdService;
-        this.tradeStatisticsManager = tradeStatisticsManager;
     }
 
     /**

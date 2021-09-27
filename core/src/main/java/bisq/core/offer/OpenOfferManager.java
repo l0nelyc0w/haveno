@@ -35,7 +35,6 @@ import bisq.core.provider.price.PriceFeedService;
 import bisq.core.support.dispute.arbitration.arbitrator.ArbitratorManager;
 import bisq.core.support.dispute.mediation.mediator.Mediator;
 import bisq.core.support.dispute.mediation.mediator.MediatorManager;
-import bisq.core.support.dispute.refund.refundagent.RefundAgentManager;
 import bisq.core.trade.TradableList;
 import bisq.core.trade.TradeUtils;
 import bisq.core.trade.closed.ClosedTradableManager;
@@ -122,7 +121,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
     private final TradeStatisticsManager tradeStatisticsManager;
     private final ArbitratorManager arbitratorManager;
     private final MediatorManager mediatorManager;
-    private final RefundAgentManager refundAgentManager;
     private final FilterManager filterManager;
     private final Broadcaster broadcaster;
     private final PersistenceManager<TradableList<OpenOffer>> persistenceManager;
@@ -157,7 +155,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
                             TradeStatisticsManager tradeStatisticsManager,
                             ArbitratorManager arbitratorManager,
                             MediatorManager mediatorManager,
-                            RefundAgentManager refundAgentManager,
                             FilterManager filterManager,
                             Broadcaster broadcaster,
                             PersistenceManager<TradableList<OpenOffer>> persistenceManager,
@@ -177,7 +174,6 @@ public class OpenOfferManager implements PeerManager.Listener, DecryptedDirectMe
         this.tradeStatisticsManager = tradeStatisticsManager;
         this.arbitratorManager = arbitratorManager;
         this.mediatorManager = mediatorManager;
-        this.refundAgentManager = refundAgentManager;
         this.filterManager = filterManager;
         this.broadcaster = broadcaster;
         this.persistenceManager = persistenceManager;
