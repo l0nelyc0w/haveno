@@ -81,9 +81,6 @@ public class OfferUtil {
 	private final P2PService p2PService;
 	private final ReferralIdService referralIdService;
 
-	private final Predicate<String> isValidFeePaymentCurrencyCode = (c) ->
-		c.equalsIgnoreCase("XMR");
-
     @Inject
     public OfferUtil(AccountAgeWitnessService accountAgeWitnessService,
                      FilterManager filterManager,
