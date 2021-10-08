@@ -68,7 +68,6 @@ public class OpenOfferManagerTest {
                 null,              //TradeStatisticsManager
                 null,              //ArbitratorManager
                 null,              //MediatorManager
-                null,              //RefundAgentManager
                 null,              //FilterManager
                 null,              //Broadcaster
                 persistenceManager,
@@ -118,7 +117,6 @@ public class OpenOfferManagerTest {
                 null,
                 null,
                 null,
-                null,
                 persistenceManager,
                 signedOfferPersistenceManager);
 
@@ -151,7 +149,6 @@ public class OpenOfferManagerTest {
                 null,
                 null,
                 offerBookService,
-                null,
                 null,
                 null,
                 null,
